@@ -12,6 +12,9 @@ const io = new IO();
 // 注入应用
 io.attach(app);
 
+app._io.set('heartbeat interval', 60000);
+app._io.set('heartbeat timeout', 5000);
+
 // 中间件
 io.use(close());
 io.use(log());
