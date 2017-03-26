@@ -9,9 +9,9 @@ class SocketClient {
     constructor(host, port, opt = defaultOpt) {
         this.socket = new socket(`${opt.https ? 'https' : 'http'}://${host}:${port}`);
     }
-    get(path, data) {
+    get(path, params) {
         return new Promise((resolve) => {
-            this.socket.emit('message', { path, data }, resolve);
+            this.socket.emit('message', { method: 'GET', path, params }, resolve);
         });
     }
 }
