@@ -40,6 +40,7 @@ class SocketRouter {
                         pathParams[route.regexp.keys[i].name] = matchResult[i + 1];
                     }
                     ctx.params = Object.assign(pathParams, ctx.data.params);
+                    ctx.header = ctx.data.header;
                     route.cb(ctx);
                 }
             }
