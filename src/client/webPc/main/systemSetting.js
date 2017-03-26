@@ -20,13 +20,13 @@ class SystemSetting extends React.Component {
         router: React.PropTypes.object.isRequired,
     }
 
-    handleCloseClick() {
+    static handleCloseClick() {
         ui.closeSystemSetting();
         ui.closeMaskLayout();
     }
 
     handleLogoutClick = () => {
-        user.logout().then(response => {
+        user.logout().then((response) => {
             if (response.status === 204) {
                 this.context.router.push('/login');
                 window.localStorage.removeItem('token');
@@ -39,8 +39,7 @@ class SystemSetting extends React.Component {
         const { desktopNotification } = this.props;
         if (desktopNotification) {
             ui.closeDesktopNotification();
-        }
-        else {
+        } else {
             ui.openDesktopNotification();
         }
         window.localStorage.setItem('desktopNotification', !desktopNotification);
@@ -50,8 +49,7 @@ class SystemSetting extends React.Component {
         const { soundNotification } = this.props;
         if (soundNotification) {
             ui.closeSoundNotification();
-        }
-        else {
+        } else {
             ui.openSoundNotification();
         }
         window.localStorage.setItem('soundNotification', !soundNotification);
@@ -137,5 +135,5 @@ export default connect(
         show: state.getIn(['pc', 'showSystemSetting']),
         desktopNotification: state.getIn(['pc', 'desktopNotification']),
         soundNotification: state.getIn(['pc', 'soundNotification']),
-    })
+    }),
 )(SystemSetting);

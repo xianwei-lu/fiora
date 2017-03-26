@@ -5,8 +5,8 @@ import {
 } from 'react-native';
 import pureRender from 'pure-render-decorator';
 
-import cs from '../../util/commonStyle.js';
-import Message from './message.js';
+import cs from '../../util/commonStyle';
+import Message from './message';
 
 let styles = null;
 

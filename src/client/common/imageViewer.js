@@ -52,14 +52,14 @@ class ImageViewer extends React.Component {
                     src={image}
                     style={{ transform: `scale(${scale}) rotate(${rotate}deg)` }}
                     draggable
-                    onDragStart={event => {
+                    onDragStart={(event) => {
                         const img = document.createElement('img');
                         img.src = 'data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==';
                         event.dataTransfer.setDragImage(img, 0, 0);
                         offsetX = event.clientX - event.target.offsetLeft;
                         offsetY = event.clientY - event.target.offsetTop;
                     }}
-                    onDragOver={event => {
+                    onDragOver={(event) => {
                         event.target.style.left = `${event.clientX - offsetX}px`;
                         event.target.style.top = `${event.clientY - offsetY}px`;
                         event.target.style.right = undefined;
@@ -104,5 +104,5 @@ export default connect(
     state => ({
         show: state.getIn(['pc', 'showImageViewer']),
         image: state.getIn(['pc', 'imageViewerSrc']),
-    })
+    }),
 )(ImageViewer);

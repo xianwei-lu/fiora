@@ -1,26 +1,24 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import 'assets/styles/monokai-sublime.min.css';
+import backImage from 'assets/images/background.jpg';
 
 import './app.scss';
-import 'assets/styles/monokai-sublime.min.css';
 
 import user from '../action/user';
 import ui from '../action/pc';
 import socket from '../socket';
-import publicApi from '../api.js';
+import publicApi from '../api';
 import messageTool from '../util/message';
 
 import Notification from '../common/notification';
 import MaskLayout from '../common/maskLayout';
 import ImageViewer from '../common/imageViewer';
 
-import backImage from 'assets/images/background.jpg';
-
 window.fiora = publicApi;
 
 class App extends React.Component {
     static propTypes = {
-        state: PropTypes.object.isRequired,
         children: PropTypes.element,
         location: PropTypes.object.isRequired,
         playSound: PropTypes.bool,
@@ -38,14 +36,12 @@ class App extends React.Component {
         // system setting
         if (window.localStorage.getItem('desktopNotification') === 'false') {
             ui.closeDesktopNotification();
-        }
-        else {
+        } else {
             ui.openDesktopNotification();
         }
         if (window.localStorage.getItem('soundNotification') === 'false') {
             ui.closeSoundNotification();
-        }
-        else {
+        } else {
             ui.openSoundNotification();
         }
 
@@ -54,7 +50,7 @@ class App extends React.Component {
         if (token && token !== '') {
             user
             .reConnect(token)
-            .then(result => {
+            .then((result) => {
                 if (result.status === 201) {
                     user.online();
                     if (this.props.location.pathname === '/') {
@@ -65,12 +61,12 @@ class App extends React.Component {
         }
 
         // register server event
-        socket.on('groupMessage', data => {
+        socket.on('groupMessage', (data) => {
             data.linkmanType = 'group';
             messageTool.messageHandle(data);
         });
 
-        socket.on('message', data => {
+        socket.on('message', (data) => {
             data.linkmanType = 'stranger';
             messageTool.messageHandle(data);
         });
@@ -81,7 +77,7 @@ class App extends React.Component {
         socket.on('reconnect', () => {
             user
             .reConnect()
-            .then(result => {
+            .then((result) => {
                 if (result.status === 201) {
                     user.online();
                 }
@@ -143,7 +139,7 @@ class App extends React.Component {
 
 export default connect(
     state => ({
-        state: state,
+        state,
         playSound: state.getIn(['pc', 'playSound']),
-    })
+    }),
 )(App);

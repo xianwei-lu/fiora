@@ -22,17 +22,17 @@ class UserSetting extends React.Component {
         router: React.PropTypes.object.isRequired,
     }
 
+    static handleCloseClick() {
+        ui.closeUserSetting();
+        ui.closeMaskLayout();
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             avatarHover: false,
             editStatus: false,
         };
-    }
-
-    handleCloseClick() {
-        ui.closeUserSetting();
-        ui.closeMaskLayout();
     }
 
     handleSelectImage = () => {
@@ -42,7 +42,7 @@ class UserSetting extends React.Component {
         }
         const reader = new FileReader();
         reader.onloadend = function () {
-            user.updateAvatar(this.result).then(response => {
+            user.updateAvatar(this.result).then((response) => {
                 if (response.status === 200) {
                     ui.closeUserSetting();
                     ui.closeMaskLayout();
@@ -63,8 +63,8 @@ class UserSetting extends React.Component {
             this.location.value,
             this.website.value,
             this.github.value,
-            this.qq.value
-        ).then(response => {
+            this.qq.value,
+        ).then((response) => {
             if (response.status === 200) {
                 this.setState({ editStatus: false });
             }
@@ -79,8 +79,7 @@ class UserSetting extends React.Component {
         let createdDays = (Date.now() - new Date(userInfo.get('createTime')).getTime()) / (1000 * 60 * 60 * 24);
         if (createdDays > 365) {
             createdDays = `${parseInt(createdDays / 365, 10)}年`;
-        }
-        else {
+        } else {
             createdDays = `${parseInt(createdDays, 10)}天`;
         }
         const location = userInfo.get('location') || '火星';
@@ -241,5 +240,5 @@ export default connect(
     state => ({
         show: state.getIn(['pc', 'showUserSetting']),
         userInfo: state.get('user'),
-    })
+    }),
 )(UserSetting);

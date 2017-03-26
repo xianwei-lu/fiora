@@ -61,8 +61,7 @@ function send(linkmanType, linkmanId, messageType, messageContent) {
     function responseCallback(response) {
         if (response.status === 401 && response.data === 'send messages too frequently') {
             ui.openNotification('消息发送频率过快, 请稍候.');
-        }
-        else if (response.status !== 201) {
+        } else if (response.status !== 201) {
             ui.openNotification('消息发送失败, 请重试.');
         }
         return response;
@@ -70,9 +69,8 @@ function send(linkmanType, linkmanId, messageType, messageContent) {
     if (linkmanType === 'group') {
         return user.sendGroupMessage(linkmanId, messageType, messageContent).then(responseCallback);
     }
-    else {
-        return user.sendMessage(linkmanId, messageType, messageContent).then(responseCallback);
-    }
+
+    return user.sendMessage(linkmanId, messageType, messageContent).then(responseCallback);
 }
 
 export default send;

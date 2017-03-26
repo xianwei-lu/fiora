@@ -16,7 +16,7 @@ class UserPanel extends React.Component {
         online: PropTypes.bool,
     };
 
-    handleAvatarClick() {
+    static handleAvatarClick() {
         ui.openUserSetting();
         mask(ui.closeUserSetting);
     }
@@ -48,5 +48,5 @@ export default connect(
         avatar: state.getIn(['user', 'avatar']),
         username: state.getIn(['user', 'username']),
         online: state.getIn(['user', 'online']),
-    })
+    }),
 )(UserPanel);

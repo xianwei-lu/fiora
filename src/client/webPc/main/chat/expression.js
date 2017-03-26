@@ -44,7 +44,7 @@ class Expression extends React.Component {
 
     renderDefaultExpression = () => (
         <div className="default-expression">
-        {
+            {
             expressions.baidu.map((e, index) => (
                 <div
                     key={index}
@@ -59,7 +59,7 @@ class Expression extends React.Component {
 
     renderAliExpression = () => (
         <div className="ali-expression">
-        {
+            {
             expressions.ali.map((e, index) => (
                 <div
                     key={index}
@@ -113,8 +113,7 @@ class Expression extends React.Component {
                             ((p) => {
                                 if (p === 'ali') {
                                     return this.renderAliExpression();
-                                }
-                                else if (p === 'collect') {
+                                } else if (p === 'collect') {
                                     return this.renderCollectExpression();
                                 }
                                 return this.renderDefaultExpression();
@@ -152,5 +151,5 @@ export default connect(
     state => ({
         show: state.getIn(['pc', 'showExpression']),
         userExpressions: state.getIn(['user', 'expressions']),
-    })
+    }),
 )(Expression);

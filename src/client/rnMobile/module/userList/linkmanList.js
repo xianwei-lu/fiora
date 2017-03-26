@@ -6,8 +6,8 @@ import {
 import { connect } from 'react-redux';
 import pureRender from 'pure-render-decorator';
 
-import cs from '../../util/commonStyle.js';
-import Linkman from './linkman.js';
+import cs from '../../util/commonStyle';
+import Linkman from './linkman';
 
 let styles = null;
 
@@ -46,5 +46,5 @@ styles = {
 export default connect(
     state => ({
         linkmans: state.getIn(['user', 'linkmans']),
-    })
+    }),
 )(UserList);

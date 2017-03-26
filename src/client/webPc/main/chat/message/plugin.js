@@ -25,11 +25,9 @@ function findUserMessage(userName) {
                 $item = $names.eq(i).parents('.message-list-item');
                 break;
             }
-        } else {
-            if (thisName.indexOf(userName) !== -1) {
-                $item = $names.eq(i).parents('.message-list-item');
-                break;
-            }
+        } else if (thisName.indexOf(userName) !== -1) {
+            $item = $names.eq(i).parents('.message-list-item');
+            break;
         }
     }
 
@@ -123,9 +121,8 @@ const pluginMessage = {
         const pmessage = <PluginMessage name={message.get('pluginMessageInfo').get('name')} content={message.get('pluginMessageInfo').get('content')} isNew={message.get('isNew')} />;
         if (showBase) {
             return base(pmessage, message, me);
-        } else {
-            return pmessage;
         }
+        return pmessage;
     },
 };
 

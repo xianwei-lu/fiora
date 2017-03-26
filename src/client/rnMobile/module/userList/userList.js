@@ -4,9 +4,9 @@ import {
 } from 'react-native';
 import pureRender from 'pure-render-decorator';
 
-import cs from '../../util/commonStyle.js';
-import Header from './header.js';
-import LinkmanList from './linkmanList.js';
+import cs from '../../util/commonStyle';
+import Header from './header';
+import LinkmanList from './linkmanList';
 
 let styles = null;
 

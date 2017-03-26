@@ -5,11 +5,11 @@ import {
 import { connect, Provider } from 'react-redux';
 import pureRender from 'pure-render-decorator';
 
-import Store from '../../store.js';
+import Store from '../../store';
 
-import Chat from './chat/chat.js';
-import Login from './login/login.js';
-import UserList from './userList/userList.js';
+import Chat from './chat/chat';
+import Login from './login/login';
+import UserList from './userList/userList';
 
 const routes = {
     chat: Chat,
@@ -62,7 +62,7 @@ const ConnectedIndex = connect(
         state,
         router: state.getIn(['rn', 'router']),
         routerParams: state.getIn(['rn', 'routerParams']),
-    })
+    }),
 )(Index);
 
 const provider = (

@@ -8,10 +8,10 @@ import {
 import moment from 'moment';
 import pureRender from 'pure-render-decorator';
 
-import color from '../../util/color.js';
-import url from '../../util/url.js';
-import cs from '../../util/commonStyle.js';
-import rn from '../../../action/rn.js';
+import color from '../../util/color';
+import url from '../../util/url';
+import cs from '../../util/commonStyle';
+import rn from '../../../action/rn';
 
 let styles = null;
 

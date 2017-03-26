@@ -33,5 +33,5 @@ export default connect(
     state => ({
         show: state.getIn(['pc', 'showNotification']),
         content: state.getIn(['pc', 'notificationContent']),
-    })
+    }),
 )(Notification);

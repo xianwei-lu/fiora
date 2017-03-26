@@ -9,8 +9,8 @@ import {
     AppRegistry,
 } from 'react-native';
 
-import './util/reactotron.js';
-import Index from './module/index.js';
+import './util/reactotron';
+import Index from './module/index';
 
 export default class Fiora extends Component {
     render() {

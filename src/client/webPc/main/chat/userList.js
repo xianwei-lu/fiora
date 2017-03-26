@@ -50,18 +50,13 @@ class User extends React.Component {
         let content = '';
         if (!message) {
             content = '...';
-        }
-        else {
-            if (message.get('preview')) {
-                content = message.get('preview');
-            }
-            else if (message.get('type') === 'text') {
-                const text = message.get('content');
-                content = `${message.getIn(['from', 'username'])}: ${text}`;
-            }
-            else {
-                content = `${message.getIn(['from', 'username'])}: [${message.get('type')}]`;
-            }
+        } else if (message.get('preview')) {
+            content = message.get('preview');
+        } else if (message.get('type') === 'text') {
+            const text = message.get('content');
+            content = `${message.getIn(['from', 'username'])}: ${text}`;
+        } else {
+            content = `${message.getIn(['from', 'username'])}: [${message.get('type')}]`;
         }
 
         return (

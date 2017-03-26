@@ -53,7 +53,7 @@ class ChatPanel extends React.Component {
                     messagesCount={linkman.get('messages').size}
                 >
                     {
-                        linkman.get('messages').map((message) => (
+                        linkman.get('messages').map(message => (
                             <MessageList.item
                                 key={linkman.get('type') + message.get('_id')}
                                 me={me}
@@ -110,5 +110,5 @@ class ChatPanel extends React.Component {
 export default connect(
     state => ({
         shouldScrollMessage: state.getIn(['pc', 'shouldScrollMessage']),
-    })
+    }),
 )(ChatPanel);

@@ -33,18 +33,15 @@ class GroupSetting extends React.Component {
         const reader = new FileReader();
         const instance = this;
         reader.onloadend = function () {
-            user.updateGroupAvatar(instance.props.linkmanId, this.result).then(response => {
+            user.updateGroupAvatar(instance.props.linkmanId, this.result).then((response) => {
                 if (response.status !== 201) {
                     if (response.data === 'groupId is invalid') {
                         ui.openNotification('群组ID不正确');
-                    }
-                    else if (response.data === 'group not exists') {
+                    } else if (response.data === 'group not exists') {
                         ui.openNotification('该群组不存在');
-                    }
-                    else if (response.data === 'you are not creator of this group') {
+                    } else if (response.data === 'you are not creator of this group') {
                         ui.openNotification('只有群主才有权限修改群公告');
-                    }
-                    else {
+                    } else {
                         ui.openNotification('修改失败! 服务器发生错误, 请联系管理员.');
                     }
                 }
@@ -55,7 +52,7 @@ class GroupSetting extends React.Component {
 
     handleLeaveGroup = () => {
         const { linkmanId } = this.props;
-        user.leaveGroup(linkmanId).then(response => {
+        user.leaveGroup(linkmanId).then((response) => {
             if (response.status === 204) {
                 this.context.router.replace('/main/chat');
                 ui.closeMaskLayout();
@@ -129,5 +126,5 @@ class GroupSetting extends React.Component {
 export default connect(
     state => ({
         show: state.getIn(['pc', 'showGroupSetting']),
-    })
+    }),
 )(GroupSetting);

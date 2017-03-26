@@ -16,8 +16,7 @@ const reducers = combineReducers({ pc, mobile, rn, user });
 let store = null;
 if (devToolsEnhancer) {
     store = createStore(reducers, devToolsEnhancer.default({ realtime: true, port: config.reduxDevPort }));
-}
-else {
+} else {
     store = createStore(reducers);
 }
 export default store;

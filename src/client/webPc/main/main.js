@@ -51,5 +51,5 @@ class Main extends React.Component {
 export default connect(
     state => ({
         user: state.get('user'),
-    })
+    }),
 )(Main);

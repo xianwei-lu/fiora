@@ -17,23 +17,13 @@ class InputBox extends React.Component {
         insertTexts: PropTypes.object.isRequired,
     };
 
-    componentWillUpdate(nextProps) {
-        if (!nextProps.insertTexts.equals(this.props.insertTexts)) {
-            nextProps.insertTexts.forEach(text => {
-                this.insertAtCursor(this.input, text);
-            });
-            ui.insertTextEnd(nextProps.insertTexts.size);
-        }
-    }
-
-    insertAtCursor(input, value) {
+    static insertAtCursor(input, value) {
         if (document.selection) {
             input.focus();
             const sel = document.selection.createRange();
             sel.text = value;
             sel.select();
-        }
-        else if (input.selectionStart || input.selectionStart === '0') {
+        } else if (input.selectionStart || input.selectionStart === '0') {
             const startPos = input.selectionStart;
             const endPos = input.selectionEnd;
             const restoreTop = input.scrollTop;
@@ -47,6 +37,15 @@ class InputBox extends React.Component {
         } else {
             input.value += value;
             input.focus();
+        }
+    }
+
+    componentWillUpdate(nextProps) {
+        if (!nextProps.insertTexts.equals(this.props.insertTexts)) {
+            nextProps.insertTexts.forEach((text) => {
+                this.insertAtCursor(this.input, text);
+            });
+            ui.insertTextEnd(nextProps.insertTexts.size);
         }
     }
 
@@ -124,5 +123,5 @@ class InputBox extends React.Component {
 export default connect(
     state => ({
         insertTexts: state.getIn(['pc', 'insertTexts']),
-    })
+    }),
 )(InputBox);

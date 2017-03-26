@@ -7,9 +7,9 @@ import {
 import { connect } from 'react-redux';
 import pureRender from 'pure-render-decorator';
 
-import color from '../../util/color.js';
-import url from '../../util/url.js';
-import cs from '../../util/commonStyle.js';
+import color from '../../util/color';
+import url from '../../util/url';
+import cs from '../../util/commonStyle';
 
 let styles = null;
 
@@ -49,7 +49,7 @@ styles = {
         cs.radius(17),
         cs.position('absolute', undefined, undefined, 3, 10),
     ]),
-    online: (isOnline) => ([
+    online: isOnline => ([
         cs.size(6, 6),
         cs.radius(3),
         cs.bgColor(isOnline ? '#7cfc00' : 'red'),
@@ -66,5 +66,5 @@ export default connect(
         username: state.getIn(['user', 'username']),
         avatar: state.getIn(['user', 'avatar']),
         online: state.getIn(['user', 'online']),
-    })
+    }),
 )(Header);

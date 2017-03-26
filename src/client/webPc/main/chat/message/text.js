@@ -12,7 +12,7 @@ const textMessage = {
             /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
             r => (
                 `<a href="${r}" rel="noopener noreferrer" target="_blank">${r}</a>`
-            )
+            ),
         ).replace(
             /#\(([\u4e00-\u9fa5a-z]+)\)/g,
             (r, e) => {
@@ -21,7 +21,7 @@ const textMessage = {
                     return `<img class="expression-default-message" src="${transparentImage}" style="background-position: left ${-30 * index}px; background-image: url(${require('assets/images/expressions.png')})" onerror="this.style.display='none'" alt="${r}">`;
                 }
                 return r;
-            }
+            },
         ).replace(
             /#\(ali(\d+)\)/g,
             (r, e) => {
@@ -30,7 +30,7 @@ const textMessage = {
                     return `<img class="expression-ali-message" src="${transparentImage}" style="background-position: left ${-44 * index}px; background-image: url(${require('assets/images/ali.png')})" onerror="this.style.display='none'" alt="${r}">`;
                 }
                 return r;
-            }
+            },
         );
         return base(
             <div

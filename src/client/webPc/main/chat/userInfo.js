@@ -39,7 +39,7 @@ class UserInfo extends React.Component {
     componentWillUpdate(nextProps) {
         if (this.props.show !== nextProps.show && nextProps.show) {
             this.setState(initialState);
-            user.getUserInfo(nextProps.userId).then(response => {
+            user.getUserInfo(nextProps.userId).then((response) => {
                 if (response.status) {
                     this.setState({
                         _id: nextProps.userId,
@@ -74,8 +74,7 @@ class UserInfo extends React.Component {
         let createdDays = (Date.now() - new Date(this.state.createTime).getTime()) / (1000 * 60 * 60 * 24);
         if (createdDays > 365) {
             createdDays = `${parseInt(createdDays / 365, 10)}年`;
-        }
-        else {
+        } else {
             createdDays = `${parseInt(createdDays, 10)}天`;
         }
 
@@ -164,5 +163,5 @@ export default connect(
     state => ({
         show: state.getIn(['pc', 'showUserInfo']),
         userId: state.getIn(['pc', 'userInfoId']),
-    })
+    }),
 )(UserInfo);

@@ -5,8 +5,8 @@ import messageTool from '../util/message';
 const dispatch = Store.dispatch;
 
 const actions = {
-    online: function () {
-        return new Promise(resolve => {
+    online() {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'Online',
             });
@@ -14,8 +14,8 @@ const actions = {
         });
     },
 
-    offline: function () {
-        return new Promise(resolve => {
+    offline() {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'Offline',
             });
@@ -23,9 +23,9 @@ const actions = {
         });
     },
 
-    login: function (username, password) {
-        return new Promise(resolve => {
-            socket.post('/auth', { username, password }, response => {
+    login(username, password) {
+        return new Promise((resolve) => {
+            socket.post('/auth', { username, password }, (response) => {
                 if (response.status === 201) {
                     for (const group of response.data.user.groups) {
                         group.messages = messageTool.initialMessagesHandle(group.messages);
@@ -39,30 +39,28 @@ const actions = {
                     });
                     socket.setToken(response.data.token);
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    logout: function () {
-        return new Promise(resolve => {
-            socket.delete('/auth', { }, response => {
+    logout() {
+        return new Promise((resolve) => {
+            socket.delete('/auth', { }, (response) => {
                 if (response.status === 204) {
                     socket.setToken('');
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    init: function () {
-        return new Promise(resolve => {
+    init() {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'Initialize',
             });
@@ -70,17 +68,17 @@ const actions = {
         });
     },
 
-    signup: function (username, password) {
-        return new Promise(resolve => {
-            socket.post('/user', { username, password }, response => {
+    signup(username, password) {
+        return new Promise((resolve) => {
+            socket.post('/user', { username, password }, (response) => {
                 resolve(response);
             });
         });
     },
 
-    updateUser: function (gender, birthday, location, website, github, qq) {
-        return new Promise(resolve => {
-            socket.put('/user', { gender, birthday, location, website, github, qq }, response => {
+    updateUser(gender, birthday, location, website, github, qq) {
+        return new Promise((resolve) => {
+            socket.put('/user', { gender, birthday, location, website, github, qq }, (response) => {
                 if (response.status === 200) {
                     dispatch({
                         type: 'UpdateUser',
@@ -92,29 +90,28 @@ const actions = {
         });
     },
 
-    updateAvatar: function (avatar) {
-        return new Promise(resolve => {
-            socket.put('/user/avatar', { avatar }, response => {
+    updateAvatar(avatar) {
+        return new Promise((resolve) => {
+            socket.put('/user/avatar', { avatar }, (response) => {
                 if (response.status === 200) {
                     dispatch({
                         type: 'UpdateAvatar',
                         user: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    reConnect: function (token) {
+    reConnect(token) {
         if (token) {
             socket.setToken(token);
         }
-        return new Promise(resolve => {
-            socket.post('/auth/re', { }, response => {
+        return new Promise((resolve) => {
+            socket.post('/auth/re', { }, (response) => {
                 if (response.status === 201) {
                     for (const group of response.data.groups) {
                         group.messages = messageTool.initialMessagesHandle(group.messages);
@@ -127,41 +124,40 @@ const actions = {
                         user: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    sendGroupMessage: function (linkmanId, type, content) {
-        return new Promise(resolve => {
-            socket.post('/groupMessage', { linkmanId, type, content }, response => {
+    sendGroupMessage(linkmanId, type, content) {
+        return new Promise((resolve) => {
+            socket.post('/groupMessage', { linkmanId, type, content }, (response) => {
                 resolve(response);
             });
         });
     },
 
-    addSelfMessage: function (message) {
+    addSelfMessage(message) {
         dispatch({
             type: 'AddSelfMessage',
             message,
         });
     },
 
-    addGroupMessage: function (message) {
-        return new Promise(resolve => {
+    addGroupMessage(message) {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'AddGroupMessage',
-                message: message,
+                message,
             });
             resolve(message);
         });
     },
 
-    clearUnread: function (linkmanType, linkmanId) {
-        return new Promise(resolve => {
+    clearUnread(linkmanType, linkmanId) {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'ClearUnread',
                 linkmanType,
@@ -171,43 +167,41 @@ const actions = {
         });
     },
 
-    createGroup: function (name) {
-        return new Promise(resolve => {
-            socket.post('/group', { name: name }, response => {
+    createGroup(name) {
+        return new Promise((resolve) => {
+            socket.post('/group', { name }, (response) => {
                 if (response.status === 201) {
                     dispatch({
                         type: 'CreateGroup',
                         group: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    joinGroup: function (groupName) {
-        return new Promise(resolve => {
-            socket.post('/group/members', { groupName }, response => {
+    joinGroup(groupName) {
+        return new Promise((resolve) => {
+            socket.post('/group/members', { groupName }, (response) => {
                 if (response.status === 201) {
                     dispatch({
                         type: 'JoinGroup',
                         group: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    leaveGroup: function (groupId) {
-        return new Promise(resolve => {
-            socket.delete('/group/members', { groupId }, response => {
+    leaveGroup(groupId) {
+        return new Promise((resolve) => {
+            socket.delete('/group/members', { groupId }, (response) => {
                 if (response.status === 204) {
                     dispatch({
                         type: 'LeaveGroup',
@@ -219,42 +213,40 @@ const actions = {
         });
     },
 
-    updateGroupAnnouncement: function (groupId, content) {
-        return new Promise(resolve => {
-            socket.put('/group/announcement', { groupId, content }, response => {
+    updateGroupAnnouncement(groupId, content) {
+        return new Promise((resolve) => {
+            socket.put('/group/announcement', { groupId, content }, (response) => {
                 if (response.status === 201) {
                     dispatch({
                         type: 'UpdateGroupAnnouncement',
                         group: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    updateGroupAvatar: function (groupId, avatar) {
-        return new Promise(resolve => {
-            socket.put('/group/avatar', { groupId, avatar }, response => {
+    updateGroupAvatar(groupId, avatar) {
+        return new Promise((resolve) => {
+            socket.put('/group/avatar', { groupId, avatar }, (response) => {
                 if (response.status === 201) {
                     dispatch({
                         type: 'UpdateGroupAvatar',
                         group: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    addUserLinkman: function (user) {
-        return new Promise(resolve => {
+    addUserLinkman(user) {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'AddUserLinkman',
                 user,
@@ -263,26 +255,26 @@ const actions = {
         });
     },
 
-    sendMessage: function (linkmanId, type, content) {
-        return new Promise(resolve => {
-            socket.post('/message', { linkmanId, type, content }, response => {
+    sendMessage(linkmanId, type, content) {
+        return new Promise((resolve) => {
+            socket.post('/message', { linkmanId, type, content }, (response) => {
                 resolve(response);
             });
         });
     },
 
-    addMessage: function (message) {
-        return new Promise(resolve => {
+    addMessage(message) {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'AddMessage',
-                message: message,
+                message,
             });
             resolve(message);
         });
     },
 
-    readAllMessage: function (linkmanType, linkmanId) {
-        return new Promise(resolve => {
+    readAllMessage(linkmanType, linkmanId) {
+        return new Promise((resolve) => {
             dispatch({
                 type: 'ReadAllMessage',
                 linkmanType,
@@ -292,29 +284,28 @@ const actions = {
         });
     },
 
-    getGroupInfo: function (groupId) {
-        return new Promise(resolve => {
-            socket.get('/group', { groupId }, response => {
+    getGroupInfo(groupId) {
+        return new Promise((resolve) => {
+            socket.get('/group', { groupId }, (response) => {
                 if (response.status === 200) {
                     dispatch({
                         type: 'GetGroupInfo',
                         group: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    getGroupHistoryMessage: function (groupId, length) {
+    getGroupHistoryMessage(groupId, length) {
         if (!length) {
             length = 0;
         }
-        return new Promise(resolve => {
-            socket.get('/groupMessage/history', { groupId, length }, response => {
+        return new Promise((resolve) => {
+            socket.get('/groupMessage/history', { groupId, length }, (response) => {
                 if (response.status === 200) {
                     dispatch({
                         type: 'GetGroupHistoryMessage',
@@ -322,51 +313,48 @@ const actions = {
                         messages: messageTool.initialMessagesHandle(response.data),
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    addUserExpression: function (src) {
-        return new Promise(resolve => {
-            socket.post('/user/expression', { src }, response => {
+    addUserExpression(src) {
+        return new Promise((resolve) => {
+            socket.post('/user/expression', { src }, (response) => {
                 if (response.status === 201) {
                     dispatch({
                         type: 'AddUserExpression',
                         expressions: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    deleteUserExpression: function (src) {
-        return new Promise(resolve => {
-            socket.delete('/user/expression', { src }, response => {
+    deleteUserExpression(src) {
+        return new Promise((resolve) => {
+            socket.delete('/user/expression', { src }, (response) => {
                 if (response.status === 200) {
                     dispatch({
                         type: 'DeleteUserExpression',
                         expressions: response.data,
                     });
                     resolve(response);
-                }
-                else {
+                } else {
                     resolve(response);
                 }
             });
         });
     },
 
-    getUserInfo: function (userId) {
-        return new Promise(resolve => {
-            socket.get('/user', { userId }, response => {
+    getUserInfo(userId) {
+        return new Promise((resolve) => {
+            socket.get('/user', { userId }, (response) => {
                 resolve(response);
             });
         });

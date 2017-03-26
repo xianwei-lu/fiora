@@ -13,7 +13,6 @@ import Header from './header';
 class LinkmanList extends React.Component {
     static propTypes = {
         linkmans: ImmutablePropTypes.list,
-        me: PropTypes.string,
     };
 
     static contextTypes = {
@@ -66,13 +65,10 @@ class Linkman extends React.Component {
         let content = '';
         if (!message) {
             content = '...';
-        }
-        else {
-            if (message.get('type') === 'text') {
-                content = `${message.getIn(['from', 'username'])}: ${message.get('content')}`;
-            } else {
-                content = `${message.getIn(['from', 'username'])}: [${message.get('type')}]`;
-            }
+        } else if (message.get('type') === 'text') {
+            content = `${message.getIn(['from', 'username'])}: ${message.get('content')}`;
+        } else {
+            content = `${message.getIn(['from', 'username'])}: [${message.get('type')}]`;
         }
 
         return (
@@ -105,5 +101,5 @@ export default connect(
     state => ({
         linkmans: state.getIn(['user', 'linkmans']),
         me: state.getIn(['user', '_id']),
-    })
+    }),
 )(LinkmanList);

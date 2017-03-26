@@ -52,5 +52,5 @@ export default connect(
     state => ({
         linkmans: state.getIn(['user', 'linkmans']),
         me: state.getIn(['user', '_id']),
-    })
+    }),
 )(Chat);

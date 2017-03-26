@@ -27,23 +27,17 @@ class GroupNotice extends React.Component {
     }
 
     handleSaveClick = () => {
-        user.updateGroupAnnouncement(this.props.linkman.get('_id'), this.editor.value).then(response => {
+        user.updateGroupAnnouncement(this.props.linkman.get('_id'), this.editor.value).then((response) => {
             if (response.status === 201) {
                 this.setState({ editor: false });
-            }
-            else {
-                if (response.data === 'groupId is invalid') {
-                    ui.openNotification('群组ID不正确');
-                }
-                else if (response.data === 'group not exists') {
-                    ui.openNotification('该群组不存在');
-                }
-                else if (response.data === 'you are not creator of this group') {
-                    ui.openNotification('只有群主才有权限修改群公告');
-                }
-                else {
-                    ui.openNotification('修改失败! 服务器发生错误, 请联系管理员.');
-                }
+            } else if (response.data === 'groupId is invalid') {
+                ui.openNotification('群组ID不正确');
+            } else if (response.data === 'group not exists') {
+                ui.openNotification('该群组不存在');
+            } else if (response.data === 'you are not creator of this group') {
+                ui.openNotification('只有群主才有权限修改群公告');
+            } else {
+                ui.openNotification('修改失败! 服务器发生错误, 请联系管理员.');
             }
         });
     }
@@ -97,5 +91,5 @@ class GroupNotice extends React.Component {
 export default connect(
     state => ({
         show: state.getIn(['pc', 'showGroupNotice']),
-    })
+    }),
 )(GroupNotice);

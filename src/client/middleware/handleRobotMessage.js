@@ -3,11 +3,9 @@ import xss from '../util/xss';
 function getMessageType(message) {
     if (message.type === 'imageMessage') {
         return 'image';
-    }
-    else if (message.type === 'pluginMessage') {
+    } else if (message.type === 'pluginMessage') {
         return 'plugin';
-    }
-    else if (message.type === 'codeMessage') {
+    } else if (message.type === 'codeMessage') {
         return 'unknown';
     }
     return 'text';
@@ -26,8 +24,7 @@ export default function handleRobotMessage(message) {
         let messageData = null;
         try {
             messageData = JSON.parse(message.content);
-        }
-        catch (err) {
+        } catch (err) {
             return message;
         }
         message.from.username = `${messageData.source} - ${messageData.name}`;

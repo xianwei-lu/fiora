@@ -73,7 +73,7 @@ class Chat extends React.Component {
                     onScroll={() => this.handleOnScroll(id, type, linkman.get('messages').size)}
                 >
                     {
-                        linkman.get('messages').map((message) => (
+                        linkman.get('messages').map(message => (
                             <ConnectedMessage
                                 key={linkman.get('type') + message.get('_id')}
                                 me={me}
@@ -117,12 +117,12 @@ class Message extends React.Component {
                 /#\(([\u4e00-\u9fa5a-z]+)\)/g,
                 (r, e) => (
                     expressions.indexOf(e) !== -1 ? `<img class="expression-message" src="data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==" style="background-position: left ${-30 * expressions.indexOf(e)}px" onerror="this.style.display='none'">` : r
-                )
+                ),
             ).replace(
                 /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
                 r => (
                     `<a href="${r}" rel="noopener noreferrer" target="_blank">${r}</a>`
-                )
+                ),
             );
 
             return (
@@ -131,8 +131,7 @@ class Message extends React.Component {
                     dangerouslySetInnerHTML={{ __html: content }}
                 />
             );
-        }
-        else if (type === 'image') {
+        } else if (type === 'image') {
             return (
                 <div
                     className="image"
@@ -146,8 +145,7 @@ class Message extends React.Component {
                     />
                 </div>
             );
-        }
-        else if (type === 'code') {
+        } else if (type === 'code') {
             return (
                 <div
                     className="code"
@@ -157,8 +155,7 @@ class Message extends React.Component {
                     </Highlight>
                 </div>
             );
-        }
-        else if (type === 'url') {
+        } else if (type === 'url') {
             return (
                 <div
                     className="url"
@@ -213,7 +210,7 @@ class Message extends React.Component {
 const ConnectedMessage = connect(
     state => ({
         shouldScrollMessage: state.getIn(['mobile', 'shouldScrollMessage']),
-    })
+    }),
 )(Message);
 
 export default connect(
@@ -221,5 +218,5 @@ export default connect(
         linkmans: state.getIn(['user', 'linkmans']),
         me: state.getIn(['user', '_id']),
         shouldScrollMessage: state.getIn(['mobile', 'shouldScrollMessage']),
-    })
+    }),
 )(Chat);

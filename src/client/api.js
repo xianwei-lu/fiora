@@ -1,5 +1,5 @@
 import socket from './socket';
-import store from './store.js';
+import store from './store';
 
 const publicApi = {
     apis: {
@@ -8,21 +8,21 @@ const publicApi = {
         sendMessage: 'send message. params( linkmanType, linkmanId, messageType, content, cb )',
         getLinkmanId: 'get id from type and name. params( linkmanType, linkmanName, cb )',
     },
-    getApis: function (cb) {
+    getApis(cb) {
         cb(null, this.apis);
     },
-    getOnlineCount: function (cb) {
-        socket.get('/auth/count', {}, response => {
+    getOnlineCount(cb) {
+        socket.get('/auth/count', {}, (response) => {
             cb(null, response.data.onlineCount);
         });
     },
-    sendMessage: function (linkmanType, linkmanId, messageType, content, cb) {
+    sendMessage(linkmanType, linkmanId, messageType, content, cb) {
         if (linkmanType === 'group') {
             socket.post('/groupMessage', {
                 linkmanId,
                 type: messageType,
                 content,
-            }, response => {
+            }, (response) => {
                 if (response.status !== 201) {
                     return cb(response.data, null);
                 }
@@ -33,7 +33,7 @@ const publicApi = {
                 linkmanId,
                 type: messageType,
                 content,
-            }, response => {
+            }, (response) => {
                 if (response.status !== 201) {
                     return cb(response.data, null);
                 }
@@ -43,36 +43,34 @@ const publicApi = {
             cb('invalid linkman type', null);
         }
     },
-    getLinkmanId: function (linkmanType, linkmanName, cb) {
+    getLinkmanId(linkmanType, linkmanName, cb) {
         const state = store.getState();
         const linkmans = state.getIn(['user', 'linkmans']);
         const linkman = linkmans.find(l => l.get('type') === linkmanType && l.get(linkmanType === 'group' ? 'name' : 'username') === linkmanName);
         cb(null, linkman && linkman.get('_id'));
     },
-    setPluginData: function (data, cb) {
-        socket.put('/user/pluginData', { pluginData: data }, response => {
+    setPluginData(data, cb) {
+        socket.put('/user/pluginData', { pluginData: data }, (response) => {
             if (response.status === 200) {
                 cb(null, response.data);
-            }
-            else {
+            } else {
                 cb(response.data, undefined);
             }
         });
     },
-    getPluginData: function (cb) {
-        socket.get('/user/me', { }, response => {
+    getPluginData(cb) {
+        socket.get('/user/me', { }, (response) => {
             if (response.status === 200) {
                 cb(null, response.data.pluginData);
-            }
-            else {
+            } else {
                 cb(response.data, undefined);
             }
         });
     },
-    getAllClients: function (cb) {
+    getAllClients(cb) {
         socket.get('/clients', {}, cb);
     },
-    getAllAuths: function (cb) {
+    getAllAuths(cb) {
         socket.get('/auths', {}, cb);
     },
 };

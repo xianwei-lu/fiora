@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import pureRender from 'pure-render-decorator';
 
-import color from '../../util/color.js';
-import cs from '../../util/commonStyle.js';
+import color from '../../util/color';
+import cs from '../../util/commonStyle';
 
 let styles = null;
 

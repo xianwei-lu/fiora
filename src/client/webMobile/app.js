@@ -8,7 +8,6 @@ import socket from '../socket';
 
 class App extends React.Component {
     static propTypes = {
-        state: PropTypes.object,
         children: PropTypes.element,
         location: PropTypes.object.isRequired,
     };
@@ -26,7 +25,7 @@ class App extends React.Component {
         if (token && token !== '') {
             user
             .reConnect(token)
-            .then(result => {
+            .then((result) => {
                 if (result.status === 201) {
                     user.online();
                     if (this.props.location.pathname === '/login') {
@@ -37,7 +36,7 @@ class App extends React.Component {
         }
 
         // register server event
-        socket.on('groupMessage', data => {
+        socket.on('groupMessage', (data) => {
             user.addGroupMessage(data);
             this.sound.play();
 
@@ -48,7 +47,7 @@ class App extends React.Component {
                         icon: data.from.avatar,
                         body: data.type === 'text' ? data.content : `[${data.type}]`,
                         tag: data.from.id,
-                    }
+                    },
                 );
                 notification.onclick = function () {
                     window.blur();
@@ -83,6 +82,6 @@ class App extends React.Component {
 
 export default connect(
     state => ({
-        state: state,
-    })
+        state,
+    }),
 )(App);

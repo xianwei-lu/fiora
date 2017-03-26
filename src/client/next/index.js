@@ -5,5 +5,5 @@ import App from 'next/App';
 
 ReactDom.render(
     <App />,
-    document.querySelector('#app')
+    document.querySelector('#app'),
 );

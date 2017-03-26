@@ -68,8 +68,6 @@ class Message extends React.Component {
         me: PropTypes.string.isRequired,
         message: ImmutablePropTypes.map.isRequired,
         shouldScrollMessage: PropTypes.bool,
-        linkmanType: PropTypes.string,
-        linkmanId: PropTypes.string,
     };
 
     static contextTypes = {
@@ -112,6 +110,6 @@ export default {
     item: connect(
         state => ({
             shouldScrollMessage: state.getIn(['pc', 'shouldScrollMessage']),
-        })
+        }),
     )(Message),
 };

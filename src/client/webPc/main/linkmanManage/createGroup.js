@@ -16,33 +16,27 @@ class CreateGroup extends React.Component {
         router: PropTypes.object.isRequired,
     }
 
+    static handleClose() {
+        ui.closeCreateGroupInput();
+        ui.closeMaskLayout();
+    }
+
     handleClick = (text) => {
-        user.createGroup(text).then(response => {
+        user.createGroup(text).then((response) => {
             if (response.status === 201) {
                 ui.closeCreateGroupInput();
                 ui.closeMaskLayout();
                 this.context.router.push('/main/chat');
-            }
-            else {
-                if (response.data === 'group name already exists') {
-                    ui.openNotification('群组名称已存在');
-                }
-                else if (response.data === 'group name invalid') {
-                    ui.openNotification('群组名称错误. 仅能使用字母,数字,汉字,横线-,下划线_');
-                }
-                else if (response.data === 'every one can create only one group') {
-                    ui.openNotification('每个人只能创建一个群组. 请删除已经创建群组');
-                }
-                else {
-                    ui.openNotification('创建失败! 服务器发生错误, 请联系管理员.');
-                }
+            } else if (response.data === 'group name already exists') {
+                ui.openNotification('群组名称已存在');
+            } else if (response.data === 'group name invalid') {
+                ui.openNotification('群组名称错误. 仅能使用字母,数字,汉字,横线-,下划线_');
+            } else if (response.data === 'every one can create only one group') {
+                ui.openNotification('每个人只能创建一个群组. 请删除已经创建群组');
+            } else {
+                ui.openNotification('创建失败! 服务器发生错误, 请联系管理员.');
             }
         });
-    }
-
-    handleClose() {
-        ui.closeCreateGroupInput();
-        ui.closeMaskLayout();
     }
 
     render() {
@@ -62,5 +56,5 @@ class CreateGroup extends React.Component {
 export default connect(
     state => ({
         show: state.getIn(['pc', 'showCreateGroupInput']),
-    })
+    }),
 )(CreateGroup);

@@ -59,7 +59,7 @@ function reducer(state = initialState, action) {
         action.group.unread = 0;
         return state.update(
             'linkmans',
-            linkmans => linkmans.unshift(immutable.fromJS(action.group))
+            linkmans => linkmans.unshift(immutable.fromJS(action.group)),
         );
     }
     case 'JoinGroup': {
@@ -67,13 +67,13 @@ function reducer(state = initialState, action) {
         action.group.unread = 0;
         return state.update(
             'linkmans',
-            linkmans => linkmans.unshift(immutable.fromJS(action.group))
+            linkmans => linkmans.unshift(immutable.fromJS(action.group)),
         );
     }
     case 'LeaveGroup': {
         return state.update(
             'linkmans',
-            linkmans => linkmans.delete(linkmans.findIndex(l => l.get('_id') === action.groupId))
+            linkmans => linkmans.delete(linkmans.findIndex(l => l.get('_id') === action.groupId)),
         );
     }
     case 'UpdateGroupAnnouncement': {
@@ -81,8 +81,8 @@ function reducer(state = initialState, action) {
             'linkmans',
             linkmans => linkmans.update(
                 linkmans.findIndex(linkman => linkman.get('type') === 'group' && linkman.get('_id') === action.group._id),
-                linkman => linkman.set('announcement', action.group.announcement).set('announcementPublisher', action.group.announcementPublisher).set('announcementTime', action.group.announcementTime)
-            )
+                linkman => linkman.set('announcement', action.group.announcement).set('announcementPublisher', action.group.announcementPublisher).set('announcementTime', action.group.announcementTime),
+            ),
         );
     }
     case 'UpdateGroupAvatar': {
@@ -90,32 +90,32 @@ function reducer(state = initialState, action) {
             'linkmans',
             linkmans => linkmans.update(
                 linkmans.findIndex(linkman => linkman.get('type') === 'group' && linkman.get('_id') === action.group._id),
-                linkman => linkman.set('avatar', action.group.avatar)
-            )
+                linkman => linkman.set('avatar', action.group.avatar),
+            ),
         );
     }
 
     case 'AddSelfMessage': {
         return state.updateIn(
             ['linkmans'],
-            linkmans => {
+            (linkmans) => {
                 const groupIndex = linkmans.findIndex(g => g.get('type') === action.message.linkmanType && g.get('_id') === action.message.to._id);
                 const group = linkmans.get(groupIndex).updateIn(
                     ['messages'],
                     m => m.push(immutable.fromJS(action.message)).slice(m.size > maxMessageRecords ? maxMessageRecords / 2 : 0)).update('unread', () => 0);
                 return linkmans.delete(groupIndex).unshift(group);
-            }
+            },
         );
     }
 
     case 'AddGroupMessage': {
         return state.updateIn(
             ['linkmans'],
-            linkmans => {
+            (linkmans) => {
                 const groupIndex = linkmans.findIndex(g => g.get('type') === 'group' && g.get('_id') === action.message.to._id);
                 const group = linkmans.get(groupIndex).updateIn(['messages'], m => m.push(immutable.fromJS(action.message)).slice(m.size > maxMessageRecords ? maxMessageRecords / 2 : 0)).update('unread', unread => (action.message.from._id === state.get('_id') ? 0 : unread + 1));
                 return linkmans.delete(groupIndex).unshift(group);
-            }
+            },
         );
     }
     case 'ClearUnread': {
@@ -123,8 +123,8 @@ function reducer(state = initialState, action) {
             'linkmans',
             linkmans => linkmans.update(
                 linkmans.findIndex(linkman => linkman.get('type') === action.linkmanType && linkman.get('_id') === action.linkmanId),
-                linkman => linkman.set('unread', 0)
-            )
+                linkman => linkman.set('unread', 0),
+            ),
         );
     }
     case 'UpdateUser': {
@@ -148,7 +148,7 @@ function reducer(state = initialState, action) {
         action.user.messages = [];
         return state.update(
             'linkmans',
-            linkmans => linkmans.unshift(immutable.fromJS(action.user))
+            linkmans => linkmans.unshift(immutable.fromJS(action.user)),
         );
     }
 
@@ -158,47 +158,47 @@ function reducer(state = initialState, action) {
             newLinkman = newLinkman.set('type', 'stranger').set('unread', 1).set('messages', immutable.fromJS([action.message]));
             return state.updateIn(
                 ['linkmans'],
-                linkmans => linkmans.unshift(newLinkman)
+                linkmans => linkmans.unshift(newLinkman),
             );
         }
         return state.updateIn(
             ['linkmans'],
-            linkmans => {
+            (linkmans) => {
                 const linkmanIndex = linkmans.findIndex(g => g.get('type') === 'stranger' && g.get('_id') === action.message.from._id);
                 const linkman = linkmans.get(linkmanIndex).updateIn(['messages'], m => m.push(immutable.fromJS(action.message)).slice(m.size > maxMessageRecords ? maxMessageRecords / 2 : 0)).update('unread', unread => (action.message.from._id === state.get('_id') ? 0 : unread + 1));
                 return linkmans.delete(linkmanIndex).unshift(linkman);
-            }
+            },
         );
     }
 
     case 'SendMessage': {
         return state.updateIn(
             ['linkmans'],
-            linkmans => {
+            (linkmans) => {
                 const linkmanIndex = linkmans.findIndex(g => g.get('type') === 'stranger' && g.get('_id') === action.message.to._id);
                 const linkman = linkmans.get(linkmanIndex).updateIn(['messages'], m => m.push(immutable.fromJS(action.message)).slice(m.size > maxMessageRecords ? maxMessageRecords / 2 : 0)).set('unread', 0);
                 return linkmans.delete(linkmanIndex).unshift(linkman);
-            }
+            },
         );
     }
 
     case 'ReadAllMessage': {
         return state.updateIn(
             ['linkmans'],
-            linkmans => {
+            (linkmans) => {
                 const linkmanIndex = linkmans.findIndex(g => g.get('type') === action.linkmanType && g.get('_id') === action.linkmanId);
                 return linkmans.updateIn(
                     [linkmanIndex, 'messages'],
                     messages => messages.map(
-                        message => {
+                        (message) => {
                             if (message.get('isNew')) {
                                 return message.set('isNew', false);
                             }
                             return message;
-                        }
-                    )
+                        },
+                    ),
                 );
-            }
+            },
         );
     }
 
@@ -207,8 +207,8 @@ function reducer(state = initialState, action) {
             'linkmans',
             linkmans => linkmans.update(
                 linkmans.findIndex(g => g.get('type') === 'group' && g.get('_id') === action.group._id),
-                linkman => linkman.set('members', immutable.fromJS(action.group.members))
-            )
+                linkman => linkman.set('members', immutable.fromJS(action.group.members)),
+            ),
         );
     }
 
@@ -217,8 +217,8 @@ function reducer(state = initialState, action) {
             'linkmans',
             linkmans => linkmans.update(
                 linkmans.findIndex(g => g.get('type') === 'group' && g.get('_id') === action.groupId),
-                linkman => linkman.update('messages', messages => immutable.fromJS(action.messages).concat(messages))
-            )
+                linkman => linkman.update('messages', messages => immutable.fromJS(action.messages).concat(messages)),
+            ),
         );
     }
 

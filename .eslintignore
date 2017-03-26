@@ -1,8 +1,8 @@
 # webpack output directory
-public
+public/
 
-# webpack build config
-build
+#npm
+node_modules/
 
-# test
-test
+#test
+test/

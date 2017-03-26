@@ -55,8 +55,7 @@ export default {
             tempStyle.borderWidth = width;
             tempStyle.borderColor = color;
             tempStyle.borderStyle = style;
-        }
-        else {
+        } else {
             const directions = direction.split(' ');
             for (const d of directions) {
                 if (/Top|Right|Bottom|Left/.test(d)) {

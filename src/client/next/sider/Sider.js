@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Menu, Layout } from 'antd';
 import Avatar from 'components/Avatar';
+import 'next/styles/sider.less';
 
 const { Sider } = Layout;
-
-import 'next/styles/sider.less';
 
 class AppSider extends Component {
     constructor(props) {

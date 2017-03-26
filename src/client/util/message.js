@@ -1,3 +1,5 @@
+import userDefaultAvatar from 'assets/images/user_avatar_default.png';
+
 import user from '../action/user';
 import ui from '../action/pc';
 import store from '../store';
@@ -6,10 +8,8 @@ import xss from './xss';
 
 // third party middleware
 import plugin from '../middleware/plugin';
-import handleRobotMessage from '../middleware/handleRobotMessage.js';
-import filterCrMessage from '../middleware/filterCrMessage.js';
-
-import userDefaultAvatar from 'assets/images/user_avatar_default.png';
+import handleRobotMessage from '../middleware/handleRobotMessage';
+import filterCrMessage from '../middleware/filterCrMessage';
 
 const thirdPartyMiddlewares = [
     handleRobotMessage,
@@ -61,7 +61,7 @@ function openNotification(message) {
                 icon: message.notification.avatar,
                 body: message.notification.body,
                 tag: message.notification.tag,
-            }
+            },
         );
         notification.onclick = function () {
             window.blur();
@@ -98,14 +98,13 @@ function messageHandle(message) {
     }
     if (message.linkmanType === 'group') {
         user.addGroupMessage(message);
-    }
-    else if (message.linkmanType === 'stranger') {
+    } else if (message.linkmanType === 'stranger') {
         user.addMessage(message);
     }
 }
 
 function initialMessagesHandle(messages) {
-    return messages.map(m => {
+    return messages.map((m) => {
         m.preview = `${m.from.username}: ${m.type === 'text' ? m.content : `[${m.type}]`}`;
         m.isNew = false;
         if (m.type === 'text') {

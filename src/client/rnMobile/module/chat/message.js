@@ -6,8 +6,8 @@ import {
 } from 'react-native';
 import pureRender from 'pure-render-decorator';
 
-import color from '../../util/color.js';
-import cs from '../../util/commonStyle.js';
+import color from '../../util/color';
+import cs from '../../util/commonStyle';
 
 let styles = null;
 
@@ -41,7 +41,7 @@ export default class Message extends Component {
 }
 
 styles = {
-    container: (isSelf) => ([
+    container: isSelf => ([
         cs.direction(isSelf ? 'row-reverse' : 'row'),
         cs.margin(0, 0, 5),
     ]),
@@ -50,12 +50,12 @@ styles = {
         cs.radius(20),
         cs.margin(3, 10, 3, 10),
     ]),
-    message: (isSelf) => ([
+    message: isSelf => ([
         cs.flex(),
         isSelf ? cs.margin(0, 0, 0, 60) : cs.margin(0, 60),
         cs.padding(3),
     ]),
-    nickTimeContainer: (isSelf) => ([
+    nickTimeContainer: isSelf => ([
         cs.direction(),
         cs.layout('flex-end'),
         isSelf ? cs.layout('flex-end', 'flex-end') : {},

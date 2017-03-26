@@ -1,24 +1,19 @@
 require('./check-versions')();
 const config = require('../config/webpack');
-if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
+
+if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
+}
+
+const opn = require('opn');
 const path = require('path');
 const express = require('express');
 const webpack = require('webpack');
-const opn = require('opn');
 const proxyMiddleware = require('http-proxy-middleware');
-const webpackConfig = process.env.NODE_ENV === 'testing'
-  ? require('./webpack.prod.conf')
-  : require('./webpack.dev.conf');
+const webpackConfig = require('./webpack.dev.conf');
 
-// start redux dev tool server
-// const remotedev = require('remotedev-server');
-// const projectConfig = require('../config/project');
-// remotedev({ hostname: 'localhost', port: config.reduxDevPort });
-
-// default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port;
-// Define HTTP proxies to your custom API backend
-// https://github.com/chimurai/http-proxy-middleware
+const autoOpenBrowser = !!config.dev.autoOpenBrowser;
 const proxyTable = config.dev.proxyTable;
 
 const app = express();
@@ -30,9 +25,9 @@ const devMiddleware = require('webpack-dev-middleware')(compiler, {
 });
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
-    log: () => {},
+    log: () => { },
 });
-// force page reload when html-webpack-plugin template changes
+
 compiler.plugin('compilation', (compilation) => {
     compilation.plugin('html-webpack-plugin-after-emit', (data, cb) => {
         hotMiddleware.publish({ action: 'reload' });
@@ -40,26 +35,20 @@ compiler.plugin('compilation', (compilation) => {
     });
 });
 
-// proxy api requests
 Object.keys(proxyTable).forEach((context) => {
     let options = proxyTable[context];
     if (typeof options === 'string') {
         options = { target: options };
     }
-    app.use(proxyMiddleware(context, options));
+    app.use(proxyMiddleware(options.filter || context, options));
 });
 
-// handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')());
 
-// serve webpack bundle output
 app.use(devMiddleware);
 
-// enable hot-reload and state-preserving
-// compilation error display
 app.use(hotMiddleware);
 
-// serve pure static assets
 const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
 app.use(staticPath, express.static('./static'));
 
@@ -75,8 +64,8 @@ module.exports = app.listen(port, (err) => {
         return;
     }
 
-  // when env is testing, don't need open it
-    if (process.env.NODE_ENV !== 'testing') {
+    // when env is testing, don't need open it
+    if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
         opn(uri);
     }
 });

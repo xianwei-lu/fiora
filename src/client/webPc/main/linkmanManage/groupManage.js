@@ -10,12 +10,12 @@ import mask from '../../../util/mask';
 
 @pureRender
 class GroupManage extends React.Component {
-    handleCreateGroupClick() {
+    static handleCreateGroupClick() {
         ui.openCreateGroupInput();
         mask(ui.closeCreateGroupInput);
     }
 
-    handleAddGroupClick() {
+    static handleAddGroupClick() {
         ui.openAddGroupInput();
         mask(ui.closeAddGroupInput);
     }

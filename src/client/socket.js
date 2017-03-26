@@ -9,8 +9,7 @@ if (window.navigator.product === 'ReactNative') {
     window.location = {};
     window.location.protocol = 'http:';
     platformSocketParam = { jsonp: false };
-}
-else {
+} else {
     socketClient = require('socket.io-client');
 }
 
@@ -19,7 +18,7 @@ function createInterface(method) {
         if (typeof this.token === 'string' && this.token !== '') {
             data.token = this.token;
         }
-        this.emit('message', { method: method, path: path, data: data }, cb);
+        this.emit('message', { method, path, data }, cb);
     };
 }
 

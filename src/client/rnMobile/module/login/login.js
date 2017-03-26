@@ -8,12 +8,12 @@ import {
     AsyncStorage,
 } from 'react-native';
 import pureRender from 'pure-render-decorator';
-
-import color from '../../util/color.js';
-import cs from '../../util/commonStyle.js';
-import user from '../../../action/user.js';
-import rn from '../../../action/rn.js';
 import userDefaultAvatar from 'assets/images/user_avatar_default.png';
+
+import color from '../../util/color';
+import cs from '../../util/commonStyle';
+import user from '../../../action/user';
+import rn from '../../../action/rn';
 
 let styles = null;
 
@@ -36,7 +36,7 @@ export default class Login extends Component {
             if (token && token !== '') {
                 user
                 .reConnect(token)
-                .then(result => {
+                .then((result) => {
                     if (result.status === 201) {
                         user.online();
                         rn.navigator('userList');
@@ -49,8 +49,8 @@ export default class Login extends Component {
     handleLogin = () => {
         user.login(
             this.state.username,
-            this.state.password
-        ).then(response => {
+            this.state.password,
+        ).then((response) => {
             if (response.status === 201) {
                 AsyncStorage.setItem('token', response.data.token);
                 user.online();
@@ -157,7 +157,7 @@ styles = {
         cs.margin(50, undefined, 5, undefined),
         cs.radius(40),
     ]),
-    textInputContainer: (noTopBorder) => ([
+    textInputContainer: noTopBorder => ([
         cs.layout('stretch'),
         cs.border(`${noTopBorder ? '' : 'Top'} Bottom`, 1, color.gery[1]),
         cs.bgColor('white'),

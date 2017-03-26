@@ -16,30 +16,25 @@ class AddGroup extends React.Component {
         router: PropTypes.object.isRequired,
     }
 
+    static handleClose() {
+        ui.closeAddGroupInput();
+        ui.closeMaskLayout();
+    }
+
     handleClick = (groupName) => {
-        user.joinGroup(groupName).then(response => {
+        user.joinGroup(groupName).then((response) => {
             if (response.status === 201) {
                 ui.closeAddGroupInput();
                 ui.closeMaskLayout();
                 this.context.router.push(`/main/chat/group/${response.data._id}`);
-            }
-            else {
-                if (response.data === 'group not exists') {
-                    ui.openNotification('该群组不存在');
-                }
-                else if (response.data === 'you already join this group') {
-                    ui.openNotification('您已在该群组中');
-                }
-                else {
-                    ui.openNotification('加入失败! 服务器发生错误, 请联系管理员.');
-                }
+            } else if (response.data === 'group not exists') {
+                ui.openNotification('该群组不存在');
+            } else if (response.data === 'you already join this group') {
+                ui.openNotification('您已在该群组中');
+            } else {
+                ui.openNotification('加入失败! 服务器发生错误, 请联系管理员.');
             }
         });
-    }
-
-    handleClose() {
-        ui.closeAddGroupInput();
-        ui.closeMaskLayout();
     }
 
     render() {
@@ -59,5 +54,5 @@ class AddGroup extends React.Component {
 export default connect(
     state => ({
         show: state.getIn(['pc', 'showAddGroupInput']),
-    })
+    }),
 )(AddGroup);

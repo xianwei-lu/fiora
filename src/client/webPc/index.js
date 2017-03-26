@@ -28,5 +28,5 @@ ReactDom.render(
             </Route>
         </Router>
     </Provider>,
-    document.querySelector('#app')
+    document.querySelector('#app'),
 );

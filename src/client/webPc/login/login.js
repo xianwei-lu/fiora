@@ -31,34 +31,26 @@ class Login extends React.Component {
     handleLogin = () => {
         user
             .login(this.username.value, this.password.value)
-            .then(result => {
+            .then((result) => {
                 if (result.status === 201) {
                     window.localStorage.setItem('token', result.data.token);
                     this.context.router.push('/main');
                     user.online();
-                }
-                else {
-                    if (result.data === 'need username param but not exists') {
-                        ui.openNotification('请输入用户名');
-                        this.setState({ usernameInput: 'error' });
-                    }
-                    else if (result.data === 'need password param but not exists') {
-                        ui.openNotification('请输入密码');
-                        this.setState({ passwordInput: 'error' });
-                    }
-                    else if (result.data === 'user not exists') {
-                        ui.openNotification('该用户不存在!');
-                    }
-                    else if (result.data === 'password not correct') {
-                        ui.openNotification('密码错误!');
-                        this.setState({ passwordInput: 'error' });
-                    }
-                    else if (result.data === 'you have login. please logout first') {
-                        ui.openNotification('您已经登录了一个帐号, 请退出登录后再试!');
-                    }
-                    else {
-                        ui.openNotification('登录失败! 服务器发生错误, 请联系管理员.');
-                    }
+                } else if (result.data === 'need username param but not exists') {
+                    ui.openNotification('请输入用户名');
+                    this.setState({ usernameInput: 'error' });
+                } else if (result.data === 'need password param but not exists') {
+                    ui.openNotification('请输入密码');
+                    this.setState({ passwordInput: 'error' });
+                } else if (result.data === 'user not exists') {
+                    ui.openNotification('该用户不存在!');
+                } else if (result.data === 'password not correct') {
+                    ui.openNotification('密码错误!');
+                    this.setState({ passwordInput: 'error' });
+                } else if (result.data === 'you have login. please logout first') {
+                    ui.openNotification('您已经登录了一个帐号, 请退出登录后再试!');
+                } else {
+                    ui.openNotification('登录失败! 服务器发生错误, 请联系管理员.');
                 }
             });
     }
@@ -66,7 +58,7 @@ class Login extends React.Component {
     handleSignup = () => {
         user
             .signup(this.username.value, this.password.value)
-            .then(result => {
+            .then((result) => {
                 if (result.status === 201) {
                     user
                         .login(this.username.value, this.password.value)
@@ -74,27 +66,20 @@ class Login extends React.Component {
                             this.context.router.push('/main');
                             user.online();
                         });
-                }
-                else {
-                    if (result.data === 'need username param but not exists') {
-                        ui.openNotification('请输入用户名');
-                        this.setState({ usernameInput: 'error' });
-                    }
-                    else if (result.data === 'need password param but not exists') {
-                        ui.openNotification('请输入密码');
-                        this.setState({ passwordInput: 'error' });
-                    }
-                    else if (result.data === 'username already exists') {
-                        ui.openNotification('注册失败! 用户名已存在.');
-                        this.setState({ usernameInput: 'error' });
-                    }
-                    else if (result.data === 'username invalid') {
-                        ui.openNotification('注册失败! 用户名仅能使用字母,数字,汉字,横线-,下划线_.');
-                        this.setState({ usernameInput: 'error' });
-                    }
-                    else {
-                        ui.openNotification('注册失败! 服务器发生错误, 请联系管理员.');
-                    }
+                } else if (result.data === 'need username param but not exists') {
+                    ui.openNotification('请输入用户名');
+                    this.setState({ usernameInput: 'error' });
+                } else if (result.data === 'need password param but not exists') {
+                    ui.openNotification('请输入密码');
+                    this.setState({ passwordInput: 'error' });
+                } else if (result.data === 'username already exists') {
+                    ui.openNotification('注册失败! 用户名已存在.');
+                    this.setState({ usernameInput: 'error' });
+                } else if (result.data === 'username invalid') {
+                    ui.openNotification('注册失败! 用户名仅能使用字母,数字,汉字,横线-,下划线_.');
+                    this.setState({ usernameInput: 'error' });
+                } else {
+                    ui.openNotification('注册失败! 服务器发生错误, 请联系管理员.');
                 }
             });
     }
@@ -230,5 +215,5 @@ export default connect(
     state => ({
         username: state.getIn(['pc', 'username']),
         avatar: state.getIn(['pc', 'avatar']),
-    })
+    }),
 )(Login);

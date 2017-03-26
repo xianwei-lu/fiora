@@ -7,7 +7,7 @@ module.exports = {
         index: path.resolve(__dirname, '../public/index.html'),
         assetsRoot: path.resolve(__dirname, '../public'),
         assetsSubDirectory: '.',
-        assetsPublicPath: '/',
+        assetsPublicPath: 'http://assets.suisuijiang.com/',
         productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -22,6 +22,7 @@ module.exports = {
         assetsSubDirectory: '.',
         assetsPublicPath: '/',
         proxyTable: {},
+        autoOpenBrowser: true,
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

@@ -13,14 +13,13 @@ class Input extends React.Component {
         linkmanId: PropTypes.string.isRequired,
     };
 
-    insertAtCursor(input, value) {
+    static insertAtCursor(input, value) {
         if (document.selection) {
             input.focus();
             const sel = document.selection.createRange();
             sel.text = value;
             sel.select();
-        }
-        else if (input.selectionStart || input.selectionStart === '0') {
+        } else if (input.selectionStart || input.selectionStart === '0') {
             const startPos = input.selectionStart;
             const endPos = input.selectionEnd;
             const restoreTop = input.scrollTop;
@@ -58,8 +57,7 @@ class Input extends React.Component {
                 return;
             }
             user.sendGroupMessage(linkmanId, 'text', message);
-        }
-        else {
+        } else {
             if (/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(message)) {
                 const img = new Image();
                 img.onload = () => {
@@ -96,8 +94,7 @@ class Input extends React.Component {
                     reader.onloadend = function () {
                         if (instance.props.type === 'group') {
                             user.sendGroupMessage(instance.props.linkmanId, 'image', this.result);
-                        }
-                        else {
+                        } else {
                             user.sendMessage(instance.props.linkmanId, 'image', this.result);
                         }
                     };

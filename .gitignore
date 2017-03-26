@@ -3,6 +3,7 @@
 .vscode
 typings
 tsconfig.json
+jsconfig.json
 
 # node.js
 node_modules

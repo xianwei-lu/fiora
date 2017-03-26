@@ -4,7 +4,7 @@ const dispatch = Store.dispatch;
 
 const actions = {
     // chat messageList
-    shouldScrollMessage: (should) => dispatch({ type: 'ShouldScrollMessage', should }),
+    shouldScrollMessage: should => dispatch({ type: 'ShouldScrollMessage', should }),
 };
 
 export default actions;
