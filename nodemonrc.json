@@ -1,12 +1,13 @@
 {
-  "verbose": true,
-  "ignore": [
-    "src/client/*",
-    "build/*",
-    "test/*",
-    "android/*",
-    "ios/*",
-    "node_modules/*",
-    "public/*"
-  ]
+    "verbose": true,
+    "ignore": [
+        "src/client/*",
+        "build/*",
+        "test/*",
+        "android/*",
+        "ios/*",
+        "node_modules/*",
+        "public/*",
+        "test.js"
+    ]
 }
