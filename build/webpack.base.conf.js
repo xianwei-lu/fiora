@@ -1,6 +1,6 @@
 const path = require('path');
 const utils = require('./utils');
-const config = require('../config/webpack');
+const config = require('../config');
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
