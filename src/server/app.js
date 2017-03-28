@@ -5,7 +5,10 @@ const res = require('./middlewares/res');
 const log = require('./middlewares/log');
 const close = require('./middlewares/close');
 const notFound = require('./middlewares/notFound');
+const police = require('./middlewares/police');
 const catchError = require('./middlewares/catchError');
+
+const policeConfig = require('./polices/index');
 
 const app = new Koa();
 const io = new IO();
@@ -21,6 +24,7 @@ io.use(close());
 io.use(log());
 io.use(catchError());
 io.use(res());
+io.use(police(policeConfig));
 
 // 注册路由
 applyRoutes(io);
