@@ -5,6 +5,7 @@ const res = require('./middlewares/res');
 const log = require('./middlewares/log');
 const close = require('./middlewares/close');
 const notFound = require('./middlewares/notFound');
+const catchError = require('./middlewares/catchError');
 
 const app = new Koa();
 const io = new IO();
@@ -18,6 +19,7 @@ app._io.set('heartbeat timeout', 5000);
 // 中间件
 io.use(close());
 io.use(log());
+io.use(catchError());
 io.use(res());
 
 // 注册路由
