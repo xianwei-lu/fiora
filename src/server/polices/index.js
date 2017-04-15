@@ -1,5 +1,5 @@
 const pathToRegexp = require('path-to-regexp');
-const hasAuthorization = require('./hasAuthorization');
+// const hasAuthorization = require('./hasAuthorization');
 
 const allApplyPolices = [
 
@@ -15,7 +15,7 @@ function createRouterMatch(method, path) {
 let policeConfig = [
     {
         match: createRouterMatch('GET', '/example/:id'),
-        polices: [hasAuthorization],
+        polices: [],
     },
 ];
 policeConfig = policeConfig.map((police) => {

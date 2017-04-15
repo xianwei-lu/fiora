@@ -26,7 +26,7 @@ const MessageSchema = new Schema({
     content: {
         type: String,
         default: '',
-    }
+    },
 });
 
 const Message = mongoose.model('Message', MessageSchema);

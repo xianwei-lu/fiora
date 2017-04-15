@@ -3,7 +3,11 @@ module.exports = function () {
         try {
             await next();
         } catch (err) {
-            console.log(err);
+            if (err.name === 'Assert Error') {
+                const { status, data } = JSON.parse(err.message);
+                ctx.res(status, data);
+                return;
+            }
             ctx.res(500, err.toString());
         }
     };
