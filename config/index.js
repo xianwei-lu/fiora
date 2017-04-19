@@ -35,7 +35,7 @@ module.exports = {
         reduxDevPort: 8000,
 
         // database url and name
-        database: 'localhost:27017/fiora-new',
+        database: 'localhost:27017/fiora',
         testDatabase: 'localhost:27017/fiora-new-test',
 
         // jwt encryption secret

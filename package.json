@@ -8,6 +8,7 @@
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
     "reduxServer": "node bin/reduxDevServer.js",
+    "init": "node bin/init.js",
     "rnServer": "node node_modules/react-native/local-cli/cli.js start --root src/client/rnMobile --reset-cache",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "antd": "^2.7.1",
+    "avatar-generator": "^1.0.8",
     "bcrypt": "^1.0.2",
     "bluebird": "^3.4.7",
     "chat-room-plugin": "1.1.3",

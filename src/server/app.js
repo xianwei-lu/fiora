@@ -1,7 +1,7 @@
 const Koa = require('koa');
 const IO = require('koa-socket');
 const applyRoutes = require('./routes');
-const res = require('./middlewares/res');
+const addMethods = require('./middlewares/addMethods');
 const log = require('./middlewares/log');
 const close = require('./middlewares/close');
 const notFound = require('./middlewares/notFound');
@@ -23,7 +23,7 @@ app._io.set('heartbeat timeout', 5000);
 io.use(close());
 io.use(log());
 io.use(catchError());
-io.use(res());
+io.use(addMethods(io, app._io));
 io.use(police(policeConfig));
 
 // 注册路由
@@ -38,7 +38,9 @@ app.io.on('connection', () => {
 app.io.on('disconnect', () => {
     // console.log('连接断开', ctx.socket.id);
 });
-app.io.on('message', () => {}); // 不能去掉
+app.io.on('message', () => {
+
+}); // 不能去掉
 
 app.use(async (ctx) => {
     ctx.body = 'welcome friends!';

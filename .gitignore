@@ -90,3 +90,6 @@ android/app/libs
 android/keystores/debug.keystore
 
 test.js
+
+# temp avatar file
+temp/

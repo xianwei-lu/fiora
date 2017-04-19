@@ -41,7 +41,7 @@ class SocketRouter {
                     }
                     ctx.params = Object.assign(pathParams, ctx.data.params);
                     ctx.header = ctx.data.header;
-                    route.cb(ctx);
+                    await route.cb(ctx);
                 }
             }
             if (!hasMatch) {

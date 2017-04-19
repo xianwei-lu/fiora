@@ -8,6 +8,7 @@ module.exports = function () {
                 ctx.res(status, data);
                 return;
             }
+            console.log(err);
             ctx.res(500, err.toString());
         }
     };
