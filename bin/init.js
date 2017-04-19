@@ -1,19 +1,17 @@
 const mongoose = require('mongoose');
-const config = require('../config/index');
+const bluebird = require('bluebird');
+const path = require('path');
+const fs = bluebird.promisifyAll(require('fs'));
+const config = require('../config/index').project;
 const Group = require('../src/server/models/group');
 
 mongoose.Promise = Promise;
-mongoose.connect(config.project.database, async (err) => {
-    if (err) {
-        console.log('connect database error!');
-        console.log(err);
-        return process.exit(1);
-    }
 
+async function init() {
+    await mongoose.connect(config.database);
     const group = await Group.findOne({ isDefault: true });
     if (group) {
-        console.log('default group already exists.');
-        return process.exit(0);
+        throw Error('default group already exists.');
     }
 
     const defaultGroup = await Group.create({
@@ -22,8 +20,22 @@ mongoose.connect(config.project.database, async (err) => {
         isDefault: true,
     });
     if (!defaultGroup) {
-        console.log('create default group fail');
-        return process.exit(1);
+        throw Error('create default group fail.');
     }
-    console.log('create default group success');
+    console.log('create default group success.');
+
+    const tempDirectory = path.join(__dirname, '../temp/');
+    if (!await fs.exists(tempDirectory)) {
+        await fs.mkdir(tempDirectory);
+        console.log('create temp directory success.');
+    }
+}
+
+init()
+.then(() => {
+    process.exit(0);
+})
+.catch(err => {
+    console.log(err.message);
+    process.exit(1);
 });
