@@ -8,7 +8,7 @@ function resolve(dir) {
 
 module.exports = {
     entry: {
-        pc: './src/client/webPc/index.js',
+        pc: './src/client/index.pc.js',
     },
     output: {
         path: config.build.assetsRoot,
