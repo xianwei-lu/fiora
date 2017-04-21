@@ -73,38 +73,6 @@ Example
 module.exports = Example;
 
 // const UserRoute = {
-//     'POST /user': function* (data) {
-//         assert(!data.username, this.end, 400, 'need username param but not exists');
-//         assert(!data.password, this.end, 400, 'need password param but not exists');
-
-//         const user = yield User.findOne({ username: data.username });
-//         assert(user, this.end, 400, 'username already exists');
-
-//         const defaultGroup = yield Group.findOne({ isDefault: true });
-
-//         const salt = yield bcrypt.genSalt$(saltRounds);
-//         const hash = yield bcrypt.hash$(data.password, salt);
-//         const newUser = new User({
-//             username: data.username,
-//             salt,
-//             password: hash,
-//             avatar: avatarColors[Math.floor(Math.random() * avatarColors.length)],
-//             groups: [defaultGroup],
-//         });
-
-//         let savedUser = null;
-//         try {
-//             savedUser = yield newUser.save();
-//             defaultGroup.members.push(newUser);
-//             yield defaultGroup.save();
-//         } catch (err) {
-//             if (err.message === 'User validation failed') {
-//                 return this.end(400, 'username invalid');
-//             }
-//             return this.end(500, 'server error when save new user');
-//         }
-//         this.end(201, savedUser);
-//     },
 //     'GET /user': function* (data) {
 
 //     },

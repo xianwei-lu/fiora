@@ -1,8 +1,0 @@
-@import "../../common/commonStyle";
-
-header {
-    @include size(100%, 80px);
-    background-color: $lightBlue5;
-    display: flex;
-    flex-direction: row;
-}

@@ -1,8 +1,0 @@
-@import "./commonStyle";
-
-.mask-layout {
-    @include maskColor;
-    @include maskIndex;
-    @include size;
-    @include containerStart;
-}

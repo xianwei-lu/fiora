@@ -1,8 +1,0 @@
-@import "../../common/commonStyle";
-
-.chat {
-    @include size(1000px, 100%);
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-}

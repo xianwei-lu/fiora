@@ -7,11 +7,7 @@
     "server": "export NODE_ENV=development && nodemon src/server/index.js --config nodemonrc.json",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "reduxServer": "node bin/reduxDevServer.js",
     "init": "node bin/init.js",
-    "rnServer": "node node_modules/react-native/local-cli/cli.js start --root src/client/rnMobile --reset-cache",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
     "test": "export NODE_ENV=test && mocha test/*",
     "lint": "./node_modules/.bin/eslint ./ --cache --ignore-pattern .eslintignore --fix"
   },

@@ -9,8 +9,6 @@ function resolve(dir) {
 module.exports = {
     entry: {
         pc: './src/client/webPc/index.js',
-        mobile: './src/client/webMobile/index.js',
-        next: './src/client/next/index.js',
     },
     output: {
         path: config.build.assetsRoot,
@@ -27,18 +25,10 @@ module.exports = {
             '@': resolve('src'),
             assets: resolve('src/client/assets'),
             components: resolve('src/client/components'),
-            next: resolve('src/client/next'),
         },
     },
     module: {
         rules: [
-            {
-                enforce: 'pre',
-                test: /\.jsx?$/,
-                loader: 'eslint-loader',
-                include: [resolve('src')],
-                exclude: /node_modules/,
-            },
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
