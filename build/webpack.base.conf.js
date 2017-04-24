@@ -27,6 +27,7 @@ module.exports = {
             components: resolve('src/client/components'),
             features: resolve('src/client/features'),
             pages: resolve('src/client/pages'),
+            styles: resolve('src/client/styles'),
         },
     },
     module: {
