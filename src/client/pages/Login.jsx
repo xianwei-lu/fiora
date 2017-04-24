@@ -3,17 +3,24 @@ import React, { Component } from 'react';
 import View from 'components/View';
 import Form from 'features/Form';
 import Avatar from 'components/Avatar';
+import 'styles/page/login.less';
 
 export default class Login extends Component {
+    onLogin = ({ username, password }) => {
+        console.log(username, password);
+    }
     render() {
         return (
             <View
-                center fill
+                className="page-login" center fill
                 backgroundImage={require('assets/images/background2.jpg')}
             >
-                <View>
-                    <Avatar />
-                    <Form />
+                <View className="form-view">
+                    <Avatar width={60} height={60} circular />
+                    <Form className="form" onSubmit={this.onLogin}>
+                        <Form.Input placeholder="昵称" name="username" />
+                        <Form.Input placeholder="密码" name="password" />
+                    </Form>
                 </View>
             </View>
         );

@@ -4,7 +4,7 @@ import {
     Route,
 } from 'react-router-dom';
 
-import 'styles/app.less';
+import 'styles/page/app.less';
 import 'normalize.css';
 import Login from './Login';
 
