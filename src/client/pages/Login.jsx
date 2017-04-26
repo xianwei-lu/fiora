@@ -11,17 +11,12 @@ export default class Login extends Component {
     }
     render() {
         return (
-            <View
-                className="page-login" center fill
-                backgroundImage={require('assets/images/background2.jpg')}
-            >
-                <View className="form-view">
-                    <Avatar width={60} height={60} circular />
-                    <Form className="form" onSubmit={this.onLogin}>
-                        <Form.Input placeholder="昵称" name="username" />
-                        <Form.Input placeholder="密码" name="password" />
-                    </Form>
-                </View>
+            <View className="page-login">
+                <Avatar width={60} height={60} circular />
+                <Form className="form" onSubmit={this.onLogin}>
+                    <Form.Input placeholder="昵称" name="username" />
+                    <Form.Input placeholder="密码" name="password" />
+                </Form>
             </View>
         );
     }

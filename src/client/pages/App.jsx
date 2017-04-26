@@ -6,13 +6,19 @@ import {
 
 import 'styles/page/app.less';
 import 'normalize.css';
+import View from 'components/View';
 import Login from './Login';
 
 export default class App extends Component {
     render() {
         return (
             <Router>
-                <Route path="/login" component={Login} />
+                <View
+                    className="page-app" center fill
+                    backgroundImage={require('assets/images/background2.jpg')}
+                >
+                    <Route path="/login" component={Login} />
+                </View>
             </Router>
         );
     }
