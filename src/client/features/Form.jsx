@@ -43,6 +43,7 @@ export default class Form extends Component {
             PropTypes.string,
         ]),
         onSubmit: PropTypes.func,
+        button: PropTypes.string,
     }
 
     onSubmitClick = () => {
@@ -58,11 +59,11 @@ export default class Form extends Component {
         }
     }
     render() {
-        const { children } = this.props;
+        const { children, button } = this.props;
         return (
             <div className="feature-form" ref={d => this.dom = d}>
                 { children }
-                <FormButton text="登录" onClick={this.onSubmitClick} />
+                <FormButton text={button} onClick={this.onSubmitClick} />
             </div>
         );
     }

@@ -20,8 +20,6 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.json'],
         alias: {
-
-            react$: 'react/dist/react.js',
             '@': resolve('src'),
             assets: resolve('src/client/assets'),
             components: resolve('src/client/components'),

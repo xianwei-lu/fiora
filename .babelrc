@@ -8,8 +8,7 @@
         ],
         "stage-2",
         "es2015",
-        "react",
-        "react-native"
+        "react"
     ],
     "plugins": [
         "transform-runtime",
