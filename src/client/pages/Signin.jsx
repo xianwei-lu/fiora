@@ -11,9 +11,7 @@ class Signin extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 server.register(values.username, values.password).then(response => {
-                    console.log(response);
                     if (response.status !== 201) {
                         message.error(response.data), 3;
                     }
