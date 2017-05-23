@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
     createTime: { type: Date, default: Date.now, index: true },
-    updateTime: { type: Date, default: Date.now },
 
     username: {
         type: String,
@@ -18,36 +17,6 @@ const UserSchema = new Schema({
     avatar: {
         type: String,
         default: '',
-    },
-    gender: {
-        type: String,
-        enum: ['male', 'female'],
-        default: 'male',
-    },
-    birthday: {
-        type: Date,
-        default: Date.now,
-    },
-    introduce: {
-        type: String,
-        default: '',
-        maxLength: 256,
-    },
-    location: {
-        type: String,
-        maxLength: 64,
-    },
-    github: {
-        type: String,
-        maxLength: 64,
-    },
-    website: {
-        type: String,
-        maxLength: 64,
-    },
-    qq: {
-        type: String,
-        maxLength: 16,
     },
     groups: [
         {

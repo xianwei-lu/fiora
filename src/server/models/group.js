@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-
 const GroupSchema = new Schema({
     createTime: { type: Date, default: Date.now },
-    updateTime: { type: Date, default: Date.now },
 
     name: {
         type: String,
@@ -21,7 +19,6 @@ const GroupSchema = new Schema({
         type: String,
         default: '',
     },
-
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User',

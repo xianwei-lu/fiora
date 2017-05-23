@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const SocketSchema = new Schema({
     createTime: { type: Date, default: Date.now, index: true },
-    updateTime: { type: Date, default: Date.now },
 
     socket: {
         type: String,

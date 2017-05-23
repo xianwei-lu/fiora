@@ -12,8 +12,8 @@ const Group = require('../models/group');
 const saltRounds = 10;
 const genders = ['male', 'female'];
 
-const Example = new Router({ prefix: '/user' });
-Example
+const UserRouter = new Router({ prefix: '/user' });
+UserRouter
 .get('/:username', async (ctx) => {
     const { username } = ctx.params;
     assert(!mongoose.Types.ObjectId.isValid(username), 400, 'userId is invalid');
@@ -68,14 +68,42 @@ Example
         }
         return ctx.res(500, 'server error when save new user');
     }
+})
+.put('/', async (ctx) => {
+    const {gender, birthday, location, website, github, qq} = ctx.params;
+    assert(typeof gender !== 'string', 400, 'need gender param but not exists');
+    assert(typeof birthday !== 'string', 400, 'need birthday param but not exists');
+    assert(typeof location !== 'string', 400, 'need location param but not exists');
+    assert(typeof website !== 'string', 400, 'need website param but not exists');
+    assert(typeof github !== 'string', 400, 'need github param but not exists');
+    assert(typeof qq !== 'string', 400, 'need qq param but not exists');
+
+    // const user = yield User.findById(this.socket.user, '-password -salt');
+
+    // user.gender = data.gender;
+    // const updateBirthday = new Date(data.birthday);
+    // const now = new Date();
+    // user.birthday = updateBirthday > now ? now : updateBirthday;
+    // user.location = data.location;
+    // user.website = data.website;
+    // user.github = data.github;
+    // user.qq = data.qq;
+    // yield user.save();
+
+    // this.end(200, {
+    //     gender: user.gender,
+    //     birthday: user.birthday,
+    //     location: user.location,
+    //     website: user.website === '' || /^http/.test(user.website) ? user.website : `http://${user.website}`,
+    //     github: user.github === '' || /^http/.test(user.github) ? user.github : `http://${user.github}`,
+    //     qq: user.qq,
+    // });
+    return ctx.res(404, '未实现');
 });
 
-module.exports = Example;
+module.exports = UserRouter;
 
 // const UserRoute = {
-//     'GET /user': function* (data) {
-
-//     },
 //     'PUT /user': function* (data) {
 //         yield* isLogin(this.socket, data, this.end);
 //         assert(typeof data.gender !== 'string', this.end, 400, 'need gender param but not exists');
