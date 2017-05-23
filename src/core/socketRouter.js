@@ -24,7 +24,7 @@ class SocketRouter {
         this.get = createMethod.call(this, 'GET');
         this.post = createMethod.call(this, 'POST');
         this.delete = createMethod.call(this, 'DELETE');
-        this.update = createMethod.call(this, 'UPDATE');
+        this.put = createMethod.call(this, 'PUT');
         this.patch = createMethod.call(this, 'PATCH');
     }
     routes() {
