@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const config = require('../../../config/index');
 
 const Schema = mongoose.Schema;
 const GroupSchema = new Schema({
@@ -12,7 +13,7 @@ const GroupSchema = new Schema({
     },
     avatar: {
         type: String,
-        default: 'http://assets.suisuijiang.com/group_avatar_default.jpeg',
+        default: config.project.defaultGroupAvatar,
     },
     // 公告
     announcement: {

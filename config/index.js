@@ -31,9 +31,6 @@ module.exports = {
         devServer: 'localhost',
         devPort: 9200,
 
-        // redux dev tool server
-        reduxDevPort: 8000,
-
         // database url and name
         database: 'localhost:27017/fiora',
         testDatabase: 'localhost:27017/fiora-new-test',
@@ -50,5 +47,8 @@ module.exports = {
 
         // max message lenght. for both backend and frontend
         maxMessageLength: 1024,
+
+        // default group avatar
+        defaultGroupAvatar: 'https://assets.suisuijiang.com/group_avatar_default.jpeg',
     },
 };

@@ -37,11 +37,11 @@ UserRouter
 })
 .post('/', async (ctx) => {
     const { username, password } = ctx.params;
-    assert(!username, 400, 'need username param but not exists');
-    assert(!password, 400, 'need password param but not exists');
+    assert(!username, 400, '昵称不能为空');
+    assert(!password, 400, '密码不能为空');
 
     const user = await User.findOne({ username });
-    assert(user, 400, 'username already exists');
+    assert(user, 400, '该昵称已存在');
 
     const defaultGroup = await Group.findOne({ isDefault: true });
 
@@ -64,7 +64,7 @@ UserRouter
         ctx.res(201, newUser);
     } catch (err) {
         if (err.message === 'User validation failed') {
-            return ctx.res(400, 'username invalid');
+            return ctx.res(400, '用户名不合法');
         }
         return ctx.res(500, 'server error when save new user');
     }
