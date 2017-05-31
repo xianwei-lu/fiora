@@ -8,6 +8,7 @@ import server from '../server';
 class Login extends Component {
     static propTypes = {
         form: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired,
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -21,6 +22,9 @@ class Login extends Component {
                 });
             }
         });
+    }
+    toSignin = () => {
+        this.props.history.push('/signin');
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -52,6 +56,7 @@ class Login extends Component {
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                    <p className="login-form-text" onClick={this.toSignin}>还没有账号? <a>去注册</a></p>
                 </Form.Item>
             </Form>
         );
