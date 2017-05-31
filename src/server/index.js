@@ -4,6 +4,8 @@ const app = require('./app');
 const config = require('../../config').project;
 const env = require('../utils/env');
 
+const Socket = require('./models/socket');
+
 mongoose.Promise = Promise;
 
 mongoose.connect(config.database, (err) => {
@@ -16,6 +18,7 @@ mongoose.connect(config.database, (err) => {
 
 const host = env.isDev() ? config.devServer : config.server;
 const port = env.isDev() ? config.devPort : config.port;
-app.listen(port, () => {
+app.listen(port, async () => {
+    await Socket.remove({});
     console.log(` >>> server listen on http://${host}:${port}`);
 });

@@ -11,11 +11,11 @@ class Signin extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                server.register(values.username, values.password).then(response => {
+                server.register(values.username, values.password).then((response) => {
                     if (response.status !== 201) {
-                        message.error(response.data), 3;
+                        message.error(response.data, 3);
                     }
-                })
+                });
             }
         });
     }
@@ -44,12 +44,12 @@ class Signin extends Component {
                         getFieldDecorator('username', {
                             rules: [{
                                 required: true,
-                                message: '昵称不能为空'
+                                message: '昵称不能为空',
                             }, {
-                                validator: this.checkUsername
+                                validator: this.checkUsername,
                             }],
                         })(
-                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="请输入昵称, 支持中文/英文/数字" />
+                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="请输入昵称, 支持中文/英文/数字" />,
                         )
                     }
                 </Form.Item>
@@ -58,10 +58,10 @@ class Signin extends Component {
                         getFieldDecorator('password', {
                             rules: [{
                                 required: true,
-                                message: '密码不能为空'
+                                message: '密码不能为空',
                             }],
                         })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请输入密码, 越复杂越好" />
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请输入密码, 越复杂越好" />,
                         )
                     }
                 </Form.Item>
@@ -70,12 +70,12 @@ class Signin extends Component {
                         getFieldDecorator('passwordConfirm', {
                             rules: [{
                                 required: true,
-                                message: '请重复密码'
+                                message: '请重复密码',
                             }, {
-                                validator: this.checkPassword
+                                validator: this.checkPassword,
                             }],
                         })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请再输入次密码, 不知道你还记得吗" />
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请再输入次密码, 不知道你还记得吗" />,
                         )
                     }
                 </Form.Item>

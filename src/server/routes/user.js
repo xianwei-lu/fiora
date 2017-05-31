@@ -16,7 +16,6 @@ const UserRouter = new Router({ prefix: '/user' });
 UserRouter
 .get('/:username', async (ctx) => {
     const { username } = ctx.params;
-    assert(!mongoose.Types.ObjectId.isValid(username), 400, 'userId is invalid');
 
     const user = await User.findById(username, '-password -salt');
     if (user) {
@@ -70,7 +69,7 @@ UserRouter
     }
 })
 .put('/', async (ctx) => {
-    const {gender, birthday, location, website, github, qq} = ctx.params;
+    const { gender, birthday, location, website, github, qq } = ctx.params;
     assert(typeof gender !== 'string', 400, 'need gender param but not exists');
     assert(typeof birthday !== 'string', 400, 'need birthday param but not exists');
     assert(typeof location !== 'string', 400, 'need location param but not exists');

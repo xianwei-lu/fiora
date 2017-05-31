@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const IO = require('koa-socket');
+
 const applyRoutes = require('./routes');
 const addMethods = require('./middlewares/addMethods');
 const log = require('./middlewares/log');
@@ -10,14 +11,13 @@ const catchError = require('./middlewares/catchError');
 
 const policeConfig = require('./polices/index');
 
+const Socket = require('./models/socket');
+
 const app = new Koa();
 const io = new IO();
 
 // 注入应用
 io.attach(app);
-
-app._io.set('heartbeat interval', 60000);
-app._io.set('heartbeat timeout', 5000);
 
 // 中间件
 io.use(close());
@@ -32,11 +32,15 @@ applyRoutes(io);
 // 必须放在路由后面
 io.use(notFound());
 
-app.io.on('connection', () => {
-    // console.log('连接成功', ctx.socket.id);
+app.io.on('connection', async (ctx) => {
+    await Socket.create({
+        socket: ctx.socket.id,
+    });
 });
-app.io.on('disconnect', () => {
-    // console.log('连接断开', ctx.socket.id);
+app.io.on('disconnect', async (ctx) => {
+    await Socket.remove({
+        socket: ctx.socket.id,
+    });
 });
 app.io.on('message', () => {
 

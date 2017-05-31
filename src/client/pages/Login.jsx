@@ -1,16 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
 
-import View from 'components/View';
-import Avatar from 'components/Avatar';
 import 'styles/page/login.less';
 
+import server from '../server';
+
 class Login extends Component {
+    static propTypes = {
+        form: PropTypes.object.isRequired,
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                server.login(values.username, values.password).then((response) => {
+                    console.log(response);
+                    if (response.status !== 201) {
+                        message.error(response.data, 3);
+                    }
+                });
             }
         });
     }
@@ -23,10 +31,10 @@ class Login extends Component {
                         getFieldDecorator('username', {
                             rules: [{
                                 required: true,
-                                message: '昵称不能为空'
+                                message: '昵称不能为空',
                             }],
                         })(
-                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="你的昵称" />
+                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="你的昵称" />,
                         )
                     }
                 </Form.Item>
@@ -35,10 +43,10 @@ class Login extends Component {
                         getFieldDecorator('password', {
                             rules: [{
                                 required: true,
-                                message: '密码不能为空'
+                                message: '密码不能为空',
                             }],
                         })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="你的密码" />
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="你的密码" />,
                         )
                     }
                 </Form.Item>
