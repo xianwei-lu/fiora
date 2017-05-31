@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
 
-import View from 'components/View';
 import 'styles/page/login.less';
 
 import server from '../server';
 
 class Signin extends Component {
+    static propTypes = {
+        form: PropTypes.object.isRequired,
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -20,7 +22,6 @@ class Signin extends Component {
         });
     }
     checkUsername = (rule, value, callback) => {
-        const form = this.props.form;
         if (value && !/^([0-9a-zA-Z]{1,2}|[\u4e00-\u9eff]){1,8}$/.test(value)) {
             callback('昵称不合法');
         } else {
@@ -29,7 +30,7 @@ class Signin extends Component {
     }
     checkPassword = (rule, value, callback) => {
         const form = this.props.form;
-        if (value === undefined || value && value !== form.getFieldValue('password')) {
+        if (value === undefined || (value && value !== form.getFieldValue('password'))) {
             callback('输入的密码不一致');
         } else {
             callback();
