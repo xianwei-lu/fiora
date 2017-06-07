@@ -1,0 +1,60 @@
+@import "../util.less";
+
+.feature-chat {
+    padding: 46px 50px 0px 50px;
+    .wrap {
+        .size(100%, 100%);
+        background-color: white;
+        padding: 0px;
+    }
+    .sider {
+        background-color: #fdfdfd;
+        & > div {
+            height: 100%;
+        }
+    }
+    .window {
+        // padding: 24px;
+        background-color: #fdfdfd;
+        // background-image: url(http://img.hb.aicdn.com/b7586265163276c3d8b877ddd4450176d1d0d5acac1a0-54Xcaq_fw658);
+        .header {
+            background-color: #fdfdfd;
+            height: 66px;
+        }
+        .footer {
+            background-color: #fdfdfd;
+            height: 66px;
+        }
+    }
+    .user-list {
+        background-color: #fdfdfd;
+        border-left: 1px solid #e9e9e9;
+    }
+    .linkman-list {
+        height: 100%;
+    }
+    .linkman-item {
+        height: 66px;
+        .layout();
+        flex-direction: row;
+        .avatar {
+            .size(50px, 50px);
+            border-radius: 50%;
+            margin: 8px 0px;
+        }
+        .nick-time {
+            .layout(space-between);
+            line-height: 48px;
+        }
+        .content {
+            line-height: 30px;
+        }
+        & > div {
+            flex: 1;
+            & > div {
+                height: 33px;
+                padding-left: 10px;
+            }
+        }
+    }
+}
