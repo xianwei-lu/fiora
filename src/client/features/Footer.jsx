@@ -5,8 +5,8 @@ import { Layout } from 'antd';
 export default class Footer extends Component {
     render() {
         return (
-            <Layout.Footer style={{ textAlign: 'center' }}>
-                Ant Design ©2016 Created by Ant UED
+            <Layout.Footer className="feature-footer">
+                <div>github/fiora ©2016 author yinxin630</div>
             </Layout.Footer>
         );
     }

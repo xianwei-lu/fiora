@@ -1,0 +1,30 @@
+@import "../util.less";
+
+.component-linkman {
+    height: 60px;
+    .layout();
+    flex-direction: row;
+    .avatar {
+        .size(44px, 44px);
+        border-radius: 50%;
+        margin: 8px 0px;
+    }
+    .nick-time {
+        .layout(space-between);
+        line-height: 40px;
+    }
+    .content {
+        line-height: 22px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    & > div {
+        flex: 1;
+        & > div {
+            height: 30px;
+            padding-left: 10px;
+            max-width: 210px;
+        }
+    }
+}

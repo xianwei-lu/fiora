@@ -1,6 +1,6 @@
 export default class Props {
-    constructor(className, initValue) {
-        this.props = Object.assign({ className, style: {} }, initValue);
+    constructor(initValue) {
+        this.props = Object.assign({ className: '', style: {} }, initValue);
     }
     addClass(condition, className) {
         if (condition) {

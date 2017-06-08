@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, Menu } from 'antd';
 
-import 'styles/feature/header.less';
+import 'styles/feature/footer.less';
 
 export default class Header extends Component {
     render() {
