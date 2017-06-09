@@ -11,9 +11,10 @@ module.exports = {
         'jsx-a11y',
         'import'
     ],
+    'parser': 'babel-eslint',
     'globals': {
         window: true
-    },
+    }, 
     'rules': {
         'indent': [2, 4],
         'global-require': 0,

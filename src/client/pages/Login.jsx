@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button, message } from 'antd';
+import pureRender from 'pure-render-decorator';
 
 import 'styles/page/login.less';
 
 import server from '../server';
 
+@pureRender
 class Login extends Component {
     static propTypes = {
         form: PropTypes.object.isRequired,

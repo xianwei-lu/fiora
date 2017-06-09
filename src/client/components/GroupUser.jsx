@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import Avatar from 'components/Avatar';
+import pureRender from 'pure-render-decorator';
 
 import 'styles/component/groupUser.less';
 
+@pureRender
 export default class Linkman extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,
