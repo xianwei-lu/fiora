@@ -1,21 +1,19 @@
 module.exports = {
     'extends': [
-        'esnext',
         'airbnb',
     ],
     'env': {
         'browser': true,
         'node': true,
-        'es6': true,
     },
     'plugins': [
         'react',
         'jsx-a11y',
         'import'
     ],
-    'globals': [
-        'window',
-    ],
+    'globals': {
+        window: true
+    },
     'rules': {
         'indent': [2, 4],
         'global-require': 0,
@@ -46,6 +44,7 @@ module.exports = {
         'no-underscore-dangle': 0,
         'import/no-dynamic-require': 0,
         'no-return-assign': 0,
+        'no-await-in-loop': 0,
 
         'react/jsx-indent': [2, 4],
         'react/jsx-indent-props': [2, 4],

@@ -5,9 +5,14 @@ import {
     Route,
  } from 'react-router-dom';
 
+import App from 'pages/App';
+
 import 'normalize.css';
 
-import App from 'pages/App';
+import store from './state/store';
+import { init } from './state/action';
+
+init(store.dispatch);
 
 ReactDom.render(
     <Router>

@@ -6,9 +6,9 @@ import 'styles/component/message.less';
 
 export default class Message extends Component {
     static propTypes = {
-        avatar: PropTypes.number.isRequired,
-        username: PropTypes.number.isRequired,
-        time: PropTypes.bool,
+        avatar: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+        time: PropTypes.string.isRequired,
         content: PropTypes.string.isRequired,
         isSimple: PropTypes.bool,
     }

@@ -41,22 +41,22 @@ export default class Chat extends Component {
                         <Layout className="window">
                             <div className="header">
                                 <div className="avatar-name">
-                                    <Avatar className="avatar" width={36} height={36} src="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" circular />
+                                    <Avatar className="avatar" width={28} height={28} src="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" circular />
                                     <p className="name">Fiora聊天室</p>
                                 </div>
                                 <div className="button-group">
                                     <Tooltip title="用户列表" mouseEnterDelay={1}>
-                                        <Button shape="circle" icon="search" size="large" />
+                                        <Button shape="circle" icon="search" />
                                     </Tooltip>
                                     <Tooltip title="更多" mouseEnterDelay={1}>
-                                        <Button shape="circle" icon="search" size="large" />
+                                        <Button shape="circle" icon="search" />
                                     </Tooltip>
                                 </div>
                             </div>
                             <Content className="message-list">
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
+                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊\n第二行"
                                 />
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"

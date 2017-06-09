@@ -35,7 +35,7 @@ init()
 .then(() => {
     process.exit(0);
 })
-.catch(err => {
+.catch((err) => {
     console.log(err.message);
     process.exit(1);
 });

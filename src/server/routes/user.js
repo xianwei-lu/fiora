@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const bluebird = require('bluebird');
 const bcrypt = bluebird.promisifyAll(require('bcrypt'), { suffix: '$' });
 
