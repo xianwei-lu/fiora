@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button, message } from 'antd';
 
 import 'styles/page/login.less';

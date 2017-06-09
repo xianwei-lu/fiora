@@ -7,7 +7,10 @@ const initState = immutable.fromJS({
 export default function (state = initState, action) {
     switch (action.type) {
     case 'SetValue': {
-        return state.setIn(action.key, action.value);
+        return state.setIn(
+            action.key,
+            immutable.fromJS(action.value),
+        );
     }
     default: {
         return state;
