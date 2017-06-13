@@ -12,6 +12,9 @@ const SocketSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    token: {
+        type: String,
+    },
 });
 
 const Socket = mongoose.model('Socket', SocketSchema);

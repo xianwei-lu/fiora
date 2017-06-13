@@ -14,7 +14,11 @@ export default class Avatar extends Component {
         src: PropTypes.string.isRequired,
     }
     render() {
-        const { width, height, circular, src } = this.props;
+        const { width, height, circular } = this.props;
+        let src = this.props.src;
+        if (/suisuijiang.com/.test(src) && !/imageView2/.test(src)) {
+            src = `${src}?imageView2/2/w/${width}/h/${height}`;
+        }
 
         const props = new Props({ src });
         props.addClass(true, 'component-avatar');

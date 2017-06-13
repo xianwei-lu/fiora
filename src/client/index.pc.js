@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import App from 'pages/App';
+import Login from 'pages/Login';
+import Signin from 'pages/Signin';
 
 import 'normalize.css';
 
@@ -17,6 +19,9 @@ ReactDom.render(
         <Router>
             <div className="index">
                 <Route exact path="/" component={App} />
+                <Route path="/group/:name" component={App} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/signin" component={Signin} />
                 <Route exact path="/a" render={() => <p>a</p>} />
             </div>
         </Router>

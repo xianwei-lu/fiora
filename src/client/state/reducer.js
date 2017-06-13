@@ -5,6 +5,10 @@ const initState = immutable.fromJS({
 });
 
 export default function (state = initState, action) {
+    if (!Array.isArray(action.key) && action.type !== '@@redux/INIT') {
+        console.warn('action.key 类型错误, 需要为Array', action);
+        return state;
+    }
     switch (action.type) {
     case 'SetValue': {
         return state.setIn(

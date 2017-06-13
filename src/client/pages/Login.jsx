@@ -5,7 +5,7 @@ import pureRender from 'pure-render-decorator';
 
 import 'styles/page/login.less';
 
-import server from '../server';
+import action from '../state/action';
 
 @pureRender
 class Login extends Component {
@@ -17,10 +17,12 @@ class Login extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                server.login(values.username, values.password).then((response) => {
-                    console.log(response);
+                action.login(values.username, values.password).then((response) => {
                     if (response.status !== 201) {
                         message.error(response.data, 3);
+                    } else {
+                        window.localStorage.setItem('token', response.data.token);
+                        this.props.history.push('/');
                     }
                 });
             }
@@ -32,36 +34,38 @@ class Login extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="page-login">
-                <Form.Item>
-                    {
-                        getFieldDecorator('username', {
-                            rules: [{
-                                required: true,
-                                message: '昵称不能为空',
-                            }],
-                        })(
-                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="你的昵称" />,
-                        )
-                    }
-                </Form.Item>
-                <Form.Item>
-                    {
-                        getFieldDecorator('password', {
-                            rules: [{
-                                required: true,
-                                message: '密码不能为空',
-                            }],
-                        })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="你的密码" />,
-                        )
-                    }
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                    <p className="login-form-text" onClick={this.toSignin}>还没有账号? <a>去注册</a></p>
-                </Form.Item>
-            </Form>
+            <div className="page-login">
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Item>
+                        {
+                            getFieldDecorator('username', {
+                                rules: [{
+                                    required: true,
+                                    message: '昵称不能为空',
+                                }],
+                            })(
+                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="你的昵称" />,
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        {
+                            getFieldDecorator('password', {
+                                rules: [{
+                                    required: true,
+                                    message: '密码不能为空',
+                                }],
+                            })(
+                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="你的密码" />,
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                        <p className="login-form-text" onClick={this.toSignin}>还没有账号? <a>去注册</a></p>
+                    </Form.Item>
+                </Form>
+            </div>
         );
     }
 }

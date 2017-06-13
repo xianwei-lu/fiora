@@ -9,13 +9,24 @@ import Chat from 'features/Chat';
 
 import 'styles/page/app.less';
 
+import action from '../state/action';
+
 @pureRender
 class App extends Component {
+    componentDidMount() {
+        const token = window.localStorage.getItem('token');
+        if (token) {
+            action.reConnect(token).then((res) => {
+                // console.log(res);
+            });
+        }
+    }
     render() {
+        const { history } = this.props;
         return (
             <Layout className="app">
-                <Header />
-                <Chat />
+                <Header history={history} />
+                <Chat history={history} />
                 <Footer />
             </Layout>
         );

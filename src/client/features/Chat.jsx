@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Button, Tooltip, Input, Icon } from 'antd';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import pureRender from 'pure-render-decorator';
 
 import Linkman from 'components/Linkman';
 import Avatar from 'components/Avatar';
@@ -10,38 +13,67 @@ import 'styles/feature/chat.less';
 
 const { Content, Sider } = Layout;
 
-export default class Chat extends Component {
+@pureRender
+class Chat extends Component {
+    static contextTypes = {
+        router: PropTypes.object.isRequired,
+    }
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            selectedGroup: [],
+        };
+    }
+    renderGroups = () => {
+        const { groups } = this.props;
+        if (!groups) {
+            return null;
+        }
+        return groups.map((group) => {
+            const name = group.get('name');
+            const avatar = group.get('avatar');
+            const messages = group.get('messages');
+            const lastMessage = messages.size > 0 ? messages.get(messages.size - 1) : null;
+
+            return (
+                <Menu.Item key={name}>
+                    <Linkman
+                        avatar={avatar}
+                        username={name}
+                        content={lastMessage ? '显示最后一条消息' : '...'}
+                    />
+                </Menu.Item>
+            );
+        });
+    }
+    handleSelectGroup = ({ key }) => {
+        this.setState({ selectedGroup: [key] });
+        this.context.router.history.push(`/group/${key}`);
+    }
+    componentDidUpdate(prevProps) {
+        if (!prevProps.groups && this.props.groups) {
+            const { name } = this.context.router.route.match.params;
+            if (name) {
+                console.log('更新');
+                this.setState({ selectedGroup: [name] });
+            }
+        }
+    }
     render() {
+        const { selectedGroup } = this.state;
+        console.log(selectedGroup);
         return (
             <Layout className="feature-chat">
                 <Layout className="wrap">
                     <Sider className="sider" width={300}>
-                        <Menu className="linkman-list" mode="inline">
-                            <Menu.Item>
-                                <Linkman
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="碎碎酱: 呵呵呵呵呵呵呵"
-                                />
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Linkman
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="碎碎酱: 呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
-                                />
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Linkman
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="碎碎酱: 呵呵呵呵呵呵呵"
-                                />
-                            </Menu.Item>
+                        <Menu className="linkman-list" mode="inline" defaultSelectedKeys={['2']} selectedKey={selectedGroup} onSelect={this.handleSelectGroup}>
+                            {this.renderGroups()}
                         </Menu>
                     </Sider>
                     <Layout>
                         <Layout className="window">
                             <div className="header">
                                 <div className="avatar-name">
-                                    <Avatar className="avatar" width={28} height={28} src="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" circular />
                                     <p className="name">Fiora聊天室</p>
                                 </div>
                                 <div className="button-group">
@@ -95,3 +127,9 @@ export default class Chat extends Component {
         );
     }
 }
+
+export default connect(
+    state => ({
+        groups: state.getIn(['user', 'groups']),
+    }),
+)(Chat);

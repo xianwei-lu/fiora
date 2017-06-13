@@ -4,7 +4,7 @@ import { Form, Icon, Input, Button, message } from 'antd';
 import pureRender from 'pure-render-decorator';
 
 import 'styles/page/login.less';
-import server from '../server';
+import action from '../state/action';
 
 @pureRender
 class Signin extends Component {
@@ -16,7 +16,7 @@ class Signin extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                server.register(values.username, values.password).then((response) => {
+                action.register(values.username, values.password).then((response) => {
                     if (response.status !== 201) {
                         message.error(response.data, 3);
                     }
@@ -45,52 +45,54 @@ class Signin extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="page-login">
-                <Form.Item>
-                    {
-                        getFieldDecorator('username', {
-                            rules: [{
-                                required: true,
-                                message: '昵称不能为空',
-                            }, {
-                                validator: this.checkUsername,
-                            }],
-                        })(
-                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="请输入昵称, 支持中文/英文/数字" />,
-                        )
-                    }
-                </Form.Item>
-                <Form.Item>
-                    {
-                        getFieldDecorator('password', {
-                            rules: [{
-                                required: true,
-                                message: '密码不能为空',
-                            }],
-                        })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请输入密码, 越复杂越好" />,
-                        )
-                    }
-                </Form.Item>
-                <Form.Item>
-                    {
-                        getFieldDecorator('passwordConfirm', {
-                            rules: [{
-                                required: true,
-                                message: '请重复密码',
-                            }, {
-                                validator: this.checkPassword,
-                            }],
-                        })(
-                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请再输入次密码, 不知道你还记得吗" />,
-                        )
-                    }
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">注册</Button>
-                    <p className="login-form-text" onClick={this.toLogin}>已有账号? <a>去登陆</a></p>
-                </Form.Item>
-            </Form>
+            <div className="page-login">
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Item>
+                        {
+                            getFieldDecorator('username', {
+                                rules: [{
+                                    required: true,
+                                    message: '昵称不能为空',
+                                }, {
+                                    validator: this.checkUsername,
+                                }],
+                            })(
+                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="请输入昵称, 支持中文/英文/数字" />,
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        {
+                            getFieldDecorator('password', {
+                                rules: [{
+                                    required: true,
+                                    message: '密码不能为空',
+                                }],
+                            })(
+                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请输入密码, 越复杂越好" />,
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        {
+                            getFieldDecorator('passwordConfirm', {
+                                rules: [{
+                                    required: true,
+                                    message: '请重复密码',
+                                }, {
+                                    validator: this.checkPassword,
+                                }],
+                            })(
+                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请再输入次密码, 不知道你还记得吗" />,
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">注册</Button>
+                        <p className="login-form-text" onClick={this.toLogin}>已有账号? <a>去登陆</a></p>
+                    </Form.Item>
+                </Form>
+            </div>
         );
     }
 }
