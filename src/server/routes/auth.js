@@ -38,11 +38,11 @@ AuthRouter
     const groupOpts = [
         {
             path: 'members',
-            select: {
-                _id: true,
-                avatar: true,
-                username: true,
-            },
+            select: '_id username avatar',
+        },
+        {
+            path: 'creator',
+            select: '_id username',
         },
     ];
     for (const group of user.groups) {
@@ -51,8 +51,7 @@ AuthRouter
         if (messages.length > 30) {
             messages.splice(0, messages.length - 30);
         }
-        group.messages = messages || [];
-        await Group.populate(group, { path: 'creator', select: '_id username' });
+        group._doc.messages = messages || [];
     }
 
     const token = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 7) }, config.jwtSecret);
@@ -114,20 +113,15 @@ AuthRouter
     ];
     for (const group of user.groups) {
         await Group.populate(group, groupOpts);
-        const messages = await Message.find({ to: group._id }).populate({ path: 'from', select: '_id username avatar pluginData' });
+        const messages = await Message.find({ toGroup: group._id }).populate({ path: 'from', select: '_id username avatar pluginData' });
         if (messages.length > 30) {
             messages.splice(0, messages.length - 30);
         }
-        // console.log(messages);
         group._doc.messages = messages || [];
-
-        console.log(group);
-        // await Group.populate(group, { path: 'creator', select: '_id username' });
-        // console.log(group.messages);
-        // console.log(Object.assign({ message: [1, 2, 3] }, group));
     }
 
     ctx.socket.token = token;
+    ctx.socket.user = user._id;
 
     await Socket.update({
         socket: ctx.socket.id,

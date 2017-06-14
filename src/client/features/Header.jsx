@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
 import { Layout, Button } from 'antd';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import pureRender from 'pure-render-decorator';
 
 import Avatar from 'components/Avatar';
 import TextButton from 'components/TextButton';
+import Icon from 'components/Icon';
 
 import 'styles/feature/header.less';
 
 @pureRender
 class Header extends Component {
+    static contextTypes = {
+        router: PropTypes.object.isRequired,
+    }
+    static propTypes = {
+        id: PropTypes.string,
+        avatar: PropTypes.string,
+    }
     jumpTo = (path) => {
-        console.log(path);
-        this.props.history.push(path);
+        this.context.router.history.push(path);
     }
     render() {
         const { id, avatar } = this.props;
@@ -22,10 +30,9 @@ class Header extends Component {
                     id ?
                         <div className="wrap">
                             <div className="button-group">
-                                <Button type="primary" shape="circle" icon="search" />
-                                <Button type="primary" shape="circle" icon="search" />
-                                <Button type="primary" shape="circle" icon="search" />
-                                <Button type="primary" shape="circle" icon="search" />
+                                <Button type="primary" shape="circle" size="large">
+                                    <Icon icon="icon-create-group-chat" size={22} />
+                                </Button>
                             </div>
                             <Avatar className="avatar" width={32} height={32} src={avatar} circular />
                         </div>

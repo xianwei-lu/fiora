@@ -10,9 +10,16 @@ import Signin from 'pages/Signin';
 import 'normalize.css';
 
 import store from './state/store';
-import { init } from './state/action';
+import action, { init } from './state/action';
 
 init(store.dispatch);
+action.socket.on('message', (data) => {
+    console.log(data);
+    const mine = store.getState().getIn(['user', '_id']);
+    if (data.from._id !== mine) {
+        console.log(data);
+    }
+});
 
 ReactDom.render(
     <Provider store={store}>

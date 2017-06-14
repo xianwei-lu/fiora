@@ -20,10 +20,10 @@ const io = new IO();
 io.attach(app);
 
 // 中间件
+io.use(catchError());
 io.use(close());
 io.use(log());
-io.use(catchError());
-io.use(addMethods(io, app._io));
+io.use(addMethods(app.io, app._io));
 io.use(police(policeConfig));
 
 // 注册路由

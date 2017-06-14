@@ -43,11 +43,8 @@ class SocketClient {
         this.put = createMethod.call(this, 'PUT');
         this.patch = createMethod.call(this, 'PATCH');
     }
-    setToken(token) {
-        this.header.token = token;
-    }
-    on(message) {
-        return new Promise(resolve => this.socket.on(message, resolve));
+    on(message, cb) {
+        return this.socket.on(message, cb);
     }
 }
 

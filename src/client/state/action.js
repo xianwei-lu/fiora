@@ -8,14 +8,6 @@ function init(storeDispatch) {
     dispatch = storeDispatch;
 }
 
-async function action1(data) {
-    return dispatch({
-        type: 'SetValue',
-        key: ['number'],
-        value: data,
-    });
-}
-
 async function register(username, password) {
     return socket.post('/user', {
         username,
@@ -58,11 +50,22 @@ async function reConnect(token) {
     return res;
 }
 
+async function sendMessage(linkman, linkmanType, message) {
+    const res = await socket.post('/message', {
+        linkman,
+        linkmanType,
+        message,
+    });
+    console.log(res);
+    return res;
+}
+
 export default {
-    action1,
+    socket,
     register,
     login,
     reConnect,
+    sendMessage,
 };
 
 export { init };

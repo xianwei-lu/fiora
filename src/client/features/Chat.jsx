@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Button, Tooltip, Input, Icon } from 'antd';
+import { Layout, Menu, Button, Tooltip, Input } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import pureRender from 'pure-render-decorator';
 
 import Linkman from 'components/Linkman';
-import Avatar from 'components/Avatar';
 import Message from 'components/Message';
 import GroupUser from 'components/GroupUser';
 
 import 'styles/feature/chat.less';
+
+import action from '../state/action';
 
 const { Content, Sider } = Layout;
 
@@ -18,11 +20,42 @@ class Chat extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired,
     }
+    static propTypes = {
+        groups: ImmutablePropTypes.list,
+    }
     constructor(...args) {
         super(...args);
         this.state = {
             selectedGroup: [],
         };
+    }
+    componentDidUpdate(prevProps) {
+        if (!prevProps.groups && this.props.groups) {
+            const { name } = this.context.router.route.match.params;
+            if (name) {
+                console.log('更新');
+                this.setState({ selectedGroup: [name] });
+            }
+        }
+    }
+    handleSelectGroup = ({ key }) => {
+        this.setState({ selectedGroup: [key] });
+        this.context.router.history.push(`/group/${key}`);
+    }
+    handleInputKeyDown = (e) => {
+        if (e.keyCode === 9) {
+            e.preventDefault();
+            return 0;
+        }
+    }
+    handleInputEnter = (e) => {
+        if (!e.shiftKey) {
+            action.sendMessage('58f703c550d498ba50e28d48', 'group', {
+                type: 'text',
+                content: e.target.value,
+            });
+            e.preventDefault();
+        }
     }
     renderGroups = () => {
         const { groups } = this.props;
@@ -46,22 +79,8 @@ class Chat extends Component {
             );
         });
     }
-    handleSelectGroup = ({ key }) => {
-        this.setState({ selectedGroup: [key] });
-        this.context.router.history.push(`/group/${key}`);
-    }
-    componentDidUpdate(prevProps) {
-        if (!prevProps.groups && this.props.groups) {
-            const { name } = this.context.router.route.match.params;
-            if (name) {
-                console.log('更新');
-                this.setState({ selectedGroup: [name] });
-            }
-        }
-    }
     render() {
         const { selectedGroup } = this.state;
-        console.log(selectedGroup);
         return (
             <Layout className="feature-chat">
                 <Layout className="wrap">
@@ -88,27 +107,47 @@ class Chat extends Component {
                             <Content className="message-list">
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊\n第二行"
+                                    username="Fiora"
+                                    time="11:34 AM"
+                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊\n第二行"
                                 />
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊" isSimple
+                                    username="Fiora"
+                                    time="11:34 AM"
+                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
+                                    isSimple
                                 />
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊" isSimple
+                                    username="Fiora"
+                                    time="11:34 AM"
+                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
+                                    isSimple
                                 />
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
+                                    username="Fiora"
+                                    time="11:34 AM"
+                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
                                 />
                                 <Message
                                     avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora" time="11:34 AM" content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊" isSimple
+                                    username="Fiora"
+                                    time="11:34 AM"
+                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
+                                    isSimple
                                 />
                             </Content>
                             <div className="footer">
-                                <Input className="input" type="textarea" placeholder="Autosize height" autosize={{ minRows: 1, maxRows: 5 }} />
+                                <Input
+                                    className="input"
+                                    type="textarea"
+                                    placeholder="Autosize height"
+                                    autosize={{ minRows: 1, maxRows: 5 }}
+                                    onKeyDown={this.handleInputKeyDown}
+                                    onPressEnter={this.handleInputEnter}
+                                />
                             </div>
                         </Layout>
                         <Sider className="user-list" ref={i => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>

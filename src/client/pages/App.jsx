@@ -16,17 +16,16 @@ class App extends Component {
     componentDidMount() {
         const token = window.localStorage.getItem('token');
         if (token) {
-            action.reConnect(token).then((res) => {
+            action.reConnect(token).then(() => {
                 // console.log(res);
             });
         }
     }
     render() {
-        const { history } = this.props;
         return (
             <Layout className="app">
-                <Header history={history} />
-                <Chat history={history} />
+                <Header />
+                <Chat />
                 <Footer />
             </Layout>
         );

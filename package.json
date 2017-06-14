@@ -9,7 +9,7 @@
     "build": "node build/build.js",
     "init": "node bin/init.js",
     "test": "export NODE_ENV=test && mocha test/*",
-    "lint": "./node_modules/.bin/eslint ./ --cache --ignore-pattern .eslintignore --fix"
+    "lint": "./node_modules/.bin/eslint ./ --ext js,jsx --ignore-pattern .eslintignore --cache --fix"
   },
   "pre-commit": [
     "eslint"
