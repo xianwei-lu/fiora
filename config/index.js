@@ -32,21 +32,24 @@ module.exports = {
         devPort: 9200,
 
         // database url and name
-        database: 'localhost:27017/fiora',
-        testDatabase: 'localhost:27017/fiora-new-test',
+        database: 'database_name',
+        testDatabase: 'test_database_name',
 
         // jwt encryption secret
-        jwtSecret: '$2a$10$2PcdOiDdZZVK4g80kei.Fiora',
+        jwtSecret: 'jwt_token_secret',
 
         // qiniu CDN config.
         // this is not necessary. if you not modify this config. image will save to local disk.
-        accessKey: 'buwVgnvm96NuWhRSFXj8AgtWcGyhQqCOze64-QaQ',
-        secretKey: '0pe_6YeIhjCDVzWDvvWt-UZm24C7Op_wBXUc_-68',
-        bucket: 'fiora-user-data',
-        bucketUrl: 'cdn.suisuijiang.com',
+        accessKey: 'qiniu_access_key',
+        secretKey: 'qiniu_secret_key',
+        bucket: 'bucket_name',
+        bucketUrl: 'bucket_outside_url',
 
         // max message lenght. for both backend and frontend
         maxMessageLength: 1024,
+
+        // max group number
+        maxGroupNumber: 2,
 
         // default group avatar
         defaultGroupAvatar: 'https://assets.suisuijiang.com/group_avatar_default.jpeg',
