@@ -21,14 +21,15 @@ async function login(username, password) {
         password,
     });
     dispatch({
-        type: 'SetValue',
-        key: ['user'],
-        value: res.data.user,
-    });
-    dispatch({
-        type: 'SetValue',
-        key: ['token'],
-        value: res.data.token,
+        type: 'SetMultiValue',
+        keys: [
+            ['user'],
+            ['token'],
+        ],
+        values: [
+            res.data.user,
+            res.data.token,
+        ],
     });
     return res;
 }
@@ -38,14 +39,15 @@ async function reConnect(token) {
         token,
     });
     dispatch({
-        type: 'SetValue',
-        key: ['user'],
-        value: res.data.user,
-    });
-    dispatch({
-        type: 'SetValue',
-        key: ['token'],
-        value: token,
+        type: 'SetMultiValue',
+        keys: [
+            ['user'],
+            ['token'],
+        ],
+        values: [
+            res.data.user,
+            token,
+        ],
     });
     return res;
 }

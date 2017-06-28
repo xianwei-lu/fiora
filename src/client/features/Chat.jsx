@@ -21,7 +21,7 @@ class Chat extends Component {
         router: PropTypes.object.isRequired,
     }
     static propTypes = {
-        groups: ImmutablePropTypes.list,
+        $$groups: ImmutablePropTypes.list,
     }
     constructor(...args) {
         super(...args);
@@ -30,7 +30,7 @@ class Chat extends Component {
         };
     }
     componentDidUpdate(prevProps) {
-        if (!prevProps.groups && this.props.groups) {
+        if (!prevProps.$$groups && this.props.$$groups) {
             const { name } = this.context.router.route.match.params;
             if (name) {
                 console.log('更新');
@@ -58,15 +58,15 @@ class Chat extends Component {
         }
     }
     renderGroups = () => {
-        const { groups } = this.props;
-        if (!groups) {
+        const { $$groups } = this.props;
+        if (!$$groups) {
             return null;
         }
-        return groups.map((group) => {
-            const name = group.get('name');
-            const avatar = group.get('avatar');
-            const messages = group.get('messages');
-            const lastMessage = messages.size > 0 ? messages.get(messages.size - 1) : null;
+        return $$groups.map(($$group) => {
+            const name = $$group.get('name');
+            const avatar = $$group.get('avatar');
+            const $$messages = $$group.get('messages');
+            const lastMessage = $$messages.size > 0 ? $$messages.get($$messages.size - 1) : null;
 
             return (
                 <Menu.Item key={name}>
@@ -168,7 +168,7 @@ class Chat extends Component {
 }
 
 export default connect(
-    state => ({
-        groups: state.getIn(['user', 'groups']),
+    $$state => ({
+        $$groups: $$state.getIn(['user', 'groups']),
     }),
 )(Chat);

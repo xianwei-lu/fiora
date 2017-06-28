@@ -1,23 +1,31 @@
 import immutable from 'immutable';
 
 const initState = immutable.fromJS({
-    number: 0,
+
 });
 
-export default function (state = initState, action) {
-    if (!Array.isArray(action.key) && action.type !== '@@redux/INIT') {
-        console.warn('action.key 类型错误, 需要为Array', action);
-        return state;
-    }
+export default function ($$state = initState, action) {
     switch (action.type) {
     case 'SetValue': {
-        return state.setIn(
+        return $$state.setIn(
             action.key,
             immutable.fromJS(action.value),
         );
     }
+    case 'SetMultiValue': {
+        let $$newState = $$state;
+        for (let i = 0; i < action.keys.length; i++) {
+            if (action.values[i]) {
+                $$newState = $$newState.setIn(
+                    action.keys[i],
+                    immutable.fromJS(action.values[i]),
+                );
+            }
+        }
+        return $$newState;
+    }
     default: {
-        return state;
+        return $$state;
     }
     }
 }

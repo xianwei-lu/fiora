@@ -29,10 +29,6 @@ const UserSchema = new Schema({
             type: String,
         },
     ],
-    pluginData: {
-        type: String,
-        maxLength: 10240,
-    },
 });
 
 const User = mongoose.model('User', UserSchema);

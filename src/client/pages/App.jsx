@@ -33,7 +33,7 @@ class App extends Component {
 }
 
 export default connect(
-    state => ({
-        state: state.toJS(),
+    $$state => ({
+        state: $$state.toJS(),
     }),
 )(App);

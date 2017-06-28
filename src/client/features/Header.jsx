@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Layout, Button } from 'antd';
+import ReactDom from 'react-dom';
+import { Layout, Button, Modal, Input } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import pureRender from 'pure-render-decorator';
@@ -19,18 +20,35 @@ class Header extends Component {
         id: PropTypes.string,
         avatar: PropTypes.string,
     }
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            showInputGroupNameModel: false,
+        };
+    }
     jumpTo = (path) => {
         this.context.router.history.push(path);
     }
+    openInputGroupNameModel = () => {
+        this.setState({ showInputGroupNameModel: true });
+    }
+    closeInputGroupNameModel = () => {
+        this.setState({ showInputGroupNameModel: false });
+    }
+    createGroup = () => {
+        console.log('创建群组');
+        console.log(ReactDom.findDOMNode(this.groupName).value);
+    }
     render() {
         const { id, avatar } = this.props;
+        const { showInputGroupNameModel } = this.state;
         return (
             <Layout.Header className="feature-header">
                 {
                     id ?
                         <div className="wrap">
                             <div className="button-group">
-                                <Button type="primary" shape="circle" size="large">
+                                <Button type="primary" shape="circle" size="large" onClick={this.openInputGroupNameModel}>
                                     <Icon icon="icon-create-group-chat" size={22} />
                                 </Button>
                             </div>
@@ -42,14 +60,22 @@ class Header extends Component {
                             <TextButton text="登录" onClick={this.jumpTo.bind(this, '/login')} />
                         </div>
                 }
+                <Modal
+                    visible={showInputGroupNameModel}
+                    title="请输入群组名"
+                    onCancel={this.closeInputGroupNameModel}
+                    onOk={this.createGroup}
+                >
+                    <Input placeholder="群组名" ref={i => this.groupName = i} />
+                </Modal>
             </Layout.Header>
         );
     }
 }
 
 export default connect(
-    state => ({
-        id: state.getIn(['user', '_id']),
-        avatar: state.getIn(['user', 'avatar']),
+    $$state => ({
+        id: $$state.getIn(['user', '_id']),
+        avatar: $$state.getIn(['user', 'avatar']),
     }),
 )(Header);
