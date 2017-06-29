@@ -12,7 +12,7 @@ import 'normalize.css';
 import store from './state/store';
 import action, { init } from './state/action';
 
-init(store.dispatch);
+init(store);
 action.socket.on('message', (data) => {
     console.log(data);
     const mine = store.getState().getIn(['user', '_id']);

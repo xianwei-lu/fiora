@@ -1,7 +1,7 @@
 import immutable from 'immutable';
 
 const initState = immutable.fromJS({
-
+    currentGroup: '',
 });
 
 export default function ($$state = initState, action) {
@@ -41,6 +41,12 @@ export default function ($$state = initState, action) {
                 console.log($$items);
                 return $$items.insert(index, immutable.fromJS(action.value));
             },
+        );
+    }
+    case 'UpdateValue': {
+        return $$state.updateIn(
+            action.key,
+            $$item => $$item.mergeDeep(action.value),
         );
     }
     default: {

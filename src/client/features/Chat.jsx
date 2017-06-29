@@ -22,24 +22,21 @@ class Chat extends Component {
     }
     static propTypes = {
         $$groups: ImmutablePropTypes.list,
-    }
-    constructor(...args) {
-        super(...args);
-        this.state = {
-            selectedGroup: [],
-        };
+        currentGroup: PropTypes.string.isRequired,
     }
     componentDidUpdate(prevProps) {
         if (!prevProps.$$groups && this.props.$$groups) {
-            const { name } = this.context.router.route.match.params;
-            if (name) {
-                console.log('更新');
-                this.setState({ selectedGroup: [name] });
-            }
+            action.selectGroup(this.context.router.route.match.params.name);
         }
     }
+    getCurrentGroup = () => {
+        const { $$groups, currentGroup } = this.props;
+        return $$groups && $$groups.find(
+            $$g => $$g.get('name') === currentGroup,
+        );
+    }
     handleSelectGroup = ({ key }) => {
-        this.setState({ selectedGroup: [key] });
+        action.selectGroup(key);
         this.context.router.history.push(`/group/${key}`);
     }
     handleInputKeyDown = (e) => {
@@ -50,117 +47,113 @@ class Chat extends Component {
     }
     handleInputEnter = (e) => {
         if (!e.shiftKey) {
-            action.sendMessage('58f703c550d498ba50e28d48', 'group', {
+            const $$group = this.getCurrentGroup();
+            action.sendMessage($$group.get('_id'), 'group', {
                 type: 'text',
                 content: e.target.value,
             });
+            e.target.value = '';
             e.preventDefault();
         }
     }
     renderGroups = () => {
-        const { $$groups } = this.props;
+        const { $$groups, currentGroup } = this.props;
         if (!$$groups) {
             return null;
         }
-        return $$groups.map(($$group) => {
-            const name = $$group.get('name');
-            const avatar = $$group.get('avatar');
-            const $$messages = $$group.get('messages');
-            const lastMessage = $$messages.size > 0 ? $$messages.get($$messages.size - 1) : null;
-
-            return (
-                <Menu.Item key={name}>
-                    <Linkman
-                        avatar={avatar}
-                        username={name}
-                        content={lastMessage ? '显示最后一条消息' : '...'}
-                    />
-                </Menu.Item>
-            );
-        });
+        return (
+            <Menu className="linkman-list" mode="inline" selectedKeys={[currentGroup]} onSelect={this.handleSelectGroup}>
+                {
+                    $$groups.map(($$group) => {
+                        const name = $$group.get('name');
+                        const avatar = $$group.get('avatar');
+                        const $$messages = $$group.get('messages');
+                        const $$lastMessage = $$messages.get($$messages.size - 1);
+                        let lastMessage = '';
+                        if ($$lastMessage) {
+                            lastMessage = `${$$lastMessage.getIn(['from', 'username'])}: ${$$lastMessage.get('content')}`;
+                        }
+                        return (
+                            <Menu.Item key={name}>
+                                <Linkman
+                                    avatar={avatar}
+                                    username={name}
+                                    content={$$lastMessage ? lastMessage : '...'}
+                                />
+                            </Menu.Item>
+                        );
+                    })
+                }
+            </Menu>
+        );
+    }
+    renderMessage = () => {
+        const $$messages = this.getCurrentGroup().get('messages');
+        return $$messages.map($$message => (
+            <Message
+                key={$$message.get('_id')}
+                avatar={$$message.getIn(['from', 'avatar'])}
+                username={$$message.getIn(['from', 'username'])}
+                time={$$message.get('createTime')}
+                type={$$message.get('type')}
+                content={$$message.get('content')}
+                status={$$message.get('status')}
+            />
+        ));
     }
     render() {
-        const { selectedGroup } = this.state;
+        const $$group = this.getCurrentGroup();
         return (
             <Layout className="feature-chat">
                 <Layout className="wrap">
                     <Sider className="sider" width={300}>
-                        <Menu className="linkman-list" mode="inline" defaultSelectedKeys={['2']} selectedKey={selectedGroup} onSelect={this.handleSelectGroup}>
-                            {this.renderGroups()}
-                        </Menu>
+                        {this.renderGroups()}
                     </Sider>
-                    <Layout>
-                        <Layout className="window">
-                            <div className="header">
-                                <div className="avatar-name">
-                                    <p className="name">Fiora聊天室</p>
-                                </div>
-                                <div className="button-group">
-                                    <Tooltip title="用户列表" mouseEnterDelay={1}>
-                                        <Button shape="circle" icon="search" />
-                                    </Tooltip>
-                                    <Tooltip title="更多" mouseEnterDelay={1}>
-                                        <Button shape="circle" icon="search" />
-                                    </Tooltip>
-                                </div>
-                            </div>
-                            <Content className="message-list">
-                                <Message
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora"
-                                    time="11:34 AM"
-                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊\n第二行"
-                                />
-                                <Message
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora"
-                                    time="11:34 AM"
-                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
-                                    isSimple
-                                />
-                                <Message
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora"
-                                    time="11:34 AM"
-                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
-                                    isSimple
-                                />
-                                <Message
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora"
-                                    time="11:34 AM"
-                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
-                                />
-                                <Message
-                                    avatar="https://assets.suisuijiang.com/group_avatar_default.jpeg?imageView2/2/w/40/h/40"
-                                    username="Fiora"
-                                    time="11:34 AM"
-                                    content="呵呵呵呵呵呵呵啊啊啊啊啊啊啊啊啊"
-                                    isSimple
-                                />
-                            </Content>
-                            <div className="footer">
-                                <Input
-                                    className="input"
-                                    type="textarea"
-                                    placeholder="Autosize height"
-                                    autosize={{ minRows: 1, maxRows: 5 }}
-                                    onKeyDown={this.handleInputKeyDown}
-                                    onPressEnter={this.handleInputEnter}
-                                />
-                            </div>
-                        </Layout>
-                        <Sider className="user-list" ref={i => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>
-                            <div className="title">
-                                <p>成员: 8/18</p>
-                                <Button shape="circle" icon="search" size="small" />
-                            </div>
-                            <ul className="group-user-list">
-                                <GroupUser avatar="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" username="碎碎酱" icon="android" />
-                                <GroupUser avatar="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" username="碎碎酱的小号" icon="apple" />
-                            </ul>
-                        </Sider>
-                    </Layout>
+                    {
+                        $$group ?
+                            <Layout>
+                                <Layout className="window">
+                                    <div className="header">
+                                        <div className="avatar-name">
+                                            <p className="name">{$$group.get('name')}</p>
+                                        </div>
+                                        <div className="button-group">
+                                            <Tooltip title="用户列表" mouseEnterDelay={1}>
+                                                <Button shape="circle" icon="search" />
+                                            </Tooltip>
+                                            <Tooltip title="更多" mouseEnterDelay={1}>
+                                                <Button shape="circle" icon="search" />
+                                            </Tooltip>
+                                        </div>
+                                    </div>
+                                    <Content className="message-list">
+                                        {this.renderMessage()}
+                                    </Content>
+                                    <div className="footer">
+                                        <Input
+                                            className="input"
+                                            type="textarea"
+                                            placeholder="Autosize height"
+                                            autosize={{ minRows: 1, maxRows: 5 }}
+                                            onKeyDown={this.handleInputKeyDown}
+                                            onPressEnter={this.handleInputEnter}
+                                        />
+                                    </div>
+                                </Layout>
+                                <Sider className="user-list" ref={i => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>
+                                    <div className="title">
+                                        <p>成员: 8/18</p>
+                                        <Button shape="circle" icon="search" size="small" />
+                                    </div>
+                                    <ul className="group-user-list">
+                                        <GroupUser avatar="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" username="碎碎酱" icon="android" />
+                                        <GroupUser avatar="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" username="碎碎酱的小号" icon="apple" />
+                                    </ul>
+                                </Sider>
+                            </Layout>
+                        :
+                            <div>未选中群组</div>
+                    }
                 </Layout>
             </Layout>
         );
@@ -170,5 +163,6 @@ class Chat extends Component {
 export default connect(
     $$state => ({
         $$groups: $$state.getIn(['user', 'groups']),
+        currentGroup: $$state.getIn(['currentGroup']),
     }),
 )(Chat);

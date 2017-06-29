@@ -11,15 +11,19 @@ export default class Message extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,
-        time: PropTypes.string.isRequired,
+        time: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+        ]).isRequired,
         content: PropTypes.string.isRequired,
         isSimple: PropTypes.bool,
+        status: PropTypes.string,
     }
     static defaultProps = {
         isSimple: false,
     }
     render() {
-        const { avatar, username, time, content, isSimple } = this.props;
+        const { avatar, username, time, content, isSimple, status } = this.props;
 
         return (
             isSimple ?
@@ -32,7 +36,7 @@ export default class Message extends Component {
                             <span>{username}</span>
                             <span className="time">{time}</span>
                         </div>
-                        <div>{content}</div>
+                        <div>{content} {status || ''}</div>
                     </div>
                 </div>
         );
