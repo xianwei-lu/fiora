@@ -24,6 +24,25 @@ export default function ($$state = initState, action) {
         }
         return $$newState;
     }
+    case 'PushValue': {
+        return $$state.updateIn(
+            action.key,
+            $$items => $$items.push(immutable.fromJS(action.value)),
+        );
+    }
+    case 'InsertValue': {
+        const itemsLength = $$state.getIn(action.key).size;
+        const index = action.index > itemsLength ? itemsLength : action.index;
+        return $$state.updateIn(
+            action.key,
+            ($$items) => {
+                console.log(action.key);
+                console.log($$state.getIn(action.key));
+                console.log($$items);
+                return $$items.insert(index, immutable.fromJS(action.value));
+            },
+        );
+    }
     default: {
         return $$state;
     }

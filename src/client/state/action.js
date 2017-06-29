@@ -14,7 +14,6 @@ async function register(username, password) {
         password,
     });
 }
-
 async function login(username, password) {
     const res = await socket.post('/auth', {
         username,
@@ -33,7 +32,6 @@ async function login(username, password) {
     });
     return res;
 }
-
 async function reConnect(token) {
     const res = await socket.put('/auth', {
         token,
@@ -52,13 +50,25 @@ async function reConnect(token) {
     return res;
 }
 
+async function createGroup(name) {
+    const res = await socket.post('/group', {
+        name,
+    });
+    dispatch({
+        type: 'InsertValue',
+        index: 0,
+        key: ['user', 'groups'],
+        value: res.data,
+    });
+    return res;
+}
+
 async function sendMessage(linkman, linkmanType, message) {
     const res = await socket.post('/message', {
         linkman,
         linkmanType,
         message,
     });
-    console.log(res);
     return res;
 }
 
@@ -67,6 +77,7 @@ export default {
     register,
     login,
     reConnect,
+    createGroup,
     sendMessage,
 };
 

@@ -18,12 +18,6 @@ const UserSchema = new Schema({
         type: String,
         default: '',
     },
-    groups: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Group',
-        },
-    ],
     expressions: [
         {
             type: String,

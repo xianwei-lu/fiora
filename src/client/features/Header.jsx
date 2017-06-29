@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
-import { Layout, Button, Modal, Input } from 'antd';
+import { Layout, Button, Modal, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import pureRender from 'pure-render-decorator';
@@ -10,6 +10,8 @@ import TextButton from 'components/TextButton';
 import Icon from 'components/Icon';
 
 import 'styles/feature/header.less';
+
+import action from '../state/action';
 
 @pureRender
 class Header extends Component {
@@ -36,8 +38,14 @@ class Header extends Component {
         this.setState({ showInputGroupNameModel: false });
     }
     createGroup = () => {
-        console.log('创建群组');
-        console.log(ReactDom.findDOMNode(this.groupName).value);
+        action.createGroup(ReactDom.findDOMNode(this.groupName).value).then((res) => {
+            if (res.status === 201) {
+                message.info('创建群组成功');
+                this.setState({ showInputGroupNameModel: false });
+            } else {
+                message.error(`创建群组失败: ${res.data}`);
+            }
+        });
     }
     render() {
         const { id, avatar } = this.props;

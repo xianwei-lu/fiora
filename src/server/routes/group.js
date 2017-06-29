@@ -26,15 +26,14 @@ GroupRouter
     let savedGroup = null;
     try {
         savedGroup = await newGroup.save();
-        user.groups.push(savedGroup);
-        await user.save();
+        newGroup._doc.messages = [];
     } catch (err) {
         if (err.code === 11000) {
-            return this.end(400, '用户名已存在');
+            return ctx.res(400, '群组名已存在');
         } else if (err.message === 'Group validation failed') {
-            return this.end(400, '用户名不合法');
+            return ctx.res(400, '群组名不合法');
         }
-        return this.end(500, 'server error when save new group');
+        throw err;
     }
 
     const groupOpts = [
@@ -49,7 +48,7 @@ GroupRouter
     ];
     await Group.populate(savedGroup, groupOpts);
 
-    this.end(201, savedGroup);
+    ctx.res(201, savedGroup);
 });
 
 module.exports = GroupRouter;

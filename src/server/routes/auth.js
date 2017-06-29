@@ -12,6 +12,30 @@ const Message = require('../models/message');
 
 const config = require('../../../config/index').project;
 
+async function populateUser(user) {
+    const groupOpts = [
+        {
+            path: 'members',
+            select: '_id username avatar',
+        },
+        {
+            path: 'creator',
+            select: '_id username',
+        },
+    ];
+    user.groups = await Group.find({ members: user._id });
+    await Group.populate(user.groups, groupOpts);
+    for (const group of user.groups) {
+        const messages = await Message.find({ toGroup: group._id }).populate({ path: 'from', select: '_id username avatar' });
+        if (messages.length > 30) {
+            messages.splice(0, messages.length - 30);
+        }
+        group._doc.messages = messages || [];
+    }
+    user._doc.groups = user.groups;
+}
+
+
 const AuthRouter = new Router({ prefix: '/auth' });
 AuthRouter
 .post('/', async (ctx) => {
@@ -25,34 +49,7 @@ AuthRouter
     assert(!isPasswordCorrect, 400, '密码不正确');
     user.password = undefined;
 
-    const userOpts = [
-        {
-            path: 'groups',
-        },
-        {
-            path: 'friends',
-        },
-    ];
-    await User.populate(user, userOpts);
-
-    const groupOpts = [
-        {
-            path: 'members',
-            select: '_id username avatar',
-        },
-        {
-            path: 'creator',
-            select: '_id username',
-        },
-    ];
-    for (const group of user.groups) {
-        await Group.populate(group, groupOpts);
-        const messages = await Message.find({ to: group._id }).populate({ path: 'from', select: '_id username avatar pluginData' });
-        if (messages.length > 30) {
-            messages.splice(0, messages.length - 30);
-        }
-        group._doc.messages = messages || [];
-    }
+    await populateUser(user);
 
     const token = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 7) }, config.jwtSecret);
     ctx.socket.token = token;
@@ -91,34 +88,7 @@ AuthRouter
     const user = await User.findOne({ _id: payload.userId }, '-salt');
     assert(!user, 404, '该用户不存在');
 
-    const userOpts = [
-        {
-            path: 'groups',
-        },
-        {
-            path: 'friends',
-        },
-    ];
-    await User.populate(user, userOpts);
-
-    const groupOpts = [
-        {
-            path: 'members',
-            select: '_id username avatar',
-        },
-        {
-            path: 'creator',
-            select: '_id username',
-        },
-    ];
-    for (const group of user.groups) {
-        await Group.populate(group, groupOpts);
-        const messages = await Message.find({ toGroup: group._id }).populate({ path: 'from', select: '_id username avatar pluginData' });
-        if (messages.length > 30) {
-            messages.splice(0, messages.length - 30);
-        }
-        group._doc.messages = messages || [];
-    }
+    await populateUser(user);
 
     ctx.socket.token = token;
     ctx.socket.user = user._id;
