@@ -14,7 +14,7 @@ function createRouterMatch(method, path) {
 
 let policeConfig = [
     {
-        match: createRouterMatch('POST', '/messaage'),
+        match: createRouterMatch('POST', '/message'),
         polices: [isLogin],
     },
 ];

@@ -16,6 +16,7 @@ module.exports = {
         window: true
     }, 
     'rules': {
+        'arrow-parens': ['error', 'always'],
         'indent': [2, 4],
         'global-require': 0,
         'new-cap': 0,

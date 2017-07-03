@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import pureRender from 'pure-render-decorator';
+import format from 'date-format';
 
 import Avatar from 'components/Avatar';
 
@@ -27,16 +28,28 @@ export default class Message extends Component {
 
         return (
             isSimple ?
-                <div className="message-simple">{content}</div>
+                <div className="message-simple">
+                    {
+                        content.split(/\n/).map((m, i) => (
+                            <p key={i}>{m}</p>
+                        ))
+                    }
+                </div>
             :
                 <div className="message">
                     <Avatar className="avatar" width={36} height={36} src={avatar} circular />
                     <div className="content">
                         <div>
                             <span>{username}</span>
-                            <span className="time">{time}</span>
+                            <span className="time">{format('yyyy-MM-dd hh:mm:ss', new Date(time))}</span>
                         </div>
-                        <div>{content} {status || ''}</div>
+                        <div>
+                            {
+                                content.split(/\n/).map((m, i) => (
+                                    <p key={i}>{m}</p>
+                                ))
+                            }
+                        </div>
                     </div>
                 </div>
         );

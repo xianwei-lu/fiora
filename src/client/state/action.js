@@ -12,12 +12,12 @@ function init(instance) {
 
 function getGroup(id) {
     return store.getState().getIn(['user', 'groups']).find(
-        $$group => $$group.get('_id') === id,
+        ($$group) => $$group.get('_id') === id,
     );
 }
 function getGroupIndex(id) {
     return store.getState().getIn(['user', 'groups']).findIndex(
-        $$group => $$group.get('_id') === id,
+        ($$group) => $$group.get('_id') === id,
     );
 }
 
@@ -119,7 +119,7 @@ const actions = {
     async updateMessage(linkman, linkmanType, messageId, status) {
         const $$state = store.getState();
         const index = $$state.getIn(['user', 'groups', getGroupIndex(linkman), 'messages']).findIndex(
-            $$message => $$message.get('_id') === messageId,
+            ($$message) => $$message.get('_id') === messageId,
         );
         dispatch({
             type: 'UpdateValue',

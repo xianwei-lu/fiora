@@ -27,7 +27,7 @@ export default function ($$state = initState, action) {
     case 'PushValue': {
         return $$state.updateIn(
             action.key,
-            $$items => $$items.push(immutable.fromJS(action.value)),
+            ($$items) => $$items.push(immutable.fromJS(action.value)),
         );
     }
     case 'InsertValue': {
@@ -46,7 +46,7 @@ export default function ($$state = initState, action) {
     case 'UpdateValue': {
         return $$state.updateIn(
             action.key,
-            $$item => $$item.mergeDeep(action.value),
+            ($$item) => $$item.mergeDeep(action.value),
         );
     }
     default: {

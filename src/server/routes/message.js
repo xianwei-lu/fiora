@@ -56,6 +56,7 @@ MessageRouter
     // }
 
     const user = await User.findById(ctx.socket.user);
+    assert(!user, 400, 'socket对象没有user id');
     let newMessage = null;
     let toGroup = null;
     // let toUser = null;
@@ -82,9 +83,8 @@ MessageRouter
 
     await Message.populate(savedMessage, [
         { path: 'from', select: '_id username avatar' },
-        { path: 'toUser', select: '_id username avatar' },
-        { path: 'toGroup', select: '_id name avatar' },
     ]);
+    savedMessage._doc.toGroup = toGroup._id;
 
     if (linkmanType === 'group') {
         ctx.socket.socket.to(toGroup._id.toString()).emit('message', savedMessage);

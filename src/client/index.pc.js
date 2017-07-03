@@ -14,11 +14,7 @@ import action, { init } from './state/action';
 
 init(store);
 action.socket.on('message', (data) => {
-    console.log(data);
-    const mine = store.getState().getIn(['user', '_id']);
-    if (data.from._id !== mine) {
-        console.log(data);
-    }
+    action.addMessage(data.toGroup, 'group', data);
 });
 
 ReactDom.render(

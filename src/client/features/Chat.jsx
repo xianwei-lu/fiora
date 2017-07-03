@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Button, Tooltip, Input } from 'antd';
+import { Layout, Menu, Button, Tooltip, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -32,7 +32,7 @@ class Chat extends Component {
     getCurrentGroup = () => {
         const { $$groups, currentGroup } = this.props;
         return $$groups && $$groups.find(
-            $$g => $$g.get('name') === currentGroup,
+            ($$g) => $$g.get('name') === currentGroup,
         );
     }
     handleSelectGroup = ({ key }) => {
@@ -51,6 +51,10 @@ class Chat extends Component {
             action.sendMessage($$group.get('_id'), 'group', {
                 type: 'text',
                 content: e.target.value,
+            }).then((res) => {
+                if (res.status !== 201) {
+                    message.error(`消息发送失败, ${res.data}`);
+                }
             });
             e.target.value = '';
             e.preventDefault();
@@ -89,7 +93,7 @@ class Chat extends Component {
     }
     renderMessage = () => {
         const $$messages = this.getCurrentGroup().get('messages');
-        return $$messages.map($$message => (
+        return $$messages.map(($$message, index) => (
             <Message
                 key={$$message.get('_id')}
                 avatar={$$message.getIn(['from', 'avatar'])}
@@ -98,6 +102,7 @@ class Chat extends Component {
                 type={$$message.get('type')}
                 content={$$message.get('content')}
                 status={$$message.get('status')}
+                isSimple={index > 0 ? $$messages.getIn([index - 1, 'from', '_id']) === $$message.getIn(['from', '_id']) : false}
             />
         ));
     }
@@ -126,7 +131,7 @@ class Chat extends Component {
                                             </Tooltip>
                                         </div>
                                     </div>
-                                    <Content className="message-list">
+                                    <Content className="message-list" ref={(i) => this.messageList = i}>
                                         {this.renderMessage()}
                                     </Content>
                                     <div className="footer">
@@ -140,7 +145,7 @@ class Chat extends Component {
                                         />
                                     </div>
                                 </Layout>
-                                <Sider className="user-list" ref={i => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>
+                                <Sider className="user-list" ref={(i) => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>
                                     <div className="title">
                                         <p>成员: 8/18</p>
                                         <Button shape="circle" icon="search" size="small" />
@@ -161,7 +166,7 @@ class Chat extends Component {
 }
 
 export default connect(
-    $$state => ({
+    ($$state) => ({
         $$groups: $$state.getIn(['user', 'groups']),
         currentGroup: $$state.getIn(['currentGroup']),
     }),
