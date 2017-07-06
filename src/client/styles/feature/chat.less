@@ -39,7 +39,8 @@
                 }
                 .name {
                     margin-left: 10px;
-                    font-size: 15px;
+                    font-size: 16px;
+                    font-weight: bold;
                 }
             }
             .button-group {
@@ -78,6 +79,17 @@
         height: 100%;
         & > li {
             height: 60px;
+        }
+    }
+    .no-select {
+        flex: 1;
+        .layout(center, center);
+        flex-direction: column;
+        & > img {
+            .size(200px, 200px);
+        }
+        & > h4 {
+            margin-top: 10px;
         }
     }
 }

@@ -191,7 +191,10 @@ class Chat extends Component {
                                 </Sider>
                             </Layout>
                         :
-                            <div>未选中群组</div>
+                            <div className="no-select">
+                                <img src={require('../assets/images/fiora_cute.png')} />
+                                <h4>请选择左侧联系人</h4>
+                            </div>
                     }
                 </Layout>
             </Layout>

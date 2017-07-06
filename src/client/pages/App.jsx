@@ -19,6 +19,8 @@ class App extends Component {
             action.reConnect(token).then(() => {
                 // console.log(res);
             });
+        } else {
+            // asdf
         }
     }
     render() {

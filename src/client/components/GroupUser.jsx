@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Avatar from 'components/Avatar';
 import Icon from 'components/Icon';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
+import { Tooltip } from 'antd';
 
 import 'styles/component/groupUser.less';
 
@@ -23,10 +24,12 @@ export default class Linkman extends Component {
                     <Avatar width={20} height={20} src={avatar} circular />
                     <p>{username}</p>
                 </div>
-                <div className="icon">
-                    <Icon icon={`icon-${os.replace(' ', '').toLowerCase()}`} size={20} />
-                    <Icon icon={`icon-${browser.replace(' ', '').toLowerCase()}`} size={20} />
-                </div>
+                <Tooltip title={`${os} ${browser}`} mouseEnterDelay={0.5}>
+                    <div className="icon-container">
+                        <Icon icon={`icon-${os.replace(' ', '').toLowerCase()}`} size={20} />
+                        <Icon icon={`icon-${browser.replace(' ', '').toLowerCase()}`} size={20} />
+                    </div>
+                </Tooltip>
             </li>
         );
     }
