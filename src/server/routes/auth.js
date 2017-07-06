@@ -8,7 +8,6 @@ const assert = require('../../utils/assert');
 const User = require('../models/user');
 const Group = require('../models/group');
 const Socket = require('../models/socket');
-const Message = require('../models/message');
 
 const modelTool = require('../../utils/model');
 

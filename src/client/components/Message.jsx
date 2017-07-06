@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import pureRender from 'pure-render-decorator';
 import format from 'date-format';
 import { connect } from 'react-redux';
+import { Spin } from 'antd';
 
 import Avatar from 'components/Avatar';
 
@@ -36,29 +37,36 @@ class Message extends Component {
         return (
             isSimple ?
                 <div className="message-simple" ref={(i) => this.msg = i}>
-                    {
-                        content.split(/\n/).map((m, i) => (
-                            <p key={i}>{m}</p>
-                        ))
-                    }
-                </div>
-            :
-                <div className="message" ref={(i) => this.msg = i}>
-                    <Avatar className="avatar" width={36} height={36} src={avatar} circular />
-                    <div className="content">
-                        <div>
-                            <span>{username}</span>
-                            <span className="time">{format('yyyy-MM-dd hh:mm:ss', new Date(time))}</span>
-                        </div>
-                        <div>
+                    <Spin spinning={status === 'sending'} size="small">
+                        <div className="container">
                             {
                                 content.split(/\n/).map((m, i) => (
                                     <p key={i}>{m}</p>
                                 ))
                             }
                         </div>
-                    </div>
+                    </Spin>
                 </div>
+            :
+                <div className="message" ref={(i) => this.msg = i}>
+                    <Spin spinning={status === 'sending'} size="small">
+                        <Avatar className="avatar" width={36} height={36} src={avatar} circular />
+                        <div className="content">
+                            <div>
+                                <span>{username}</span>
+                                <span className="time">{format('yyyy-MM-dd hh:mm:ss', new Date(time))}</span>
+                            </div>
+                            <div>
+                                {
+                                    content.split(/\n/).map((m, i) => (
+                                        <p key={i}>{m}</p>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    </Spin>
+                </div>
+
         );
     }
 }

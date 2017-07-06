@@ -81,7 +81,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            minChunks: module => (
+            minChunks: (module) => (
                 module.resource &&
                 /\.js$/.test(module.resource) &&
                 module.resource.indexOf(path.join(__dirname, '../node_modules')) === 0
