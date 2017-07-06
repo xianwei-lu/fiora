@@ -9,6 +9,9 @@ import action from '../state/action';
 
 @immutableRenderDecorator
 class Login extends Component {
+    static contextTypes = {
+        router: PropTypes.object.isRequired,
+    }
     static propTypes = {
         form: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired,
@@ -22,7 +25,7 @@ class Login extends Component {
                         message.error(response.data, 3);
                     } else {
                         window.localStorage.setItem('token', response.data.token);
-                        this.props.history.push('/');
+                        this.context.router.history.push('/');
                     }
                 });
             }

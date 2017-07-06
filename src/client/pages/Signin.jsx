@@ -9,6 +9,9 @@ import action from '../state/action';
 
 @immutableRenderDecorator
 class Signin extends Component {
+    static contextTypes = {
+        router: PropTypes.object.isRequired,
+    }
     static propTypes = {
         form: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired,
@@ -20,6 +23,12 @@ class Signin extends Component {
                 action.register(values.username, values.password).then((response) => {
                     if (response.status !== 201) {
                         message.error(response.data, 3);
+                    } else {
+                        action.login(values.username, values.password).then((res) => {
+                            if (res.status === 201) {
+                                this.context.router.history.push('/');
+                            }
+                        });
                     }
                 });
             }

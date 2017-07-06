@@ -76,7 +76,7 @@ class Header extends Component {
                         <div className="wrap">
                             <div className="button-group">
                                 <Button type="primary" shape="circle" size="large" onClick={this.showSearchGroup}>
-                                    <Icon icon="icon-create-group-chat" size={22} />
+                                    <Icon icon="icon-search" size={22} />
                                 </Button>
                                 <Button type="primary" shape="circle" size="large" onClick={this.openCreateGroupModel}>
                                     <Icon icon="icon-create-group-chat" size={22} />

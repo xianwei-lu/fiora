@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
+import copy from 'copy-to-clipboard';
 
 import Linkman from 'components/Linkman';
 import Message from 'components/Message';
 import GroupUser from 'components/GroupUser';
+import Icon from 'components/Icon';
 
 import 'styles/feature/chat.less';
 
@@ -72,6 +74,7 @@ class Chat extends Component {
                     message.error(`消息发送失败, ${res.data}`);
                 }
             });
+            e.target.style.height = '40px';
             e.target.value = '';
             e.preventDefault();
         }
@@ -84,6 +87,10 @@ class Chat extends Component {
         this.onScrollHandle = setTimeout(() => {
             action.setAutoScroll($messageList.scrollHeight - $messageList.scrollTop - $messageList.clientHeight < $messageList.clientHeight / 2);
         }, 50);
+    }
+    handleShareGroup = () => {
+        copy(window.location.href);
+        message.info('已复制邀请链接, 发送给你的朋友吧');
     }
     renderGroups = () => {
         const { $$groups, currentGroup } = this.props;
@@ -149,11 +156,10 @@ class Chat extends Component {
                                             <p className="name">{$$group.get('name')}</p>
                                         </div>
                                         <div className="button-group">
-                                            <Tooltip title="用户列表" mouseEnterDelay={1}>
-                                                <Button shape="circle" icon="search" />
-                                            </Tooltip>
-                                            <Tooltip title="更多" mouseEnterDelay={1}>
-                                                <Button shape="circle" icon="search" />
+                                            <Tooltip title="分享群组" mouseEnterDelay={0.5}>
+                                                <Button shape="circle" onClick={this.handleShareGroup}>
+                                                    <Icon icon="icon-share-copy" size={14} />
+                                                </Button>
                                             </Tooltip>
                                         </div>
                                     </div>
@@ -164,7 +170,7 @@ class Chat extends Component {
                                         <Input
                                             className="input"
                                             type="textarea"
-                                            placeholder="Autosize height"
+                                            placeholder="输入要发送的消息"
                                             autosize={{ minRows: 1, maxRows: 5 }}
                                             onKeyDown={this.handleInputKeyDown}
                                             onPressEnter={this.handleInputEnter}
