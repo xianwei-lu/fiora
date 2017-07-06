@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
 import Avatar from 'components/Avatar';
-import pureRender from 'pure-render-decorator';
+import Icon from 'components/Icon';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import 'styles/component/groupUser.less';
 
-@pureRender
+@immutableRenderDecorator
 export default class Linkman extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,
-        icon: PropTypes.string.isRequired,
+        os: PropTypes.string,
+        browser: PropTypes.string,
     }
     render() {
-        const { avatar, username, icon } = this.props;
+        const { avatar, username, os, browser } = this.props;
 
         return (
             <li className="component-group-user">
@@ -23,7 +24,8 @@ export default class Linkman extends Component {
                     <p>{username}</p>
                 </div>
                 <div className="icon">
-                    <Icon type={icon} />
+                    <Icon icon={`icon-${os.replace(' ', '').toLowerCase()}`} size={20} />
+                    <Icon icon={`icon-${browser.replace(' ', '').toLowerCase()}`} size={20} />
                 </div>
             </li>
         );

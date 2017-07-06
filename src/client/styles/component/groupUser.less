@@ -4,13 +4,16 @@
     .layout(space-between, center);
     padding: 0px 5px;
     .avatar-name {
-        .layout();
+        .layout(flex-start, center);
         & > p {
             margin-left: 8px;
             font-size: 12px;
         }
     }
     .icon {
-        font-size: 18px;
+        height: 28px;
+        & > i {
+            padding-left: 4px;
+        }
     }
 }

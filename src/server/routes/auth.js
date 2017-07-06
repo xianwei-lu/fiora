@@ -15,9 +15,10 @@ const config = require('../../../config/index').project;
 
 async function populateUser(user) {
     user.groups = await Group.find({ members: user._id });
-    await modelTool.populateGroupInfo(user.groups);
     for (const group of user.groups) {
         await modelTool.populateGroupMessage(group);
+        await modelTool.populateGroupOnline(group);
+        await modelTool.populateGroupInfo(group);
     }
     user._doc.groups = user.groups;
 }
@@ -26,7 +27,7 @@ async function populateUser(user) {
 const AuthRouter = new Router({ prefix: '/auth' });
 AuthRouter
 .post('/', async (ctx) => {
-    const { username, password } = ctx.params;
+    const { username, password, os, browser, description } = ctx.params;
     assert(!username, 400, '用户名不能为空');
     assert(!password, 400, '密码不能为空');
 
@@ -35,8 +36,6 @@ AuthRouter
     const isPasswordCorrect = bcrypt.compareSync(password, user.password);
     assert(!isPasswordCorrect, 400, '密码不正确');
     user.password = undefined;
-
-    await populateUser(user);
 
     const token = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 7) }, config.jwtSecret);
     ctx.socket.token = token;
@@ -47,8 +46,13 @@ AuthRouter
         $set: {
             user: user._id,
             token,
+            os,
+            browser,
+            description,
         },
     });
+
+    await populateUser(user);
 
     for (const group of user.groups) {
         ctx.socket.socket.join(group._id);
@@ -57,7 +61,7 @@ AuthRouter
     ctx.res(201, { user, token });
 })
 .put('/', async (ctx) => {
-    const { token } = ctx.params;
+    const { token, os, browser, description } = ctx.params;
     assert(!token, 400, '需要token');
 
     let payload = null;
@@ -75,8 +79,6 @@ AuthRouter
     const user = await User.findOne({ _id: payload.userId }, '-salt');
     assert(!user, 404, '该用户不存在');
 
-    await populateUser(user);
-
     ctx.socket.token = token;
     ctx.socket.user = user._id;
 
@@ -86,8 +88,12 @@ AuthRouter
         $set: {
             user: user._id,
             token,
+            os,
+            browser,
+            description,
         },
     });
+    await populateUser(user);
 
     for (const group of user.groups) {
         ctx.socket.socket.join(group._id);

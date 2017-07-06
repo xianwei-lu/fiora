@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import { Layout, Button, Modal, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import Avatar from 'components/Avatar';
 import TextButton from 'components/TextButton';
@@ -14,7 +14,7 @@ import 'styles/feature/header.less';
 
 import action from '../state/action';
 
-@pureRender
+@immutableRenderDecorator
 class Header extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired,

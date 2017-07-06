@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import 'styles/component/linkman.less';
 
-@pureRender
+@immutableRenderDecorator
 export default class Linkman extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,

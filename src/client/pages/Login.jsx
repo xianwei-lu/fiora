@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button, message } from 'antd';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import 'styles/page/login.less';
 
 import action from '../state/action';
 
-@pureRender
+@immutableRenderDecorator
 class Login extends Component {
     static propTypes = {
         form: PropTypes.object.isRequired,

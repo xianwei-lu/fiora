@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import { Modal, Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import Avatar from 'components/Avatar';
 
@@ -11,7 +11,7 @@ import 'styles/feature/searchGroup.less';
 
 import action from '../state/action';
 
-@pureRender
+@immutableRenderDecorator
 class SearchGroup extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired,

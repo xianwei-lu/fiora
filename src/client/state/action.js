@@ -1,3 +1,4 @@
+import platform from 'platform';
 import Socket from '../../core/socketClient';
 
 const socket = new Socket('localhost', 9200);
@@ -10,9 +11,9 @@ function init(instance) {
     dispatch = store.dispatch;
 }
 
-function getGroup(id) {
+function getGroupByName(name) {
     return store.getState().getIn(['user', 'groups']).find(
-        ($$group) => $$group.get('_id') === id,
+        ($$group) => $$group.get('name') === name,
     );
 }
 function getGroupIndex(id) {
@@ -31,9 +32,13 @@ const actions = {
         });
     },
     async login(username, password) {
+        const { os, name, description } = platform;
         const res = await socket.post('/auth', {
             username,
             password,
+            os: os.family,
+            browser: name,
+            description,
         });
         dispatch({
             type: 'SetMultiValue',
@@ -49,8 +54,12 @@ const actions = {
         return res;
     },
     async reConnect(token) {
+        const { os, name, description } = platform;
         const res = await socket.put('/auth', {
             token,
+            os: os.family,
+            browser: name,
+            description,
         });
         dispatch({
             type: 'SetMultiValue',
@@ -97,6 +106,17 @@ const actions = {
                 value: res.data,
             });
             this.selectGroup(res.data.name);
+        }
+        return res;
+    },
+    async updateGroupOnline(groupId) {
+        const res = await socket.get('/group/online', { groupId });
+        if (res.status === 200) {
+            dispatch({
+                type: 'SetValue',
+                key: ['user', 'groups', getGroupIndex(groupId), 'onlines'],
+                value: res.data,
+            });
         }
         return res;
     },
@@ -157,6 +177,10 @@ const actions = {
                 key: ['currentGroup'],
                 value: name,
             });
+        }
+        const $$group = getGroupByName(name);
+        if ($$group) {
+            this.updateGroupOnline($$group.get('_id'));
         }
     },
     setAutoScroll(value) {

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import 'styles/component/avatar.less';
 import Props from '../../utils/props';
 
-@pureRender
+@immutableRenderDecorator
 export default class Avatar extends Component {
     static propTypes = {
         width: PropTypes.number.isRequired,

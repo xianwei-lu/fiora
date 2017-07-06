@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import Header from 'features/Header';
 import Footer from 'features/Footer';
@@ -11,7 +11,7 @@ import 'styles/page/app.less';
 
 import action from '../state/action';
 
-@pureRender
+@immutableRenderDecorator
 class App extends Component {
     componentDidMount() {
         const token = window.localStorage.getItem('token');

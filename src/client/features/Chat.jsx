@@ -3,7 +3,7 @@ import { Layout, Menu, Button, Tooltip, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import Linkman from 'components/Linkman';
 import Message from 'components/Message';
@@ -15,7 +15,7 @@ import action from '../state/action';
 
 const { Content, Sider } = Layout;
 
-@pureRender
+@immutableRenderDecorator
 class Chat extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired,
@@ -27,11 +27,23 @@ class Chat extends Component {
     constructor(...args) {
         super(...args);
         this.onScrollHandle = null;
+        this.updateOnlineTask = null;
+    }
+    componentDidMount() {
+        this.updateOnlineTask = setInterval(() => {
+            const $$group = this.getCurrentGroup();
+            if ($$group) {
+                action.updateGroupOnline($$group.get('_id'));
+            }
+        }, 60000);
     }
     componentDidUpdate(prevProps) {
         if (!prevProps.$$groups && this.props.$$groups) {
             action.selectGroup(this.context.router.route.match.params.name);
         }
+    }
+    componentWillUnmount() {
+        clearImmediate(this.updateOnlineTask);
     }
     getCurrentGroup = () => {
         const { $$groups, currentGroup } = this.props;
@@ -161,12 +173,14 @@ class Chat extends Component {
                                 </Layout>
                                 <Sider className="user-list" ref={(i) => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>
                                     <div className="title">
-                                        <p>成员: 8/18</p>
-                                        <Button shape="circle" icon="search" size="small" />
+                                        <p>在线成员: {$$group.get('onlines').size}/{$$group.get('members')}</p>
                                     </div>
                                     <ul className="group-user-list">
-                                        <GroupUser avatar="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" username="碎碎酱" icon="android" />
-                                        <GroupUser avatar="https://cdn.suisuijiang.com/user_593904a3c975c0695ce1ff95_1496916462029.png?imageView2/2/w/44/h/44" username="碎碎酱的小号" icon="apple" />
+                                        {
+                                            $$group.get('onlines').map(($$online, i) => (
+                                                <GroupUser key={i} avatar={$$online.getIn(['user', 'avatar'])} username={$$online.getIn(['user', 'username'])} os={$$online.get('os')} browser={$$online.get('browser')} />
+                                            ))
+                                        }
                                     </ul>
                                 </Sider>
                             </Layout>

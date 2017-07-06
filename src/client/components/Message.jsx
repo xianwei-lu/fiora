@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import format from 'date-format';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
@@ -9,7 +9,7 @@ import Avatar from 'components/Avatar';
 
 import 'styles/component/message.less';
 
-@pureRender
+@immutableRenderDecorator
 class Message extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,

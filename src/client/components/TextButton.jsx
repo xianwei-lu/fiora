@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import 'styles/component/textButton.less';
 
-@pureRender
+@immutableRenderDecorator
 export default class TextButton extends Component {
     static propTypes = {
         text: PropTypes.string.isRequired,

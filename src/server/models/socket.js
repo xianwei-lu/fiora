@@ -15,6 +15,15 @@ const SocketSchema = new Schema({
     token: {
         type: String,
     },
+    os: {
+        type: String,
+    },
+    browser: {
+        type: String,
+    },
+    description: {
+        type: String,
+    },
 });
 
 const Socket = mongoose.model('Socket', SocketSchema);

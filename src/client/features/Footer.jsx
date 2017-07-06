@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
 import 'styles/feature/footer.less';
 
-@pureRender
+@immutableRenderDecorator
 export default class Footer extends Component {
     render() {
         return (

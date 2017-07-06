@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import pureRender from 'pure-render-decorator';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
-@pureRender
+@immutableRenderDecorator
 export default class Icon extends Component {
     static propTypes = {
         icon: PropTypes.string.isRequired,

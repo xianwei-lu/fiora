@@ -70,6 +70,17 @@ GroupRouter
     await modelTool.populateGroupMessage(group);
 
     ctx.res(201, group);
+})
+.get('/online', async (ctx) => {
+    const { groupId } = ctx.params;
+    assert(!groupId, 400, '没有群组id');
+    assert(!mongoose.Types.ObjectId.isValid(groupId), 400, '群组id不合法');
+
+    const group = await Group.findById(groupId);
+    assert(!group, 400, '群组不存在');
+    await modelTool.populateGroupOnline(group);
+
+    ctx.res(200, group.onlines);
 });
 
 module.exports = GroupRouter;
