@@ -7,6 +7,8 @@ const config = require('../../../config/index').project;
 const Group = require('../models/group');
 const User = require('../models/user');
 
+const modelTool = require('../../utils/model');
+
 const GroupRouter = new Router({ prefix: '/group' });
 GroupRouter
 .post('/', async (ctx) => {
@@ -36,19 +38,38 @@ GroupRouter
         throw err;
     }
 
-    const groupOpts = [
-        {
-            path: 'members',
-            select: '_id avatar username',
-        },
-        {
-            path: 'creator',
-            select: '_id username',
-        },
-    ];
-    await Group.populate(savedGroup, groupOpts);
+    await modelTool.populateGroupInfo(savedGroup);
+    await modelTool.populateGroupMessage(savedGroup);
 
     ctx.res(201, savedGroup);
+})
+.get('/search', async (ctx) => {
+    const { groupName } = ctx.params;
+    assert(!groupName, 400, '请输入要查找的群组名');
+
+    const groups = await Group.find({ name: { $regex: groupName } }, '_id avatar name members');
+    const data = groups.map(({ _id, avatar, name, members }) => ({
+        _id,
+        avatar,
+        name,
+        members: members.length,
+    }));
+    ctx.res(200, data);
+})
+.post('/join', async (ctx) => {
+    const { groupId } = ctx.params;
+    assert(!groupId, 400, '没有群组id');
+    assert(!mongoose.Types.ObjectId.isValid(groupId), 400, '群组id不合法');
+
+    const group = await Group.findById(groupId);
+    assert(!group, 400, '群组不存在');
+    assert(group.members.indexOf(ctx.socket.user) !== -1, 400, '你已在群组中');
+    group.members.push(ctx.socket.user);
+    await group.save();
+    await modelTool.populateGroupInfo(group);
+    await modelTool.populateGroupMessage(group);
+
+    ctx.res(201, group);
 });
 
 module.exports = GroupRouter;

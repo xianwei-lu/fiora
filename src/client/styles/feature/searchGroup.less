@@ -1,0 +1,59 @@
+@import "../util.less";
+@import "~antd/lib/style/core/index.less";
+
+.feature-search-group {
+    .group-list {
+        .header {
+            border-bottom: 1px solid #e9e9e9;
+            height: 40px;
+            margin-top: 10px;
+            & > h4 {
+                text-align: center;
+                line-height: 40px;
+            }
+        }
+        .body {
+            .layout();
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding-top: 16px;
+            margin-bottom: -10px;
+            & > div {
+                .size(33.33%, 50px);
+                padding: 0px 10px;
+                margin-bottom: 10px;
+                & > div {
+                    .size();
+                    .layout(flex-start, center);
+                    flex-direction: row;
+                    position: relative;
+                    & > .content {
+                        margin-left: 8px;
+                        & > :first-child {
+                            color: #5a5a5a;
+                            font-weight: bold;
+                        }
+                        & > :last-child {
+                            color: #919191;
+                        }
+                    }
+                    & > .hover {
+                        .size();
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        background-color: rgba(0, 0, 0, 0.1);
+                        border-radius: 3px;
+                        .flex-center();
+                        display: none;
+                    }
+                    &:hover {
+                        & > .hover {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

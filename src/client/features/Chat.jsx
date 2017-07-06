@@ -24,6 +24,10 @@ class Chat extends Component {
         $$groups: ImmutablePropTypes.list,
         currentGroup: PropTypes.string.isRequired,
     }
+    constructor(...args) {
+        super(...args);
+        this.onScrollHandle = null;
+    }
     componentDidUpdate(prevProps) {
         if (!prevProps.$$groups && this.props.$$groups) {
             action.selectGroup(this.context.router.route.match.params.name);
@@ -60,6 +64,15 @@ class Chat extends Component {
             e.preventDefault();
         }
     }
+    handleMessageListScroll = (e) => {
+        const $messageList = e.target;
+        if (this.onScrollHandle) {
+            clearTimeout(this.onScrollHandle);
+        }
+        this.onScrollHandle = setTimeout(() => {
+            action.setAutoScroll($messageList.scrollHeight - $messageList.scrollTop - $messageList.clientHeight < $messageList.clientHeight / 2);
+        }, 50);
+    }
     renderGroups = () => {
         const { $$groups, currentGroup } = this.props;
         if (!$$groups) {
@@ -95,7 +108,8 @@ class Chat extends Component {
         const $$messages = this.getCurrentGroup().get('messages');
         return $$messages.map(($$message, index) => (
             <Message
-                key={$$message.get('_id')}
+                key={`message${$$message.get('_id')}`}
+                id={$$message.get('_id')}
                 avatar={$$message.getIn(['from', 'avatar'])}
                 username={$$message.getIn(['from', 'username'])}
                 time={$$message.get('createTime')}
@@ -131,7 +145,7 @@ class Chat extends Component {
                                             </Tooltip>
                                         </div>
                                     </div>
-                                    <Content className="message-list" ref={(i) => this.messageList = i}>
+                                    <Content className="message-list" onScroll={this.handleMessageListScroll}>
                                         {this.renderMessage()}
                                     </Content>
                                     <div className="footer">

@@ -10,27 +10,15 @@ const Group = require('../models/group');
 const Socket = require('../models/socket');
 const Message = require('../models/message');
 
+const modelTool = require('../../utils/model');
+
 const config = require('../../../config/index').project;
 
 async function populateUser(user) {
-    const groupOpts = [
-        {
-            path: 'members',
-            select: '_id username avatar',
-        },
-        {
-            path: 'creator',
-            select: '_id username',
-        },
-    ];
     user.groups = await Group.find({ members: user._id });
-    await Group.populate(user.groups, groupOpts);
+    await modelTool.populateGroupInfo(user.groups);
     for (const group of user.groups) {
-        const messages = await Message.find({ toGroup: group._id }).populate({ path: 'from', select: '_id username avatar' });
-        if (messages.length > 30) {
-            messages.splice(0, messages.length - 30);
-        }
-        group._doc.messages = messages || [];
+        await modelTool.populateGroupMessage(group);
     }
     user._doc.groups = user.groups;
 }

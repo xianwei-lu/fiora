@@ -71,12 +71,33 @@ const actions = {
         const res = await socket.post('/group', {
             name,
         });
-        dispatch({
-            type: 'InsertValue',
-            index: 0,
-            key: ['user', 'groups'],
-            value: res.data,
+        if (res.status === 201) {
+            dispatch({
+                type: 'InsertValue',
+                index: 0,
+                key: ['user', 'groups'],
+                value: res.data,
+            });
+            this.selectGroup(res.data.name);
+        }
+        return res;
+    },
+    async searchGroup(groupName) {
+        return socket.get('/group/search', { groupName });
+    },
+    async joinGroup(groupId) {
+        const res = await socket.post('/group/join', {
+            groupId,
         });
+        if (res.status === 201) {
+            dispatch({
+                type: 'InsertValue',
+                index: 0,
+                key: ['user', 'groups'],
+                value: res.data,
+            });
+            this.selectGroup(res.data.name);
+        }
         return res;
     },
 
@@ -128,7 +149,7 @@ const actions = {
         });
     },
 
-    // ui
+    // view
     selectGroup(name) {
         if (name && typeof name === 'string') {
             dispatch({
@@ -137,6 +158,20 @@ const actions = {
                 value: name,
             });
         }
+    },
+    setAutoScroll(value) {
+        dispatch({
+            type: 'SetValue',
+            key: ['view', 'autoScroll'],
+            value,
+        });
+    },
+    setShowSearchGroup(value) {
+        dispatch({
+            type: 'SetValue',
+            key: ['view', 'showSearchGroup'],
+            value,
+        });
     },
 };
 

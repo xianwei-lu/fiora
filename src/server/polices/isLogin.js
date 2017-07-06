@@ -4,7 +4,7 @@ const assert = require('../../utils/assert');
 
 module.exports = function (ctx) {
     if (!ctx.socket.token) {
-        ctx.res(401, 'no authorization token');
+        ctx.res(401, '你没有登录');
         return false;
     }
 
@@ -20,7 +20,7 @@ module.exports = function (ctx) {
         return false;
     }
 
-    assert(payload.expires < Date.now(), 403, 'token expires over');
+    assert(payload.expires < Date.now(), 403, 'token过期了');
     ctx.user = payload.userId;
 
     return true;

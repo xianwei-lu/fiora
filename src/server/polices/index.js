@@ -17,6 +17,14 @@ let policeConfig = [
         match: createRouterMatch('POST', '/message'),
         polices: [isLogin],
     },
+    {
+        match: createRouterMatch('POST', '/group'),
+        polices: [isLogin],
+    },
+    {
+        match: createRouterMatch('POST', '/group/join'),
+        polices: [isLogin],
+    },
 ];
 policeConfig = policeConfig.map((police) => {
     police.polices.push(...allApplyPolices);

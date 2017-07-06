@@ -2,6 +2,10 @@ import immutable from 'immutable';
 
 const initState = immutable.fromJS({
     currentGroup: '',
+    view: {
+        autoScroll: true,
+        showSearchGroup: false,
+    },
 });
 
 export default function ($$state = initState, action) {
@@ -35,12 +39,7 @@ export default function ($$state = initState, action) {
         const index = action.index > itemsLength ? itemsLength : action.index;
         return $$state.updateIn(
             action.key,
-            ($$items) => {
-                console.log(action.key);
-                console.log($$state.getIn(action.key));
-                console.log($$items);
-                return $$items.insert(index, immutable.fromJS(action.value));
-            },
+            ($$items) => $$items.insert(index, immutable.fromJS(action.value)),
         );
     }
     case 'UpdateValue': {

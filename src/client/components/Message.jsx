@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import pureRender from 'pure-render-decorator';
 import format from 'date-format';
+import { connect } from 'react-redux';
 
 import Avatar from 'components/Avatar';
 
 import 'styles/component/message.less';
 
 @pureRender
-export default class Message extends Component {
+class Message extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,
@@ -19,16 +20,22 @@ export default class Message extends Component {
         content: PropTypes.string.isRequired,
         isSimple: PropTypes.bool,
         status: PropTypes.string,
+        shouldScroll: PropTypes.bool.isRequired,
     }
     static defaultProps = {
         isSimple: false,
+    }
+    componentDidMount() {
+        if (this.props.shouldScroll) {
+            this.msg.scrollIntoView(false);
+        }
     }
     render() {
         const { avatar, username, time, content, isSimple, status } = this.props;
 
         return (
             isSimple ?
-                <div className="message-simple">
+                <div className="message-simple" ref={(i) => this.msg = i}>
                     {
                         content.split(/\n/).map((m, i) => (
                             <p key={i}>{m}</p>
@@ -36,7 +43,7 @@ export default class Message extends Component {
                     }
                 </div>
             :
-                <div className="message">
+                <div className="message" ref={(i) => this.msg = i}>
                     <Avatar className="avatar" width={36} height={36} src={avatar} circular />
                     <div className="content">
                         <div>
@@ -55,3 +62,9 @@ export default class Message extends Component {
         );
     }
 }
+
+export default connect(
+    ($$state, { id }) => ({
+        shouldScroll: $$state.getIn(['view', 'autoScroll']) || id === $$state.getIn(['user', '_id']),
+    }),
+)(Message);

@@ -26,8 +26,8 @@ const defaultOpt = {
         transports: ['websocket'],
         upgrade: false,
         reconnection: true,
-        reconnectionAttempts: 10,
-        reconnectionDelay: 5000,
+        reconnectionAttempts: 6,
+        reconnectionDelay: 10000,
     },
 };
 

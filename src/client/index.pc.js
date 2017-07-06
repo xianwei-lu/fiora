@@ -27,11 +27,13 @@ action.socket.on('disconnect', () => {
     });
 });
 action.socket.on('reconnect', () => {
-    notification.close('disconnect-notification');
-    notification.success({
-        key: 'reconnect-notification',
-        message: '已经恢复了网络连接',
-        duration: 3,
+    action.reConnect(store.getState().get('token')).then(() => {
+        notification.close('disconnect-notification');
+        notification.success({
+            key: 'reconnect-notification',
+            message: '已经恢复了网络连接',
+            duration: 3,
+        });
     });
 });
 
