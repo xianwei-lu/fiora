@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from 'components/Avatar';
-import Icon from 'components/Icon';
+import ColorIcon from 'components/ColorIcon';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import { Tooltip } from 'antd';
 
-import 'styles/component/groupUser.less';
+import 'styles/feature/groupUser.less';
 
 @immutableRenderDecorator
 export default class Linkman extends Component {
@@ -26,8 +26,8 @@ export default class Linkman extends Component {
                 </div>
                 <Tooltip title={`${os} ${browser}`} mouseEnterDelay={0.5}>
                     <div className="icon-container">
-                        <Icon icon={`icon-${os.replace(' ', '').toLowerCase()}`} size={20} />
-                        <Icon icon={`icon-${browser.replace(' ', '').toLowerCase()}`} size={20} />
+                        <ColorIcon icon={`icon-${os.replace(' ', '').toLowerCase()}`} size={20} />
+                        <ColorIcon icon={`icon-${browser.replace(' ', '').toLowerCase()}`} size={20} />
                     </div>
                 </Tooltip>
             </li>

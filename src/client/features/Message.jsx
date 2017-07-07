@@ -7,7 +7,7 @@ import { Spin } from 'antd';
 
 import Avatar from 'components/Avatar';
 
-import 'styles/component/message.less';
+import 'styles/feature/message.less';
 
 @immutableRenderDecorator
 class Message extends Component {

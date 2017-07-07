@@ -6,9 +6,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import copy from 'copy-to-clipboard';
 
-import Linkman from 'components/Linkman';
-import Message from 'components/Message';
-import GroupUser from 'components/GroupUser';
+import Linkman from 'features/Linkman';
+import Message from 'features/Message';
+import GroupUser from 'features/GroupUser';
 import Icon from 'components/Icon';
 
 import 'styles/feature/chat.less';

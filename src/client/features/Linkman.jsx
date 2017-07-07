@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
-import 'styles/component/linkman.less';
+import 'styles/feature/linkman.less';
 
 @immutableRenderDecorator
 export default class Linkman extends Component {
