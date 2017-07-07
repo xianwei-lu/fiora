@@ -197,6 +197,20 @@ const actions = {
             value,
         });
     },
+    setUserListSollapsed(value) {
+        dispatch({
+            type: 'SetValue',
+            key: ['view', 'userListSollapsed'],
+            value,
+        });
+    },
+    setSelectExpression(value) {
+        dispatch({
+            type: 'SetValue',
+            key: ['view', 'showSelectExpression'],
+            value,
+        });
+    },
 };
 
 

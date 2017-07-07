@@ -5,6 +5,8 @@ const initState = immutable.fromJS({
     view: {
         autoScroll: true,
         showSearchGroup: false,
+        userListSollapsed: false,
+        showSelectExpression: false,
     },
 });
 

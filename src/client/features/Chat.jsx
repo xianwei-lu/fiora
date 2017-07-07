@@ -10,6 +10,8 @@ import Linkman from 'features/Linkman';
 import Message from 'features/Message';
 import GroupUser from 'features/GroupUser';
 import Icon from 'components/Icon';
+import IconButton from 'components/IconButton';
+import SelectExpression from 'features/SelectExpression';
 
 import 'styles/feature/chat.less';
 
@@ -25,11 +27,15 @@ class Chat extends Component {
     static propTypes = {
         $$groups: ImmutablePropTypes.list,
         currentGroup: PropTypes.string.isRequired,
+        userListSollapsed: PropTypes.bool.isRequired,
     }
     constructor(...args) {
         super(...args);
         this.onScrollHandle = null;
         this.updateOnlineTask = null;
+        this.openUserList = action.setUserListSollapsed.bind(null, false);
+        this.closeUserList = action.setUserListSollapsed.bind(null, true);
+        this.openSelectExpression = action.setSelectExpression.bind(null, true);
     }
     componentDidMount() {
         this.updateOnlineTask = setInterval(() => {
@@ -140,6 +146,7 @@ class Chat extends Component {
         ));
     }
     render() {
+        const { userListSollapsed } = this.props;
         const $$group = this.getCurrentGroup();
         return (
             <Layout className="feature-chat">
@@ -161,33 +168,46 @@ class Chat extends Component {
                                                     <Icon icon="icon-share-copy" size={14} />
                                                 </Button>
                                             </Tooltip>
+                                            <Tooltip title={userListSollapsed ? '打开用户列表' : '关闭用户列表'} mouseEnterDelay={0.5}>
+                                                <Button shape="circle" onClick={userListSollapsed ? this.openUserList : this.closeUserList}>
+                                                    <Icon icon={userListSollapsed ? 'icon-left' : 'icon-right'} size={14} />
+                                                </Button>
+                                            </Tooltip>
                                         </div>
                                     </div>
                                     <Content className="message-list" onScroll={this.handleMessageListScroll}>
                                         {this.renderMessage()}
                                     </Content>
                                     <div className="footer">
-                                        <Input
-                                            className="input"
-                                            type="textarea"
-                                            placeholder="输入要发送的消息"
-                                            autosize={{ minRows: 1, maxRows: 5 }}
-                                            onKeyDown={this.handleInputKeyDown}
-                                            onPressEnter={this.handleInputEnter}
-                                        />
+                                        <div>
+                                            <Input
+                                                className="input"
+                                                type="textarea"
+                                                placeholder="输入要发送的消息"
+                                                autosize={{ minRows: 1, maxRows: 5 }}
+                                                onKeyDown={this.handleInputKeyDown}
+                                                onPressEnter={this.handleInputEnter}
+                                            />
+                                            <div className="button-container">
+                                                <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
+                                            </div>
+                                            <SelectExpression />
+                                        </div>
                                     </div>
                                 </Layout>
-                                <Sider className="user-list" ref={(i) => this.sider = i} collapsible collapsedWidth={0} trigger={null} width={240}>
-                                    <div className="title">
-                                        <p>在线成员: {$$group.get('onlines').size}/{$$group.get('members')}</p>
+                                <Sider className="user-list" collapsed={userListSollapsed} collapsible collapsedWidth={0} trigger={null} width={240}>
+                                    <div>
+                                        <div className="title">
+                                            <p>在线成员: {$$group.get('onlines').size}/{$$group.get('members')}</p>
+                                        </div>
+                                        <ul className="group-user-list">
+                                            {
+                                                $$group.get('onlines').map(($$online, i) => (
+                                                    <GroupUser key={i} avatar={$$online.getIn(['user', 'avatar'])} username={$$online.getIn(['user', 'username'])} os={$$online.get('os')} browser={$$online.get('browser')} />
+                                                ))
+                                            }
+                                        </ul>
                                     </div>
-                                    <ul className="group-user-list">
-                                        {
-                                            $$group.get('onlines').map(($$online, i) => (
-                                                <GroupUser key={i} avatar={$$online.getIn(['user', 'avatar'])} username={$$online.getIn(['user', 'username'])} os={$$online.get('os')} browser={$$online.get('browser')} />
-                                            ))
-                                        }
-                                    </ul>
                                 </Sider>
                             </Layout>
                         :
@@ -206,5 +226,6 @@ export default connect(
     ($$state) => ({
         $$groups: $$state.getIn(['user', 'groups']),
         currentGroup: $$state.getIn(['currentGroup']),
+        userListSollapsed: $$state.getIn(['view', 'userListSollapsed']),
     }),
 )(Chat);
