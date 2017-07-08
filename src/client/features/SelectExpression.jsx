@@ -43,16 +43,12 @@ class SelectExpression extends Component {
         );
         return (
             <Animate
-                transitionName="fade"
+                transitionName="select-expression"
                 transitionAppear
             >
                 {
                     showSelectExpression ?
-                        <div className="feature-select-expression" key="a">
-                            <div>
-                                <h3>选择表情</h3>
-                                {extra}
-                            </div>
+                        <Card className="feature-select-expression" title="选择表情" extra={extra} key="a">
                             <Tabs type="line" tabPosition="left">
                                 <TabPane tab="默认表情" key="1">
                                     { this.renderDefaultExpression() }
@@ -61,7 +57,7 @@ class SelectExpression extends Component {
                                     <p>暂未支持</p>
                                 </TabPane>
                             </Tabs>
-                        </div>
+                        </Card>
                     :
                         null
                 }
