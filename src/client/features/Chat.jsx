@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDom from 'react-dom';
 import { Layout, Menu, Button, Tooltip, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,6 +20,29 @@ import action from '../state/action';
 
 const { Content, Sider } = Layout;
 
+function insertAtCursor(input, value) {
+    if (document.selection) {
+        input.focus();
+        const sel = document.selection.createRange();
+        sel.text = value;
+        sel.select();
+    } else if (input.selectionStart || input.selectionStart === '0') {
+        const startPos = input.selectionStart;
+        const endPos = input.selectionEnd;
+        const restoreTop = input.scrollTop;
+        input.value = input.value.substring(0, startPos) + value + input.value.substring(endPos, input.value.length);
+        if (restoreTop > 0) {
+            input.scrollTop = restoreTop;
+        }
+        input.focus();
+        input.selectionStart = startPos + value.length;
+        input.selectionEnd = startPos + value.length;
+    } else {
+        input.value += value;
+        input.focus();
+    }
+}
+
 @immutableRenderDecorator
 class Chat extends Component {
     static contextTypes = {
@@ -28,6 +52,7 @@ class Chat extends Component {
         $$groups: ImmutablePropTypes.list,
         currentGroup: PropTypes.string.isRequired,
         userListSollapsed: PropTypes.bool.isRequired,
+        insertInputValue: PropTypes.string,
     }
     constructor(...args) {
         super(...args);
@@ -44,6 +69,11 @@ class Chat extends Component {
                 action.updateGroupOnline($$group.get('_id'));
             }
         }, 60000);
+    }
+    componentWillUpdate(nextProps) {
+        if (nextProps.insertInputValue && this.props.insertInputValue !== nextProps.insertInputValue) {
+            insertAtCursor(ReactDom.findDOMNode(this.input), nextProps.insertInputValue);
+        }
     }
     componentDidUpdate(prevProps) {
         if (!prevProps.$$groups && this.props.$$groups) {
@@ -187,6 +217,7 @@ class Chat extends Component {
                                                 autosize={{ minRows: 1, maxRows: 5 }}
                                                 onKeyDown={this.handleInputKeyDown}
                                                 onPressEnter={this.handleInputEnter}
+                                                ref={(i) => this.input = i}
                                             />
                                             <div className="button-container">
                                                 <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
@@ -227,5 +258,6 @@ export default connect(
         $$groups: $$state.getIn(['user', 'groups']),
         currentGroup: $$state.getIn(['currentGroup']),
         userListSollapsed: $$state.getIn(['view', 'userListSollapsed']),
+        insertInputValue: $$state.getIn(['view', 'insertInputValue']),
     }),
 )(Chat);

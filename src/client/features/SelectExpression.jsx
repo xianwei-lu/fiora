@@ -21,12 +21,19 @@ class SelectExpression extends Component {
         super(...args);
         this.close = action.setSelectExpression.bind(null, false);
     }
+    handleClick = (e) => {
+        const name = e.currentTarget.dataset.name;
+        action.insertInputValue(`#(${name})`);
+        this.close();
+    }
     renderDefaultExpression = () => (
         <div className="default-expression">
             {
                 expressions.default.map((e, index) => (
                     <div
                         key={index}
+                        data-name={e}
+                        onClick={this.handleClick}
                     >
                         <div style={{ backgroundPosition: `left ${-30 * index}px`, backgroundImage: `url(${require('assets/images/expressions.png')})` }} />
                     </div>

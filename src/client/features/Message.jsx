@@ -18,6 +18,7 @@ class Message extends Component {
             PropTypes.string,
             PropTypes.number,
         ]).isRequired,
+        type: PropTypes.string.isRequired,
         content: PropTypes.string.isRequired,
         isSimple: PropTypes.bool,
         status: PropTypes.string,
@@ -31,19 +32,27 @@ class Message extends Component {
             this.msg.scrollIntoView(false);
         }
     }
+    renderText = () => (
+        this.props.content.split(/\n/).map((m, i) => (
+            <p key={i} dangerouslySetInnerHTML={{ __html: m }} />
+        ))
+    )
+    renderContent = () => {
+        switch (this.props.type) {
+        case 'text':
+            return this.renderText();
+        default:
+            return null;
+        }
+    }
     render() {
-        const { avatar, username, time, content, isSimple, status } = this.props;
-
+        const { avatar, username, time, isSimple, status } = this.props;
         return (
             isSimple ?
                 <div className="message-simple" ref={(i) => this.msg = i}>
                     <Spin spinning={status === 'sending'} size="small">
                         <div className="container">
-                            {
-                                content.split(/\n/).map((m, i) => (
-                                    <p key={i}>{m}</p>
-                                ))
-                            }
+                            { this.renderContent() }
                         </div>
                     </Spin>
                 </div>
@@ -56,13 +65,7 @@ class Message extends Component {
                                 <span>{username}</span>
                                 <span className="time">{format('yyyy-MM-dd hh:mm:ss', new Date(time))}</span>
                             </div>
-                            <div>
-                                {
-                                    content.split(/\n/).map((m, i) => (
-                                        <p key={i}>{m}</p>
-                                    ))
-                                }
-                            </div>
+                            <div>{ this.renderContent() }</div>
                         </div>
                     </Spin>
                 </div>

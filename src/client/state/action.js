@@ -1,5 +1,6 @@
 import platform from 'platform';
 import Socket from '../../core/socketClient';
+import messageTool from '../../utils/message';
 
 const socket = new Socket('localhost', 9200);
 let store = null;
@@ -40,17 +41,22 @@ const actions = {
             browser: name,
             description,
         });
-        dispatch({
-            type: 'SetMultiValue',
-            keys: [
-                ['user'],
-                ['token'],
-            ],
-            values: [
-                res.data.user,
-                res.data.token,
-            ],
-        });
+        if (res.status === 201) {
+            for (const group of res.data.user.groups) {
+                messageTool.handleInitMessages(group.messages);
+            }
+            dispatch({
+                type: 'SetMultiValue',
+                keys: [
+                    ['user'],
+                    ['token'],
+                ],
+                values: [
+                    res.data.user,
+                    res.data.token,
+                ],
+            });
+        }
         return res;
     },
     async reConnect(token) {
@@ -61,17 +67,22 @@ const actions = {
             browser: name,
             description,
         });
-        dispatch({
-            type: 'SetMultiValue',
-            keys: [
-                ['user'],
-                ['token'],
-            ],
-            values: [
-                res.data.user,
-                token,
-            ],
-        });
+        if (res.status === 201) {
+            for (const group of res.data.user.groups) {
+                messageTool.handleInitMessages(group.messages);
+            }
+            dispatch({
+                type: 'SetMultiValue',
+                keys: [
+                    ['user'],
+                    ['token'],
+                ],
+                values: [
+                    res.data.user,
+                    token,
+                ],
+            });
+        }
         return res;
     },
 
@@ -135,6 +146,7 @@ const actions = {
             },
             status: 'sending',
         });
+        messageTool.handleSendMessage(message);
         this.addMessage(linkman, linkmanType, message);
 
         const res = await socket.post('/message', {
@@ -208,6 +220,13 @@ const actions = {
         dispatch({
             type: 'SetValue',
             key: ['view', 'showSelectExpression'],
+            value,
+        });
+    },
+    insertInputValue(value) {
+        dispatch({
+            type: 'SetValue',
+            key: ['view', 'insertInputValue'],
             value,
         });
     },

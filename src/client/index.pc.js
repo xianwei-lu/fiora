@@ -12,9 +12,13 @@ import 'normalize.css';
 
 import store from './state/store';
 import action, { init } from './state/action';
+import messageTool from '../utils/message';
 
 init(store);
 action.socket.on('message', (data) => {
+    if (data.type === 'text') {
+        messageTool.handleReceiveMessage(data);
+    }
     action.addMessage(data.toGroup, 'group', data);
 });
 action.socket.on('disconnect', () => {

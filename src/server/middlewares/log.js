@@ -21,6 +21,6 @@ module.exports = function () {
         } else if (status >= 500) {
             color = 'magenta';
         }
-        console.log(`  ${chalk.gray('-->')} ${chalk[color](ctx.resData.status)} ${chalk.yellow(`${after - before}ms`)}`);
+        console.log(`  ${chalk.gray('-->')} ${chalk[color](ctx.resData.status)} ${chalk.yellow(`${after - before}ms`)} ${status >= 500 ? ctx.resData.data : ''}`);
     };
 };

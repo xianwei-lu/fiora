@@ -67,6 +67,9 @@ AuthRouter
     let payload = null;
     try {
         payload = jwt.decode(token, config.jwtSecret);
+        if (payload.expires < Date.now()) {
+            return ctx.res(403, 'token过期了');
+        }
     } catch (err) {
         if (err.message === 'Signature verification failed') {
             ctx.res(401, 'invalid token');
