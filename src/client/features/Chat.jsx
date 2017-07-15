@@ -78,7 +78,12 @@ class Chat extends Component {
     }
     componentDidUpdate(prevProps) {
         if (!prevProps.$$groups && this.props.$$groups) {
-            action.selectGroup(this.context.router.route.match.params.name);
+            const $$group = this.props.$$groups.find(($$g) => $$g.get('name') === this.context.router.route.match.params.name);
+            if ($$group) {
+                action.selectGroup(this.context.router.route.match.params.name);
+            } else {
+                this.jumpTo('/');
+            }
         }
     }
     componentWillUnmount() {
@@ -103,9 +108,14 @@ class Chat extends Component {
     handleInputEnter = (e) => {
         if (!e.shiftKey) {
             const $$group = this.getCurrentGroup();
+            const content = e.target.value;
+            let type = 'text';
+            if (/[a-zA-z]+:\/\/[^\s]*/.test(content)) {
+                type = 'url';
+            }
             action.sendMessage($$group.get('_id'), 'group', {
-                type: 'text',
-                content: e.target.value,
+                type,
+                content,
             }).then((res) => {
                 if (res.status !== 201) {
                     message.error(`消息发送失败, ${res.data}`);

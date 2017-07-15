@@ -37,10 +37,18 @@ class Message extends Component {
             <p key={i} dangerouslySetInnerHTML={{ __html: m }} />
         ))
     )
+    renderUrl = () => {
+        const { content } = this.props;
+        return (
+            <a href={content} rel="noopener noreferrer" target="_blank">{content}</a>
+        );
+    }
     renderContent = () => {
         switch (this.props.type) {
         case 'text':
             return this.renderText();
+        case 'url':
+            return this.renderUrl();
         default:
             return null;
         }

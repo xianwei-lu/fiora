@@ -166,14 +166,14 @@ const actions = {
             },
             status: 'sending',
         });
-        messageTool.handleSendMessage(message);
-        this.addMessage(linkman, linkmanType, message);
 
         const res = await socket.post('/message', {
             linkman,
             linkmanType,
             message,
         });
+        messageTool.handleSendMessage(message);
+        this.addMessage(linkman, linkmanType, message);
 
         if (res.status === 201) {
             this.updateMessage(linkman, linkmanType, `temp-${now}`, 'success');
