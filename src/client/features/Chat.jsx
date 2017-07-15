@@ -53,6 +53,7 @@ class Chat extends Component {
         currentGroup: PropTypes.string.isRequired,
         userListSollapsed: PropTypes.bool.isRequired,
         insertInputValue: PropTypes.string,
+        guest: PropTypes.bool,
     }
     constructor(...args) {
         super(...args);
@@ -125,8 +126,15 @@ class Chat extends Component {
         }, 50);
     }
     handleShareGroup = () => {
-        copy(window.location.href);
+        if (this.props.currentGroup) {
+            copy(`${window.location.origin}/group/${this.props.currentGroup}`);
+        } else {
+            copy(window.location.href);
+        }
         message.info('已复制邀请链接, 发送给你的朋友吧');
+    }
+    jumpTo = (path) => {
+        this.context.router.history.push(path);
     }
     renderGroups = () => {
         const { $$groups, currentGroup } = this.props;
@@ -176,7 +184,7 @@ class Chat extends Component {
         ));
     }
     render() {
-        const { userListSollapsed } = this.props;
+        const { userListSollapsed, guest } = this.props;
         const $$group = this.getCurrentGroup();
         return (
             <Layout className="feature-chat">
@@ -208,23 +216,35 @@ class Chat extends Component {
                                     <Content className="message-list" onScroll={this.handleMessageListScroll}>
                                         {this.renderMessage()}
                                     </Content>
-                                    <div className="footer">
-                                        <div>
-                                            <Input
-                                                className="input"
-                                                type="textarea"
-                                                placeholder="输入要发送的消息"
-                                                autosize={{ minRows: 1, maxRows: 5 }}
-                                                onKeyDown={this.handleInputKeyDown}
-                                                onPressEnter={this.handleInputEnter}
-                                                ref={(i) => this.input = i}
-                                            />
-                                            <div className="button-container">
-                                                <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
+                                    {
+                                        guest ?
+                                            <div className="guest">
+                                                <h3>
+                                                    游客用户不能发言, 请
+                                                    <a onClick={this.jumpTo.bind(this, '/login')} >登录</a>
+                                                    或
+                                                    <a onClick={this.jumpTo.bind(this, '/signin')} >注册</a>
+                                                </h3>
                                             </div>
-                                            <SelectExpression />
-                                        </div>
-                                    </div>
+                                        :
+                                            <div className="footer">
+                                                <div>
+                                                    <Input
+                                                        className="input"
+                                                        type="textarea"
+                                                        placeholder="输入要发送的消息"
+                                                        autosize={{ minRows: 1, maxRows: 5 }}
+                                                        onKeyDown={this.handleInputKeyDown}
+                                                        onPressEnter={this.handleInputEnter}
+                                                        ref={(i) => this.input = i}
+                                                    />
+                                                    <div className="button-container">
+                                                        <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
+                                                    </div>
+                                                    <SelectExpression />
+                                                </div>
+                                            </div>
+                                    }
                                 </Layout>
                                 <Sider className="user-list" collapsed={userListSollapsed} collapsible collapsedWidth={0} trigger={null} width={240}>
                                     <div>
@@ -259,5 +279,6 @@ export default connect(
         currentGroup: $$state.getIn(['currentGroup']),
         userListSollapsed: $$state.getIn(['view', 'userListSollapsed']),
         insertInputValue: $$state.getIn(['view', 'insertInputValue']),
+        guest: $$state.getIn(['user', 'guest']),
     }),
 )(Chat);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button, message } from 'antd';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
+import { connect } from 'react-redux';
 
 
 import 'styles/page/login.less';
@@ -15,17 +16,19 @@ class Signin extends Component {
     static propTypes = {
         form: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired,
+        signinGroup: PropTypes.string,
     }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                action.register(values.username, values.password).then((response) => {
+                action.register(values.username, values.password, this.props.signinGroup).then((response) => {
                     if (response.status !== 201) {
                         message.error(response.data, 3);
                     } else {
                         action.login(values.username, values.password).then((res) => {
                             if (res.status === 201) {
+                                window.localStorage.setItem('token', res.data.token);
                                 this.context.router.history.push('/');
                             }
                         });
@@ -107,4 +110,8 @@ class Signin extends Component {
     }
 }
 
-export default Form.create()(Signin);
+export default connect(
+    ($$state) => ({
+        signinGroup: $$state.get('signinGroup'),
+    }),
+)(Form.create()(Signin));

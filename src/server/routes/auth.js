@@ -103,6 +103,24 @@ AuthRouter
     }
 
     ctx.res(201, { user });
+})
+.post('/guest', async (ctx) => {
+    const { groupName } = ctx.params;
+    assert(typeof groupName !== 'string', 400, '需要群组名');
+
+    let group = null;
+    if (groupName) {
+        group = await Group.findOne({ name: groupName });
+    } else {
+        group = await Group.findOne({ isDefault: true });
+    }
+
+    ctx.socket.socket.join(group._id);
+    await modelTool.populateGroupMessage(group);
+    await modelTool.populateGroupOnline(group);
+    await modelTool.populateGroupInfo(group);
+
+    ctx.res(201, { groups: [group] });
 });
 
 module.exports = AuthRouter;

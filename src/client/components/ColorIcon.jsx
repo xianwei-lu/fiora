@@ -11,17 +11,17 @@ export default class ColorIcon extends Component {
     render() {
         const { icon, size } = this.props;
         switch (icon) {
-        case 'safari': {
-            return <img src={require('../assets/images/colorIcons/safari.svg')} width={size - 4} height={size - 4} />;
+        case 'icon-safari': {
+            return <img src={require('../assets/images/colorIcons/safari.svg')} width={size} height={size} />;
         }
-        case 'osx': {
-            return <img src={require('../assets/images/colorIcons/osx.svg')} width={size - 7} height={size - 7} />;
+        case 'icon-osx': {
+            return <img src={require('../assets/images/colorIcons/osx.svg')} width={size - 3} height={size - 3} />;
         }
-        case 'ios': {
-            return <img src={require('../assets/images/colorIcons/ios.svg')} width={size - 6} height={size - 6} style={{ position: 'relative', top: -1 }} />;
+        case 'icon-ios': {
+            return <img src={require('../assets/images/colorIcons/ios.svg')} width={size - 2} height={size - 2} style={{ position: 'relative', top: -1 }} />;
         }
-        case 'opera': {
-            return <img src={require('../assets/images/colorIcons/opera.svg')} width={size - 6} height={size - 6} />;
+        case 'icon-opera': {
+            return <img src={require('../assets/images/colorIcons/opera.svg')} width={size - 2} height={size - 2} />;
         }
         default: {
             break;

@@ -26,10 +26,11 @@ function getGroupIndex(id) {
 const actions = {
     socket,
     // user
-    async register(username, password) {
+    async register(username, password, signinGroup) {
         return socket.post('/user', {
             username,
             password,
+            signinGroup,
         });
     },
     async login(username, password) {
@@ -45,6 +46,7 @@ const actions = {
             for (const group of res.data.user.groups) {
                 messageTool.handleInitMessages(group.messages);
             }
+            res.data.guest = false;
             dispatch({
                 type: 'SetMultiValue',
                 keys: [
@@ -71,6 +73,7 @@ const actions = {
             for (const group of res.data.user.groups) {
                 messageTool.handleInitMessages(group.messages);
             }
+            res.data.guest = false;
             dispatch({
                 type: 'SetMultiValue',
                 keys: [
@@ -82,6 +85,23 @@ const actions = {
                     token,
                 ],
             });
+        }
+        return res;
+    },
+    async guest(groupName) {
+        const res = await socket.post('/auth/guest', { groupName });
+        console.log(res);
+        if (res.status === 201) {
+            for (const group of res.data.groups) {
+                messageTool.handleInitMessages(group.messages);
+            }
+            res.data.guest = true;
+            dispatch({
+                type: 'SetValue',
+                key: ['user'],
+                value: res.data,
+            });
+            this.selectGroup(res.data.groups[0].name);
         }
         return res;
     },
@@ -182,6 +202,13 @@ const actions = {
     },
 
     // view
+    setValue(key, value) {
+        dispatch({
+            type: 'SetValue',
+            key,
+            value,
+        });
+    },
     selectGroup(name) {
         if (name && typeof name === 'string') {
             dispatch({
