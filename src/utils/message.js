@@ -1,5 +1,10 @@
+import xss from 'xss';
 import expressions from './expressions';
 
+const myXss = new xss.FilterXSS({
+    whiteList: {
+    },
+});
 const transparentImage = 'data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==';
 
 function convertExpression(txt) {
@@ -14,19 +19,22 @@ function convertExpression(txt) {
         },
     );
 }
+function handleXss(value) {
+    return myXss.process(value);
+}
 
 // export
 function handleReceiveMessage(message) {
-    message.content = convertExpression(message.content);
+    message.content = convertExpression(handleXss(message.content));
 }
 
 function handleInitMessages(messages) {
     for (const message of messages) {
-        message.content = convertExpression(message.content);
+        message.content = convertExpression(handleXss(message.content));
     }
 }
 function handleSendMessage(message) {
-    message.content = convertExpression(message.content);
+    message.content = convertExpression(handleXss(message.content));
 }
 
 export default {
