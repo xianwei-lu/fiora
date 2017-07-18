@@ -13,6 +13,7 @@ import GroupUser from 'features/GroupUser';
 import Icon from 'components/Icon';
 import IconButton from 'components/IconButton';
 import SelectExpression from 'features/SelectExpression';
+import CodeEditor from 'features/CodeEditor';
 
 import 'styles/feature/chat.less';
 
@@ -64,6 +65,7 @@ class Chat extends Component {
         this.closeUserList = action.setUserListSollapsed.bind(null, true);
         this.openSelectExpression = action.setSelectExpression.bind(null, true);
         this.setInsertInputValue = action.insertInputValue.bind(null);
+        this.openCodeEditor = action.setValue.bind(null, ['view', 'showCodeEditor'], true);
     }
     componentDidMount() {
         this.updateOnlineTask = setInterval(() => {
@@ -103,7 +105,6 @@ class Chat extends Component {
         this.context.router.history.push(`/group/${key}`);
     }
     handleInputKeyDown = (e) => {
-        // console.log(e.altKey, e.ctrlKey);
         if (e[`${expressions.shortcut.funcKey}Key`]) {
             const insertValue = expressions.shortcut.keys[e.key];
             if (insertValue) {
@@ -136,6 +137,17 @@ class Chat extends Component {
             e.target.value = '';
             e.preventDefault();
         }
+    }
+    handleCodeEditorSend = (content) => {
+        const $$group = this.getCurrentGroup();
+        action.sendMessage($$group.get('_id'), 'group', {
+            type: 'code',
+            content,
+        }).then((res) => {
+            if (res.status !== 201) {
+                message.error(`消息发送失败, ${res.data}`);
+            }
+        });
     }
     handleMessageListScroll = (e) => {
         const $messageList = e.target;
@@ -261,8 +273,10 @@ class Chat extends Component {
                                                     />
                                                     <div className="button-container">
                                                         <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
+                                                        <IconButton icon="icon-expression" size={20} onClick={this.openCodeEditor} />
                                                     </div>
                                                     <SelectExpression />
+                                                    <CodeEditor onSend={this.handleCodeEditorSend} />
                                                 </div>
                                             </div>
                                     }

@@ -7,6 +7,7 @@ const initState = immutable.fromJS({
         showSearchGroup: false,
         userListSollapsed: false,
         showSelectExpression: false,
+        showCodeEditor: false,
         insertInputValue: '',
     },
 });
