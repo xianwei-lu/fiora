@@ -41,6 +41,18 @@ class SelectExpression extends Component {
             }
         </div>
     )
+    renderShortcut = () => (
+        <div className="shortcut">
+            {
+                expressions.shortcut.keys.map((e, index) => (
+                    <div key={index}>
+                        <div style={{ backgroundPosition: `left ${-30 * expressions.default.indexOf(e)}px`, backgroundImage: `url(${require('assets/images/expressions.png')})` }} />
+                        <h4>{expressions.shortcut.funcKey} + {index}</h4>
+                    </div>
+                ))
+            }
+        </div>
+    )
     render() {
         const { showSelectExpression } = this.props;
         const extra = (
@@ -61,7 +73,11 @@ class SelectExpression extends Component {
                                     { this.renderDefaultExpression() }
                                 </TabPane>
                                 <TabPane tab="我的收藏" key="2">
-                                    <p>暂未支持</p>
+                                    <h3>暂未实现该功能</h3>
+                                </TabPane>
+                                <TabPane tab="快捷键" key="3">
+                                    <h3>点击输入框, 按下快捷键, 快速输入相应表情</h3>
+                                    { this.renderShortcut() }
                                 </TabPane>
                             </Tabs>
                         </Card>

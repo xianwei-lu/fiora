@@ -17,6 +17,7 @@ import SelectExpression from 'features/SelectExpression';
 import 'styles/feature/chat.less';
 
 import action from '../state/action';
+import expressions from '../../utils/expressions';
 
 const { Content, Sider } = Layout;
 
@@ -62,6 +63,7 @@ class Chat extends Component {
         this.openUserList = action.setUserListSollapsed.bind(null, false);
         this.closeUserList = action.setUserListSollapsed.bind(null, true);
         this.openSelectExpression = action.setSelectExpression.bind(null, true);
+        this.setInsertInputValue = action.insertInputValue.bind(null);
     }
     componentDidMount() {
         this.updateOnlineTask = setInterval(() => {
@@ -74,6 +76,7 @@ class Chat extends Component {
     componentWillUpdate(nextProps) {
         if (nextProps.insertInputValue && this.props.insertInputValue !== nextProps.insertInputValue) {
             insertAtCursor(ReactDom.findDOMNode(this.input), nextProps.insertInputValue);
+            this.setInsertInputValue('');
         }
     }
     componentDidUpdate(prevProps) {
@@ -100,6 +103,14 @@ class Chat extends Component {
         this.context.router.history.push(`/group/${key}`);
     }
     handleInputKeyDown = (e) => {
+        // console.log(e.altKey, e.ctrlKey);
+        if (e[`${expressions.shortcut.funcKey}Key`]) {
+            const insertValue = expressions.shortcut.keys[e.key];
+            if (insertValue) {
+                this.setInsertInputValue(`#(${insertValue})`);
+                e.preventDefault();
+            }
+        }
         if (e.keyCode === 9) {
             e.preventDefault();
             return 0;

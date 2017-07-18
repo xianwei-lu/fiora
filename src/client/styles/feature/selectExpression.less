@@ -14,6 +14,9 @@
         animation-name: scale-leave;
         animation-duration: 0.3s;
     }
+    .ant-card-head-title {
+        text-align: left;
+    }
     .ant-card-body {
         padding: 0;
         padding-top: 8px;
@@ -54,5 +57,25 @@
                 background-repeat: no-repeat;
             }
         }
+    }
+    .shortcut {
+        .size(100%, 170px);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        & > div {
+            .size(100px, 60px);
+            .layout(center, center);
+            flex-direction: column;
+            & > div {
+                .size(30px, 30px);
+                background-repeat: no-repeat;
+            }
+        }
+    }
+    h3 {
+        text-align: center;
+        margin-bottom: 5px;
     }
 }
