@@ -19,9 +19,9 @@ export default class IconButton extends Component {
         noBorder: false,
     }
     render() {
-        const { icon, size, noBorder, onClick } = this.props;
+        const { icon, size, noBorder, onClick, ...props } = this.props;
         return (
-            <Button className={`component-icon-button ${noBorder ? 'no-border' : ''}`} shape="circle" onClick={onClick}>
+            <Button className={`component-icon-button ${noBorder ? 'no-border' : ''}`} shape="circle" onClick={onClick} {...props}>
                 <Icon icon={icon} size={size} />
             </Button>
         );

@@ -4,10 +4,13 @@ import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import format from 'date-format';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
+import Highlight from 'react-highlight';
 
 import Avatar from 'components/Avatar';
 
 import 'styles/feature/message.less';
+// styles list: https://highlightjs.org/static/demo/
+import 'highlight.js/styles/vs.css';
 
 @immutableRenderDecorator
 class Message extends Component {
@@ -43,12 +46,26 @@ class Message extends Component {
             <a href={content} rel="noopener noreferrer" target="_blank">{content}</a>
         );
     }
+    renderCode = () => {
+        let { content } = this.props;
+        const lang = /^!!!lang=(.+)!!!/.exec(content);
+        if (lang) {
+            content = content.replace(lang[0], '');
+        }
+        return (
+            <Highlight className={`code ${(lang && lang[1]) || ''}`}>
+                {content}
+            </Highlight>
+        );
+    }
     renderContent = () => {
         switch (this.props.type) {
         case 'text':
             return this.renderText();
         case 'url':
             return this.renderUrl();
+        case 'code':
+            return this.renderCode();
         default:
             return null;
         }

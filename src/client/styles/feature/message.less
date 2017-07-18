@@ -2,29 +2,42 @@
 
 .message {
     .layout();
-    margin: 0px 10px;
+    margin: 0px 20px 0px 10px;
     padding-top: 10px;
     .ant-spin-container {
         .layout();
     }
     .content {
         margin-left: 8px;
+        flex: 1;
         .time {
             margin-left: 12px;
         }
     }
+    a {
+        word-break: break-all;
+    }
     p {
         max-width: max-content;
+        word-break: break-all;
+    }
+    .code {
+        border: 1px solid #f1f1f1;
     }
 }
 .message-simple {
-    max-width: max-content;
-    margin: 5px 46px 0px 54px;
+    margin: 5px 20px 0px 54px;
     .container {
         display: inline-block;
         max-width: 100%;
         & > a {
             word-break: break-all;
+        }
+        & > p {
+            word-break: break-all;
+        }
+        .code {
+            border: 1px solid #f1f1f1;
         }
     }
 }

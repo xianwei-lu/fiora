@@ -2994,7 +2994,7 @@ he@1.1.x:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/he/download/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
-highlight.js@^9.6.0:
+highlight.js@^9.11.0, highlight.js@^9.12.0:
   version "9.12.0"
   resolved "http://registry.npm.taobao.org/highlight.js/download/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"
 
@@ -5457,7 +5457,7 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/react-deep-force-update/download/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-react-dom@15.5.4, "react-dom@^0.14.0 || ^15.0.0":
+react-dom@15.5.4, react-dom@^15.5.4:
   version "15.5.4"
   resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
   dependencies:
@@ -5466,13 +5466,13 @@ react-dom@15.5.4, "react-dom@^0.14.0 || ^15.0.0":
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
-react-highlight@^0.9.0:
-  version "0.9.0"
-  resolved "http://registry.npm.taobao.org/react-highlight/download/react-highlight-0.9.0.tgz#d5edee744ccb8689f7938794b6a1b554bb150eb7"
+react-highlight@^0.10.0:
+  version "0.10.0"
+  resolved "http://registry.npm.taobao.org/react-highlight/download/react-highlight-0.10.0.tgz#d386f9dceab867dc0dcc2364153fb1cc7645d046"
   dependencies:
-    highlight.js "^9.6.0"
-    react "^0.14.0 || ^15.0.0"
-    react-dom "^0.14.0 || ^15.0.0"
+    highlight.js "^9.11.0"
+    react "^15.5.4"
+    react-dom "^15.5.4"
 
 react-immutable-proptypes@^2.1.0:
   version "2.1.0"
@@ -5572,7 +5572,7 @@ react-transform-style@^1.0.4:
   dependencies:
     classnames "^2.2.3"
 
-react@15.5.4, "react@^0.14.0 || ^15.0.0":
+react@15.5.4, react@^15.5.4:
   version "15.5.4"
   resolved "http://registry.npm.taobao.org/react/download/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:

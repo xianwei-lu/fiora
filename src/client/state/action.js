@@ -130,6 +130,7 @@ const actions = {
             groupId,
         });
         if (res.status === 201) {
+            messageTool.handleInitMessages(res.data.messages);
             dispatch({
                 type: 'InsertValue',
                 index: 0,

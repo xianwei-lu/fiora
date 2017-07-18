@@ -38,8 +38,9 @@ GroupRouter
         throw err;
     }
 
-    await modelTool.populateGroupInfo(savedGroup);
     await modelTool.populateGroupMessage(savedGroup);
+    await modelTool.populateGroupOnline(savedGroup);
+    await modelTool.populateGroupInfo(savedGroup);
 
     ctx.res(201, savedGroup);
 })
@@ -66,8 +67,9 @@ GroupRouter
     assert(group.members.indexOf(ctx.socket.user) !== -1, 400, '你已在群组中');
     group.members.push(ctx.socket.user);
     await group.save();
-    await modelTool.populateGroupInfo(group);
     await modelTool.populateGroupMessage(group);
+    await modelTool.populateGroupOnline(group);
+    await modelTool.populateGroupInfo(group);
 
     ctx.res(201, group);
 })

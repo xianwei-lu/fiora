@@ -156,7 +156,7 @@ class Chat extends Component {
         }
         this.onScrollHandle = setTimeout(() => {
             action.setAutoScroll($messageList.scrollHeight - $messageList.scrollTop - $messageList.clientHeight < $messageList.clientHeight / 2);
-        }, 50);
+        }, 100);
     }
     handleShareGroup = () => {
         if (this.props.currentGroup) {
@@ -272,8 +272,12 @@ class Chat extends Component {
                                                         ref={(i) => this.input = i}
                                                     />
                                                     <div className="button-container">
-                                                        <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
-                                                        <IconButton icon="icon-expression" size={20} onClick={this.openCodeEditor} />
+                                                        <Tooltip title="发送表情" mouseEnterDelay={0.5}>
+                                                            <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
+                                                        </Tooltip>
+                                                        <Tooltip title="发送代码" mouseEnterDelay={0.5}>
+                                                            <IconButton icon="icon-code" size={20} onClick={this.openCodeEditor} />
+                                                        </Tooltip>
                                                     </div>
                                                     <SelectExpression />
                                                     <CodeEditor onSend={this.handleCodeEditorSend} />
