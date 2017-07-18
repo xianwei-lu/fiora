@@ -202,6 +202,11 @@ class Chat extends Component {
     }
     renderMessage = () => {
         const $$messages = this.getCurrentGroup().get('messages');
+        if ($$messages.size === 0) {
+            return (
+                <h3>还没有消息, 请大家畅所欲言!</h3>
+            );
+        }
         return $$messages.map(($$message, index) => (
             <Message
                 key={`message${$$message.get('_id')}`}

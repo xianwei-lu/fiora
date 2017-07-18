@@ -63,6 +63,7 @@ class Header extends Component {
                 this.context.router.history.push(`/group/${res.data.name}`);
             } else {
                 message.error(`创建群组失败: ${res.data}`);
+                this.setState({ createGroupLoading: false });
             }
         });
     }
