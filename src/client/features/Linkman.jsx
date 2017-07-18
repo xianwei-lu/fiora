@@ -21,7 +21,7 @@ export default class Linkman extends Component {
                     <div className="nick-time">
                         <span>{username}</span>
                     </div>
-                    <div className="content">{content}</div>
+                    <div className="content" dangerouslySetInnerHTML={{ __html: content }} />
                 </div>
             </div>
         );

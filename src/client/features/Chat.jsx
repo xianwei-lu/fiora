@@ -184,7 +184,7 @@ class Chat extends Component {
                         const $$lastMessage = $$messages.get($$messages.size - 1);
                         let lastMessage = '';
                         if ($$lastMessage) {
-                            lastMessage = `${$$lastMessage.getIn(['from', 'username'])}: ${$$lastMessage.get('content')}`;
+                            lastMessage = $$lastMessage.get('preview');
                         }
                         return (
                             <Menu.Item key={name}>
@@ -270,7 +270,7 @@ class Chat extends Component {
                                                     <Input
                                                         className="input"
                                                         type="textarea"
-                                                        placeholder="输入要发送的消息"
+                                                        placeholder="请输入消息  Enter发送  Shift + Enter换行"
                                                         autosize={{ minRows: 1, maxRows: 5 }}
                                                         onKeyDown={this.handleInputKeyDown}
                                                         onPressEnter={this.handleInputEnter}

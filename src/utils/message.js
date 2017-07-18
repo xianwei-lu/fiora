@@ -22,18 +22,28 @@ function convertExpression(txt) {
 function handleXss(value) {
     return myXss.process(value);
 }
+function setPreview(message) {
+    if (message.type === 'text') {
+        message.preview = `${message.from.username}: ${convertExpression(message.content)}`;
+    } else {
+        message.preview = `${message.from.username}: [${message.type}]`;
+    }
+}
 
 // export
 function handleReceiveMessage(message) {
+    setPreview(message);
     message.content = convertExpression(handleXss(message.content));
 }
 
 function handleInitMessages(messages) {
     for (const message of messages) {
+        setPreview(message);
         message.content = convertExpression(handleXss(message.content));
     }
 }
 function handleSendMessage(message) {
+    setPreview(message);
     message.content = convertExpression(handleXss(message.content));
 }
 
