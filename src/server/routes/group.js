@@ -16,7 +16,7 @@ GroupRouter
     assert(!name, 400, '没有群组名');
 
     const ownedGroup = await Group.find({ creator: ctx.socket.user });
-    assert(ownedGroup.length === config.maxGroupNumber, 400, `最多允许创建${config.maxGroupNumber}个群组`);
+    assert(ownedGroup.length >= config.maxGroupNumber, 400, `最多允许创建${config.maxGroupNumber}个群组`);
 
     const user = await User.findById(ctx.socket.user);
     const newGroup = new Group({

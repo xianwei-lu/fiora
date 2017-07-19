@@ -2,7 +2,7 @@ const avatar = require('avatar-generator')();
 const path = require('path');
 const bluebird = require('bluebird');
 const fs = bluebird.promisifyAll(require('fs'));
-const uploadFile = require('./uploadFile');
+const uploadFile = require('./qiniu').uploadFile;
 const config = require('../../config/index').project;
 
 const tempDir = path.join(__dirname, '../../temp');

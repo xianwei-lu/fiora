@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDom from 'react-dom';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import { Card, Tabs } from 'antd';
 import { connect } from 'react-redux';
@@ -19,12 +20,32 @@ class SelectExpression extends Component {
     }
     constructor(...args) {
         super(...args);
-        this.close = action.setSelectExpression.bind(null, false);
+        this.handleDocumentClick = (e) => {
+            let target = e.target;
+            const dom = ReactDom.findDOMNode(this.dom);
+            while (target) {
+                if (target === dom) {
+                    return;
+                }
+                target = target.parentNode;
+            }
+            this.close();
+        };
+        this.close = () => {
+            document.removeEventListener('click', this.handleDocumentClick);
+            action.setSelectExpression(false);
+        };
+    }
+    componentDidUpdate(prevProps) {
+        if (!prevProps.showSelectExpression && this.props.showSelectExpression) {
+            document.addEventListener('click', this.handleDocumentClick);
+        }
     }
     handleClick = (e) => {
         const name = e.currentTarget.dataset.name;
         action.insertInputValue(`#(${name})`);
-        this.close();
+        // must use setTimeout, otherwise the exit animation does not display properly
+        setTimeout(this.close.bind(this), 0);
     }
     renderDefaultExpression = () => (
         <div className="default-expression">
@@ -35,7 +56,7 @@ class SelectExpression extends Component {
                         data-name={e}
                         onClick={this.handleClick}
                     >
-                        <div style={{ backgroundPosition: `left ${-30 * index}px`, backgroundImage: `url(${require('assets/images/expressions.png')})` }} />
+                        <div className="no-click" style={{ backgroundPosition: `left ${-30 * index}px`, backgroundImage: `url(${require('assets/images/expressions.png')})` }} />
                     </div>
                 ))
             }
@@ -64,6 +85,7 @@ class SelectExpression extends Component {
             <Animate
                 transitionName="select-expression"
                 transitionAppear
+                ref={(i) => this.dom = i}
             >
                 {
                     showSelectExpression ?
