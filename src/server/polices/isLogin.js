@@ -1,5 +1,5 @@
 const jwt = require('jwt-simple');
-const config = require('../../../config/index').project;
+const config = require('../../../config/server');
 const assert = require('../../utils/assert');
 
 module.exports = function (ctx) {

@@ -1,5 +1,5 @@
 const qiniu = require('qiniu');
-const config = require('../../config/index').project;
+const config = require('../../config/server');
 
 qiniu.conf.ACCESS_KEY = config.accessKey;
 qiniu.conf.SECRET_KEY = config.secretKey;

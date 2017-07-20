@@ -22,10 +22,6 @@ coverage
 # qiniu
 qiniurc.json
 
-# config file
-project.js
-webpack.js
-
 # public
 public/
 
@@ -43,7 +39,6 @@ public/images/message
 
 # redux-devtools
 remotedev-db.sqlite3
-
 
 # react-native
 
@@ -93,3 +88,6 @@ test.js
 
 # temp avatar file
 temp/
+
+# secret content
+*.secret.js

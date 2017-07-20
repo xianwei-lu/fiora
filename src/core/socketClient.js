@@ -21,10 +21,7 @@ function createMethod(method) {
 }
 
 const defaultOpt = {
-    https: false,
     connectParams: {
-        transports: ['websocket'],
-        upgrade: false,
         reconnection: true,
         reconnectionAttempts: 6,
         reconnectionDelay: 10000,
@@ -33,7 +30,7 @@ const defaultOpt = {
 
 class SocketClient {
     constructor(host, port, opt = defaultOpt) {
-        this.socket = new socket(`${opt.https ? 'https' : 'http'}://${host}:${port}`, opt.connectParams);
+        this.socket = new socket(`//${host}:${port}`, opt.connectParams);
         this.header = {};
 
         this.get = createMethod.call(this, 'GET');

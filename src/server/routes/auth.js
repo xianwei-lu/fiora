@@ -11,7 +11,7 @@ const Socket = require('../models/socket');
 
 const modelTool = require('../../utils/model');
 
-const config = require('../../../config/index').project;
+const config = require('../../../config/server');
 
 async function populateUser(user) {
     user.groups = await Group.find({ members: user._id });

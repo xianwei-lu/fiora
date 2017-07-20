@@ -3,7 +3,7 @@ const path = require('path');
 const bluebird = require('bluebird');
 const fs = bluebird.promisifyAll(require('fs'));
 const uploadFile = require('./qiniu').uploadFile;
-const config = require('../../config/index').project;
+const config = require('../../config/server');
 
 const tempDir = path.join(__dirname, '../../temp');
 

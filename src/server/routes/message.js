@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Router = require('../../core/socketRouter');
 const assert = require('../../utils/assert');
-const config = require('../../../config/index').project;
+const config = require('../../../config/server');
 
 const User = require('../models/user');
 const Group = require('../models/group');
