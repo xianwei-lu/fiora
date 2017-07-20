@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../../../config/index');
+const config = require('../../../config/server');
 
 const Schema = mongoose.Schema;
 const GroupSchema = new Schema({
@@ -13,7 +13,7 @@ const GroupSchema = new Schema({
     },
     avatar: {
         type: String,
-        default: config.project.defaultGroupAvatar,
+        default: config.defaultGroupAvatar,
     },
     // 公告
     announcement: {
