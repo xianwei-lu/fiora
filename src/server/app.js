@@ -1,5 +1,8 @@
 const Koa = require('koa');
 const IO = require('koa-socket');
+const koaSend = require('koa-send');
+const koaStatic = require('koa-static');
+const path = require('path');
 
 const applyRoutes = require('./routes');
 const addMethods = require('./middlewares/addMethods');
@@ -14,6 +17,34 @@ const policeConfig = require('./polices/index');
 const Socket = require('./models/socket');
 
 const app = new Koa();
+
+// 将前端路由指向 index.html
+app.use(async (ctx, next) => {
+    if (!/\./.test(ctx.request.url)) {
+        await koaSend(
+            ctx,
+            'index.html',
+            {
+                root: path.join(__dirname, '../../public'),
+                maxage: 1000 * 60 * 60 * 24 * 7,
+                gzip: true,
+            } // eslint-disable-line
+        );
+    } else {
+        await next();
+    }
+});
+
+
+// 静态文件访问
+app.use(koaStatic(
+    path.join(__dirname, '../../public'),
+    {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        gzip: true,
+    } // eslint-disable-line
+));
+
 const io = new IO();
 
 // 注入应用
@@ -29,7 +60,7 @@ io.use(police(policeConfig));
 // 注册路由
 applyRoutes(io);
 
-// 必须放在路由后面
+// 必须放在 applyRoutes 后面
 io.use(notFound());
 
 app.io.on('connection', async (ctx) => {
@@ -42,12 +73,7 @@ app.io.on('disconnect', async (ctx) => {
         socket: ctx.socket.id,
     });
 });
-app.io.on('message', () => {
-
-}); // 不能去掉
-
-app.use(async (ctx) => {
-    ctx.body = 'welcome friends!';
-});
+// 不能去掉下面这行
+app.io.on('message', () => { });
 
 module.exports = app;

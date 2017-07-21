@@ -21,8 +21,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     devtool: config.build.productionSourceMap ? '#source-map' : false,
     output: {
         path: config.build.assetsRoot,
-        filename: utils.assetsPath('js/[name].[chunkhash].js'),
-        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+        filename: utils.assetsPath('js/[name].[chunkhash:10].js'),
+        chunkFilename: utils.assetsPath('js/[name].[chunkhash:7].js'),
     },
     plugins: [
         new webpack.optimize.ModuleConcatenationPlugin(),
@@ -39,6 +39,18 @@ const webpackConfig = merge(baseWebpackConfig, {
             filename: utils.assetsPath('css/[name].[contenthash].css'),
         }),
         new OptimizeCSSPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: (module) => (
+                module.resource &&
+                /\.js$/.test(module.resource) &&
+                module.resource.indexOf(path.join(__dirname, '../node_modules')) === 0
+            ),
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            chunks: ['vendor'],
+        }),
         new HtmlWebpackPlugin({
             filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
@@ -53,18 +65,6 @@ const webpackConfig = merge(baseWebpackConfig, {
                 removeAttributeQuotes: true,
             },
             chunksSortMode: 'dependency',
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: (module) => (
-                module.resource &&
-                /\.js$/.test(module.resource) &&
-                module.resource.indexOf(path.join(__dirname, '../node_modules')) === 0
-            ),
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor'],
         }),
         new CopyWebpackPlugin([
             {
