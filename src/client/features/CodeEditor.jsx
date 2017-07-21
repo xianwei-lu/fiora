@@ -15,15 +15,17 @@ const { Option } = Select;
 const languages = [
     'javascript',
     'typescript',
-    'html',
-    'css',
     'java',
+    'c_cpp',
     'python',
     'ruby',
+    'php',
     'golang',
     'csharp',
+    'html',
+    'css',
     'markdown',
-    'mysql',
+    'sql',
     'json',
 ];
 
@@ -70,23 +72,17 @@ const Typescript = createLanguage('typescript', function () {
         this.setState({ loadEnd: true });
     }, 'typescript');
 });
-const Html = createLanguage('html', function () {
-    require.ensure([], (require) => {
-        require('brace/mode/html');
-        this.setState({ loadEnd: true });
-    }, 'html');
-});
-const Css = createLanguage('css', function () {
-    require.ensure([], (require) => {
-        require('brace/mode/css');
-        this.setState({ loadEnd: true });
-    }, 'css');
-});
 const Java = createLanguage('java', function () {
     require.ensure([], (require) => {
         require('brace/mode/java');
         this.setState({ loadEnd: true });
     }, 'java');
+});
+const Cpp = createLanguage('c_cpp', function () {
+    require.ensure([], (require) => {
+        require('brace/mode/c_cpp');
+        this.setState({ loadEnd: true });
+    }, 'cpp');
 });
 const Python = createLanguage('python', function () {
     require.ensure([], (require) => {
@@ -100,6 +96,12 @@ const Ruby = createLanguage('ruby', function () {
         this.setState({ loadEnd: true });
     }, 'ruby');
 });
+const Php = createLanguage('php', function () {
+    require.ensure([], (require) => {
+        require('brace/mode/php');
+        this.setState({ loadEnd: true });
+    }, 'php');
+});
 const Golang = createLanguage('golang', function () {
     require.ensure([], (require) => {
         require('brace/mode/golang');
@@ -112,17 +114,29 @@ const Csharp = createLanguage('csharp', function () {
         this.setState({ loadEnd: true });
     }, 'csharp');
 });
+const Html = createLanguage('html', function () {
+    require.ensure([], (require) => {
+        require('brace/mode/html');
+        this.setState({ loadEnd: true });
+    }, 'html');
+});
+const Css = createLanguage('css', function () {
+    require.ensure([], (require) => {
+        require('brace/mode/css');
+        this.setState({ loadEnd: true });
+    }, 'css');
+});
 const Markdown = createLanguage('markdown', function () {
     require.ensure([], (require) => {
         require('brace/mode/markdown');
         this.setState({ loadEnd: true });
     }, 'markdown');
 });
-const Mysql = createLanguage('mysql', function () {
+const Sql = createLanguage('sql', function () {
     require.ensure([], (require) => {
-        require('brace/mode/mysql');
+        require('brace/mode/sql');
         this.setState({ loadEnd: true });
-    }, 'mysql');
+    }, 'sql');
 });
 const Json = createLanguage('json', function () {
     require.ensure([], (require) => {
@@ -151,6 +165,7 @@ class CodeEditor extends Component {
         const { value, lang } = this.state;
         const onSend = this.props.onSend;
         if (onSend) {
+            console.log(lang);
             onSend(`!!!lang=${lang}!!!${value}`);
             this.close();
         }
@@ -179,24 +194,28 @@ class CodeEditor extends Component {
             return <Javascript {...editorProps} />;
         case 'typescript':
             return <Typescript {...editorProps} />;
-        case 'html':
-            return <Html {...editorProps} />;
-        case 'css':
-            return <Css {...editorProps} />;
         case 'java':
             return <Java {...editorProps} />;
+        case 'c_cpp':
+            return <Cpp {...editorProps} />;
         case 'python':
             return <Python {...editorProps} />;
         case 'ruby':
             return <Ruby {...editorProps} />;
+        case 'php':
+            return <Php {...editorProps} />;
         case 'golang':
             return <Golang {...editorProps} />;
         case 'csharp':
             return <Csharp {...editorProps} />;
+        case 'html':
+            return <Html {...editorProps} />;
+        case 'css':
+            return <Css {...editorProps} />;
         case 'markdown':
             return <Markdown {...editorProps} />;
-        case 'mysql':
-            return <Mysql {...editorProps} />;
+        case 'sql':
+            return <Sql {...editorProps} />;
         case 'json':
             return <Json {...editorProps} />;
         default:
