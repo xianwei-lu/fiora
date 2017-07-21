@@ -20,7 +20,6 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.json'],
         alias: {
-            '@': resolve('src'),
             assets: resolve('src/client/assets'),
             components: resolve('src/client/components'),
             features: resolve('src/client/features'),

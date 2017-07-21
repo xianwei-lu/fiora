@@ -23,7 +23,7 @@ module.exports = merge(baseWebpackConfig, {
         new webpack.NoEmitOnErrorsPlugin(),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './src/client/templete.html',
+            template: './src/client/index.html',
             favicon: './src/client/assets/images/favicon.png',
             chunks: ['pc'],
             inject: true,

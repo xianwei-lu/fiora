@@ -25,6 +25,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
     },
     plugins: [
+        new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.DefinePlugin({
             'process.env': env,
         }),
@@ -45,32 +46,6 @@ const webpackConfig = merge(baseWebpackConfig, {
             template: './src/client/index.html',
             favicon: './src/client/assets/images/favicon.png',
             chunks: ['manifest', 'vendor', 'pc'],
-            inject: true,
-            minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true,
-            },
-            chunksSortMode: 'dependency',
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'mobile.html',
-            template: './src/client/index.html',
-            favicon: './src/client/assets/images/favicon.png',
-            chunks: ['manifest', 'vendor', 'mobile'],
-            inject: true,
-            minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true,
-            },
-            chunksSortMode: 'dependency',
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'next.html',
-            template: './src/client/index.html',
-            favicon: './src/client/assets/images/favicon.png',
-            chunks: ['manifest', 'vendor', 'next'],
             inject: true,
             minify: {
                 removeComments: true,
