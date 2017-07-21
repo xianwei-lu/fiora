@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bluebird = require('bluebird');
 const path = require('path');
 const fs = bluebird.promisifyAll(require('fs'));
-const config = require('../config/index').project;
+const config = require('../config/server');
 const Group = require('../src/server/models/group');
 
 mongoose.Promise = Promise;
