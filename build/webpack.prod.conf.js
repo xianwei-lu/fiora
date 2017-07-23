@@ -22,7 +22,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     output: {
         path: config.build.assetsRoot,
         filename: utils.assetsPath('js/[name].[chunkhash:10].js'),
-        chunkFilename: utils.assetsPath('js/[name].mode.[chunkhash:7].js'),
+        chunkFilename: utils.assetsPath('js/[name].[chunkhash:7].js'),
     },
     plugins: [
         new webpack.optimize.ModuleConcatenationPlugin(),

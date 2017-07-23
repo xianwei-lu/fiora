@@ -93,4 +93,3 @@ temp/
 *.secret.js
 
 dist/
-src/lib/

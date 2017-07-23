@@ -78,85 +78,85 @@ const Javascript = createLanguage('javascript', function () {
     require.ensure([], (require) => {
         require('brace/mode/javascript');
         this.setState({ modeReady: true });
-    }, 'javascript');
+    }, 'javascript.mode');
 });
 const Typescript = createLanguage('typescript', function () {
     require.ensure([], (require) => {
         require('brace/mode/typescript');
         this.setState({ modeReady: true });
-    }, 'typescript');
+    }, 'typescript.mode');
 });
 const Java = createLanguage('java', function () {
     require.ensure([], (require) => {
         require('brace/mode/java');
         this.setState({ modeReady: true });
-    }, 'java');
+    }, 'java.mode');
 });
 const Cpp = createLanguage('c_cpp', function () {
     require.ensure([], (require) => {
         require('brace/mode/c_cpp');
         this.setState({ modeReady: true });
-    }, 'cpp');
+    }, 'cpp.mode');
 });
 const Python = createLanguage('python', function () {
     require.ensure([], (require) => {
         require('brace/mode/python');
         this.setState({ modeReady: true });
-    }, 'python');
+    }, 'python.mode');
 });
 const Ruby = createLanguage('ruby', function () {
     require.ensure([], (require) => {
         require('brace/mode/ruby');
         this.setState({ modeReady: true });
-    }, 'ruby');
+    }, 'ruby.mode');
 });
 const Php = createLanguage('php', function () {
     require.ensure([], (require) => {
         require('brace/mode/php');
         this.setState({ modeReady: true });
-    }, 'php');
+    }, 'php.mode');
 });
 const Golang = createLanguage('golang', function () {
     require.ensure([], (require) => {
         require('brace/mode/golang');
         this.setState({ modeReady: true });
-    }, 'golang');
+    }, 'golang.mode');
 });
 const Csharp = createLanguage('csharp', function () {
     require.ensure([], (require) => {
         require('brace/mode/csharp');
         this.setState({ modeReady: true });
-    }, 'csharp');
+    }, 'csharp.mode');
 });
 const Html = createLanguage('html', function () {
     require.ensure([], (require) => {
         require('brace/mode/html');
         this.setState({ modeReady: true });
-    }, 'html');
+    }, 'html.mode');
 });
 const Css = createLanguage('css', function () {
     require.ensure([], (require) => {
         require('brace/mode/css');
         this.setState({ modeReady: true });
-    }, 'css');
+    }, 'css.mode');
 });
 const Markdown = createLanguage('markdown', function () {
     require.ensure([], (require) => {
         require('brace/mode/markdown');
         this.setState({ modeReady: true });
-    }, 'markdown');
+    }, 'markdown.mode');
 });
 const Sql = createLanguage('sql', function () {
     require.ensure([], (require) => {
         require('brace/mode/sql');
         this.setState({ modeReady: true });
-    }, 'sql');
+    }, 'sql.mode');
 });
 const Json = createLanguage('json', function () {
     require.ensure([], (require) => {
         require('brace/mode/json');
         this.setState({ modeReady: true });
-    }, 'json');
+    }, 'json.mode');
 });
 
 @immutableRenderDecorator
