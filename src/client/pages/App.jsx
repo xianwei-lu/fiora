@@ -33,6 +33,8 @@ class App extends Component {
             action.reConnect(token).then((res) => {
                 if (res.status !== 201) {
                     action.guest(groupName);
+                } else {
+                    window.localStorage.setItem('token', res.data.token);
                 }
             });
         } else {

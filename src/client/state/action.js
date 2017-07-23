@@ -83,7 +83,7 @@ const actions = {
                 ],
                 values: [
                     res.data.user,
-                    token,
+                    token: res.data.token,
                 ],
             });
         }

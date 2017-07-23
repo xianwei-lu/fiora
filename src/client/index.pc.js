@@ -31,7 +31,8 @@ action.socket.on('disconnect', () => {
     });
 });
 action.socket.on('reconnect', () => {
-    action.reConnect(store.getState().get('token')).then(() => {
+    action.reConnect(store.getState().get('token')).then((res) => {
+        window.localStorage.setItem('token', res.data.token);
         notification.close('disconnect-notification');
         notification.success({
             key: 'reconnect-notification',

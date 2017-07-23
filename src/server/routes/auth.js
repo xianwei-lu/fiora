@@ -37,7 +37,7 @@ AuthRouter
     assert(!isPasswordCorrect, 400, '密码不正确');
     user.password = undefined;
 
-    const token = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 7) }, config.jwtSecret);
+    const token = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 3) }, config.jwtSecret);
     ctx.socket.token = token;
 
     await Socket.update({
@@ -82,7 +82,8 @@ AuthRouter
     const user = await User.findOne({ _id: payload.userId }, '-salt');
     assert(!user, 404, '该用户不存在');
 
-    ctx.socket.token = token;
+    const newToken = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 3) }, config.jwtSecret);
+    ctx.socket.token = newToken;
     ctx.socket.user = user._id;
 
     await Socket.update({
@@ -102,7 +103,7 @@ AuthRouter
         ctx.socket.socket.join(group._id);
     }
 
-    ctx.res(201, { user });
+    ctx.res(201, { user, token: newToken });
 })
 .post('/guest', async (ctx) => {
     const { groupName } = ctx.params;

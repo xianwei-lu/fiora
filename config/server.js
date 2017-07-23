@@ -5,20 +5,20 @@ module.exports = {
 
     // mongodb config
     // mongodb数据库配置
-    database: 'address/name',
+    database: 'localhost:27017/fiora',
 
     // jwt encryption secret
     // jwt加密密钥
-    jwtSecret: 'jwt_token_secret',
+    jwtSecret: '$2a$10$2PcdOiDdZZVK4g80kei.Fiora',
 
     // qiniu CDN config.
     // 七牛CDN配置
     // optional, and if you do not have the configuration, the file will be saved on the local disk
     // 选填, 如果你没有配置, 文件会保存在本地磁盘上
-    accessKey: 'qiniu_access_key',
-    secretKey: 'qiniu_secret_key',
-    bucket: 'bucket_name',
-    bucketUrl: 'bucket_url',
+    accessKey: 'buwVgnvm96NuWhRSFXj8AgtWcGyhQqCOze64-QaQ',
+    secretKey: '0pe_6YeIhjCDVzWDvvWt-UZm24C7Op_wBXUc_-68',
+    bucket: 'fiora-user-data',
+    bucketUrl: 'cdn.suisuijiang.com',
 
     // maximum message length
     // 消息最大长度

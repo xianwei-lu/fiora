@@ -5,6 +5,7 @@ module.exports = {
     'env': {
         'browser': true,
         'node': true,
+        'es6': true,
     },
     'plugins': [
         'react',
@@ -14,7 +15,7 @@ module.exports = {
     'parser': 'babel-eslint',
     'globals': {
         window: true
-    }, 
+    },
     'rules': {
         'arrow-parens': ['error', 'always'],
         'indent': [2, 4],
@@ -64,5 +65,6 @@ module.exports = {
         'jsx-a11y/no-static-element-interactions': 0,
         'jsx-a11y/no-noninteractive-element-interactions': 0,
         'jsx-a11y/alt-text': 0,
+        'jsx-a11y/label-has-for': 0,
     }
 };
