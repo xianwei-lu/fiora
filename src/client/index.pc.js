@@ -50,7 +50,6 @@ ReactDom.render(
                 <Route path="/group/:name" component={App} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signin" component={Signin} />
-                <Route exact path="/a" render={() => <p>a</p>} />
             </div>
         </Router>
     </Provider>,

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import format from 'date-format';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
@@ -12,8 +11,8 @@ import 'styles/feature/message.less';
 // styles list: https://highlightjs.org/static/demo/
 import 'highlight.js/styles/vs.css';
 
+let scrollMessage = null;
 
-@immutableRenderDecorator
 class Message extends Component {
     static propTypes = {
         avatar: PropTypes.string.isRequired,
@@ -33,8 +32,15 @@ class Message extends Component {
     }
     componentDidMount() {
         if (this.props.shouldScroll) {
-            this.msg.scrollIntoView(false);
+            scrollMessage = this.msg.scrollIntoView.bind(this.msg, false);
+            scrollMessage();
+            setTimeout(scrollMessage, 300);
         }
+    }
+    shouldComponentUpdate(nextProps) {
+        return !(
+            this.props.status === nextProps.status
+        );
     }
     renderText = () => (
         this.props.content.split(/\n/).map((m, i) => (

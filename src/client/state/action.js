@@ -218,6 +218,7 @@ const actions = {
                 key: ['currentGroup'],
                 value: name,
             });
+            this.setAutoScroll(true);
         }
         const $$group = getGroupByName(name);
         if ($$group) {
