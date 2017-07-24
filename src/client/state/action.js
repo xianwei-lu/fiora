@@ -1,4 +1,5 @@
 import platform from 'platform';
+import toBase64 from 'arraybuffer-base64';
 import Socket from '../../core/socketClient';
 import messageTool from '../../utils/message';
 import config from '../../../config/client';
@@ -91,7 +92,6 @@ const actions = {
     },
     async guest(groupName) {
         const res = await socket.post('/auth/guest', { groupName });
-        console.log(res);
         if (res.status === 201) {
             for (const group of res.data.groups) {
                 messageTool.handleInitMessages(group.messages);
@@ -158,7 +158,9 @@ const actions = {
     async sendMessage(linkman, linkmanType, message) {
         const now = Date.now();
         const $$state = store.getState();
-        message = Object.assign(message, {
+        const tempMessage = {
+            type: message.type,
+            content: message.content,
             _id: `temp-${now}`,
             createTime: now,
             from: {
@@ -167,20 +169,20 @@ const actions = {
                 username: $$state.getIn(['user', 'username']),
             },
             status: 'sending',
-        });
+        };
+        messageTool.handleSendMessage(tempMessage);
+        this.addMessage(linkman, linkmanType, tempMessage);
 
         const res = await socket.post('/message', {
             linkman,
             linkmanType,
             message,
         });
-        messageTool.handleSendMessage(message);
-        this.addMessage(linkman, linkmanType, message);
 
         if (res.status === 201) {
-            this.updateMessage(linkman, linkmanType, `temp-${now}`, 'success');
+            this.updateMessage(linkman, linkmanType, `temp-${now}`, res.data.content, 'success');
         } else {
-            this.updateMessage(linkman, linkmanType, `temp-${now}`, 'faild');
+            this.updateMessage(linkman, linkmanType, `temp-${now}`, null, 'faild');
         }
         return res;
     },
@@ -191,7 +193,7 @@ const actions = {
             value: message,
         });
     },
-    async updateMessage(linkman, linkmanType, messageId, status) {
+    async updateMessage(linkman, linkmanType, messageId, content, status) {
         const $$state = store.getState();
         const index = $$state.getIn(['user', 'groups', getGroupIndex(linkman), 'messages']).findIndex(
             ($$message) => $$message.get('_id') === messageId,
@@ -199,7 +201,7 @@ const actions = {
         dispatch({
             type: 'UpdateValue',
             key: ['user', 'groups', getGroupIndex(linkman), 'messages', index],
-            value: { status },
+            value: { content, status },
         });
     },
 

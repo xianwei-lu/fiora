@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fileType = require('file-type');
 
 const Router = require('../../core/socketRouter');
 const assert = require('../../utils/assert');
@@ -7,6 +8,7 @@ const config = require('../../../config/server');
 const User = require('../models/user');
 const Group = require('../models/group');
 const Message = require('../models/message');
+const qiniuTool = require('../../utils/qiniu');
 
 let count = { };
 const MaxMessageLimit = 10; // every mimute
@@ -47,13 +49,10 @@ MessageRouter
 
     if (message.type === 'text') {
         message.content = message.content.slice(0, config.maxMessageLength);
+    } else if (message.type === 'image') {
+        const type = fileType(message.content);
+        message.content = await qiniuTool.uploadBytes(`message_${Date.now()}.${type.ext}`, message.content);
     }
-    // else if (data.type === 'image') {
-    //     if (/^data:image/.test(data.content)) {
-    //         const fileName = `message_${Date.now().toString()}.${data.content.match(/data:image\/(.+);base64/)[1]}`;
-    //         data.content = yield* imageUtil.saveImageData(fileName, data.content);
-    //     }
-    // }
 
     const user = await User.findById(ctx.socket.user);
     assert(!user, 400, 'socket对象没有user id');

@@ -1,27 +1,64 @@
 const qiniu = require('qiniu');
 const config = require('../../config/server');
 
-qiniu.conf.ACCESS_KEY = config.accessKey;
-qiniu.conf.SECRET_KEY = config.secretKey;
+const mac = new qiniu.auth.digest.Mac(config.accessKey, config.secretKey);
+const putPolicy = new qiniu.rs.PutPolicy({ scope: config.bucket, expires: 60 * 60 * 24 * 30 });
+const qiniuConfig = new qiniu.conf.Config();
+const formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
+const putExtra = new qiniu.form_up.PutExtra();
 
-function getToken(bucket, key) {
-    return new qiniu.rs.PutPolicy(`${bucket}:${key}`).token();
+function getToken() {
+    return putPolicy.uploadToken(mac);
 }
 
+let token = getToken();
+// update token
+setInterval(() => {
+    token = getToken();
+}, 1000 * 60 * 60 * 24 * 20);
+
 function uploadFile(key, localFile) {
-    const extra = new qiniu.io.PutExtra();
     return new Promise((resolve, reject) => {
-        qiniu.io.putFile(getToken(config.bucket, key), key, localFile, extra, (err, ret) => {
-            if (err) {
-                reject(err);
+        formUploader.putFile(token, key, localFile, putExtra, (respErr, respBody, respInfo) => {
+            if (respErr) {
+                reject(respErr);
+            }
+            if (respInfo.statusCode === 200) {
+                resolve(`${config.bucketUrl}/${respBody.key}`);
             } else {
-                resolve(ret);
+                reject({
+                    code: respInfo.statusCode,
+                    body: respBody,
+                });
+            }
+        });
+    });
+}
+function uploadBytes(key, bytes) {
+    return new Promise((resolve, reject) => {
+        formUploader.put(token, key, bytes, putExtra, (respErr, respBody, respInfo) => {
+            if (respErr) {
+                reject(respErr);
+                return;
+            }
+            if (!respInfo) {
+                console.log(respErr, respBody, respInfo);
+                reject();
+                return;
+            }
+            if (respInfo.statusCode === 200) {
+                resolve(`${config.bucketUrl}/${respBody.key}`);
+            } else {
+                reject({
+                    code: respInfo.statusCode,
+                    body: respBody,
+                });
             }
         });
     });
 }
 
 module.exports = {
-    getToken,
     uploadFile,
+    uploadBytes,
 };

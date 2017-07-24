@@ -5,20 +5,20 @@ module.exports = {
 
     // mongodb config
     // mongodb数据库配置
-    database: 'localhost:27017/fiora',
+    database: 'address/name',
 
     // jwt encryption secret
     // jwt加密密钥
-    jwtSecret: '$2a$10$2PcdOiDdZZVK4g80kei.Fiora',
+    jwtSecret: 'jwt_token_secret',
 
     // qiniu CDN config.
     // 七牛CDN配置
     // optional, and if you do not have the configuration, the file will be saved on the local disk
     // 选填, 如果你没有配置, 文件会保存在本地磁盘上
-    accessKey: 'buwVgnvm96NuWhRSFXj8AgtWcGyhQqCOze64-QaQ',
-    secretKey: '0pe_6YeIhjCDVzWDvvWt-UZm24C7Op_wBXUc_-68',
-    bucket: 'fiora-user-data',
-    bucketUrl: 'cdn.suisuijiang.com',
+    accessKey: 'qiniu_access_key',
+    secretKey: 'qiniu_secret_key',
+    bucket: 'bucket_name',
+    bucketUrl: 'bucket_url',
 
     // maximum message length
     // 消息最大长度
@@ -30,5 +30,5 @@ module.exports = {
 
     // default group avatar url
     // 默认群组头像链接
-    defaultGroupAvatar: 'https://assets.suisuijiang.com/group_avatar_default.jpeg',
+    defaultGroupAvatar: '//assets.suisuijiang.com/group_avatar_default.jpeg',
 };

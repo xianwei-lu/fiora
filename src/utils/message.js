@@ -1,4 +1,5 @@
 import xss from 'xss';
+import toBase64 from 'arraybuffer-base64';
 import expressions from './expressions';
 
 const myXss = new xss.FilterXSS({
@@ -44,7 +45,18 @@ function handleInitMessages(messages) {
 }
 function handleSendMessage(message) {
     setPreview(message);
-    message.content = convertExpression(handleXss(message.content));
+    switch (message.type) {
+    case 'text': {
+        message.content = convertExpression(handleXss(message.content));
+        break;
+    }
+    case 'image': {
+        message.content = toBase64(message.content);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 export default {

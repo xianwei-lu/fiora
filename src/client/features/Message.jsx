@@ -65,6 +65,10 @@ class Message extends Component {
             </Highlight>
         );
     }
+    renderImage = () => {
+        const { content } = this.props;
+        return <img src={content} />;
+    }
     renderContent = () => {
         switch (this.props.type) {
         case 'text':
@@ -73,8 +77,10 @@ class Message extends Component {
             return this.renderUrl();
         case 'code':
             return this.renderCode();
+        case 'image':
+            return this.renderImage();
         default:
-            return null;
+            return <span>未知消息</span>;
         }
     }
     render() {

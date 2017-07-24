@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import copy from 'copy-to-clipboard';
+import toBase64 from 'arraybuffer-base64';
 
 import Linkman from 'features/Linkman';
 import Message from 'features/Message';
@@ -169,6 +170,29 @@ class Chat extends Component {
     jumpTo = (path) => {
         this.context.router.history.push(path);
     }
+    sendImage = () => {
+        this.imageInput.click();
+    }
+    selectImage = () => {
+        const image = this.imageInput.files[0];
+        if (!image) {
+            return;
+        }
+
+        const reader = new FileReader();
+        const $$group = this.getCurrentGroup();
+        reader.onloadend = function () {
+            action.sendMessage($$group.get('_id'), 'group', {
+                type: 'image',
+                content: this.result,
+            }).then((res) => {
+                if (res.status !== 201) {
+                    message.error(`消息发送失败, ${res.data}`);
+                }
+            });
+        };
+        reader.readAsArrayBuffer(image);
+    }
     renderGroups = () => {
         const { $$groups, currentGroup } = this.props;
         if (!$$groups) {
@@ -277,10 +301,20 @@ class Chat extends Component {
                                                         ref={(i) => this.input = i}
                                                     />
                                                     <div className="button-container">
-                                                        <Tooltip title="发送表情" mouseEnterDelay={0.5}>
+                                                        <Tooltip title="发送表情" mouseEnterDelay={1}>
                                                             <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
                                                         </Tooltip>
-                                                        <Tooltip title="发送代码" mouseEnterDelay={0.5}>
+                                                        <Tooltip title="发送图片" mouseEnterDelay={1}>
+                                                            <IconButton icon="icon-image" size={20} onClick={this.sendImage} />
+                                                            <input
+                                                                style={{ display: 'none' }}
+                                                                type="file"
+                                                                accept="image/png,image/jpeg,image/gif"
+                                                                ref={(i) => this.imageInput = i}
+                                                                onChange={this.selectImage}
+                                                            />
+                                                        </Tooltip>
+                                                        <Tooltip title="发送代码" mouseEnterDelay={1}>
                                                             <IconButton icon="icon-code" size={20} onClick={this.openCodeEditor} />
                                                         </Tooltip>
                                                     </div>

@@ -21,7 +21,7 @@ export default class ColorIcon extends Component {
             return <img src={require('../assets/images/colorIcons/ios.svg')} width={size - 2} height={size - 2} style={{ position: 'relative', top: -1 }} />;
         }
         case 'icon-opera': {
-            return <img src={require('../assets/images/colorIcons/opera.svg')} width={size - 2} height={size - 2} />;
+            return <img src={require('../assets/images/colorIcons/opera.png')} width={size} height={size} />;
         }
         default: {
             break;
