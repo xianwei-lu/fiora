@@ -1,5 +1,6 @@
 import xss from 'xss';
 import toBase64 from 'arraybuffer-base64';
+import fileType from 'file-type';
 import expressions from './expressions';
 
 const myXss = new xss.FilterXSS({
@@ -51,7 +52,8 @@ function handleSendMessage(message) {
         break;
     }
     case 'image': {
-        message.content = toBase64(message.content);
+        const type = fileType(message.content);
+        message.content = `data:image/${type.ext};base64,${toBase64(message.content)}`;
         break;
     }
     default:

@@ -1,8 +1,8 @@
 import platform from 'platform';
-import toBase64 from 'arraybuffer-base64';
 import Socket from '../../core/socketClient';
 import messageTool from '../../utils/message';
-import config from '../../../config/client';
+
+const config = require('../../../config/client');
 
 const socket = new Socket(config.host, config.port);
 let store = null;

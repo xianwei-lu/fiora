@@ -14,6 +14,22 @@
             margin-left: 12px;
         }
     }
+}
+.message-simple {
+    margin: 5px 20px 0px 54px;
+    .ant-spin-nested-loading, .ant-spin-container {
+        display: inline-block;
+    }
+    .container {
+        display: inline-block;
+        max-width: 100%;
+    }
+}
+.expression-default-message {
+    .size(30px, 30px);
+    background-repeat: no-repeat;
+}
+.message, .message-simple .container {
     a {
         word-break: break-all;
     }
@@ -24,27 +40,8 @@
     .code {
         border: 1px solid #f1f1f1;
     }
-}
-.message-simple {
-    margin: 5px 20px 0px 54px;
-    .ant-spin-nested-loading, .ant-spin-container {
-        display: inline-block;
-    }
-    .container {
-        display: inline-block;
+    img {
+        max-height: 400px;
         max-width: 100%;
-        & > a {
-            word-break: break-all;
-        }
-        & > p {
-            word-break: break-all;
-        }
-        .code {
-            border: 1px solid #f1f1f1;
-        }
     }
-}
-.expression-default-message {
-    .size(30px, 30px);
-    background-repeat: no-repeat;
 }

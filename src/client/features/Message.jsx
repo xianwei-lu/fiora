@@ -12,6 +12,7 @@ import 'styles/feature/message.less';
 import 'highlight.js/styles/vs.css';
 
 let scrollMessage = null;
+let scrollEvent = null;
 
 class Message extends Component {
     static propTypes = {
@@ -34,7 +35,10 @@ class Message extends Component {
         if (this.props.shouldScroll) {
             scrollMessage = this.msg.scrollIntoView.bind(this.msg, false);
             scrollMessage();
-            setTimeout(scrollMessage, 300);
+            if (scrollEvent) {
+                clearTimeout(scrollEvent);
+            }
+            scrollEvent = setTimeout(scrollMessage, 300);
         }
     }
     shouldComponentUpdate(nextProps) {
@@ -67,7 +71,14 @@ class Message extends Component {
     }
     renderImage = () => {
         const { content } = this.props;
-        return <img src={content} />;
+        return (
+            <img
+                src={content}
+                ref={(i) => this.img = i}
+                onLoad={scrollMessage}
+                onError={() => this.img.src = require('../assets/images/image_not_found.png')}
+            />
+        );
     }
     renderContent = () => {
         switch (this.props.type) {
