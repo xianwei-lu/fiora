@@ -4,6 +4,7 @@
   "description": "An interesting chat application power by koa, react and react-native. ",
   "main": "index.js",
   "scripts": {
+    "start": "export NODE_ENV=product && node src/server/index.js",
     "server": "export NODE_ENV=development && nodemon src/server/index.js --config nodemonrc.json",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
@@ -63,7 +64,7 @@
     "react-redux": "^5.0.5",
     "react-router-dom": "4",
     "redux": "^3.6.0",
-    "require-dir": "^0.3.1",
+    "require-dir": "^0.3.2",
     "socket.io": "^1.7.2",
     "socket.io-client": "^1.7.2",
     "xss": "^0.3.3"
