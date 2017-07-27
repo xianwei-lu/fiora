@@ -21,7 +21,12 @@ action.socket.on('message', (data) => {
     }
     action.addMessage(data.toGroup, 'group', data);
 });
+let isDisconnect = false;
+notification.config({
+    top: 70,
+});
 action.socket.on('disconnect', () => {
+    isDisconnect = true;
     notification.warn({
         key: 'disconnect-notification',
         message: '与服务器断开连接',
@@ -34,11 +39,22 @@ action.socket.on('reconnect', () => {
     action.reConnect(store.getState().get('token')).then((res) => {
         window.localStorage.setItem('token', res.data.token);
         notification.close('disconnect-notification');
+        notification.close('connect-error-notification');
         notification.success({
             key: 'reconnect-notification',
             message: '已经恢复了网络连接',
             duration: 3,
         });
+    });
+});
+action.socket.on('connect_error', () => {
+    if (isDisconnect) {
+        return;
+    }
+    notification.error({
+        key: 'connect-error-notification',
+        message: '连接服务器失败, 请检查网络连接',
+        duration: 0,
     });
 });
 
