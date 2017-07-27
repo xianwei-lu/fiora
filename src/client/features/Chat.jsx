@@ -246,106 +246,111 @@ class Chat extends Component {
         ));
     }
     render() {
-        const { userListSollapsed, guest } = this.props;
+        const { userListSollapsed, guest, $$groups } = this.props;
         const $$group = this.getCurrentGroup();
         return (
             <Layout className="feature-chat">
-                <Layout className="wrap">
-                    <Sider className="sider" width={300}>
-                        {this.renderGroups()}
-                    </Sider>
-                    {
-                        $$group ?
-                            <Layout className="linkman">
-                                <Layout className="window">
-                                    <div className="header">
-                                        <div className="avatar-name">
-                                            <p className="name">{$$group.get('name')}</p>
-                                        </div>
-                                        <div className="button-group">
-                                            <Tooltip title="分享群组" mouseEnterDelay={0.5}>
-                                                <Button shape="circle" onClick={this.handleShareGroup}>
-                                                    <Icon icon="icon-share-copy" size={14} />
-                                                </Button>
-                                            </Tooltip>
-                                            <Tooltip title={userListSollapsed ? '打开用户列表' : '关闭用户列表'} mouseEnterDelay={0.5}>
-                                                <Button shape="circle" onClick={userListSollapsed ? this.openUserList : this.closeUserList}>
-                                                    <Icon icon={userListSollapsed ? 'icon-left' : 'icon-right'} size={14} />
-                                                </Button>
-                                            </Tooltip>
-                                        </div>
-                                    </div>
-                                    <Content className="message-list" onScroll={this.handleMessageListScroll}>
-                                        {this.renderMessage()}
-                                    </Content>
-                                    {
-                                        guest ?
-                                            <div className="guest">
-                                                <h3>
-                                                    游客用户不能发言, 请
-                                                    <a onClick={this.jumpTo.bind(this, '/login')} >登录</a>
-                                                    或
-                                                    <a onClick={this.jumpTo.bind(this, '/signin')} >注册</a>
-                                                </h3>
-                                            </div>
-                                        :
-                                            <div className="footer">
-                                                <div>
-                                                    <Input
-                                                        className="input"
-                                                        type="textarea"
-                                                        placeholder="请输入消息  Enter发送  Shift + Enter换行"
-                                                        autosize={{ minRows: 1, maxRows: 5 }}
-                                                        onKeyDown={this.handleInputKeyDown}
-                                                        onPressEnter={this.handleInputEnter}
-                                                        ref={(i) => this.input = i}
-                                                    />
-                                                    <div className="button-container">
-                                                        <Tooltip title="发送表情" mouseEnterDelay={1}>
-                                                            <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
-                                                        </Tooltip>
-                                                        <Tooltip title="发送图片" mouseEnterDelay={1}>
-                                                            <IconButton icon="icon-image" size={20} onClick={this.sendImage} />
-                                                            <input
-                                                                style={{ display: 'none' }}
-                                                                type="file"
-                                                                accept="image/png,image/jpeg,image/gif"
-                                                                ref={(i) => this.imageInput = i}
-                                                                onChange={this.selectImage}
-                                                            />
-                                                        </Tooltip>
-                                                        <Tooltip title="发送代码" mouseEnterDelay={1}>
-                                                            <IconButton icon="icon-code" size={20} onClick={this.openCodeEditor} />
-                                                        </Tooltip>
-                                                    </div>
-                                                    <SelectExpression />
-                                                    <CodeEditor onSend={this.handleCodeEditorSend} />
+                {
+                    $$groups ?
+                        <Layout className="wrap">
+                            <Sider className="sider" width={300}>
+                                {this.renderGroups()}
+                            </Sider>
+                            {
+                                $$group ?
+                                    <Layout className="linkman">
+                                        <Layout className="window">
+                                            <div className="header">
+                                                <div className="avatar-name">
+                                                    <p className="name">{$$group.get('name')}</p>
+                                                </div>
+                                                <div className="button-group">
+                                                    <Tooltip title="分享群组" mouseEnterDelay={0.5}>
+                                                        <Button shape="circle" onClick={this.handleShareGroup}>
+                                                            <Icon icon="icon-share-copy" size={14} />
+                                                        </Button>
+                                                    </Tooltip>
+                                                    <Tooltip title={userListSollapsed ? '打开用户列表' : '关闭用户列表'} mouseEnterDelay={0.5}>
+                                                        <Button shape="circle" onClick={userListSollapsed ? this.openUserList : this.closeUserList}>
+                                                            <Icon icon={userListSollapsed ? 'icon-left' : 'icon-right'} size={14} />
+                                                        </Button>
+                                                    </Tooltip>
                                                 </div>
                                             </div>
-                                    }
-                                </Layout>
-                                <Sider className="user-list" collapsed={userListSollapsed} collapsible collapsedWidth={0} trigger={null} width={240}>
-                                    <div>
-                                        <div className="title">
-                                            <p>在线成员: {$$group.get('onlines').size}/{$$group.get('members')}</p>
-                                        </div>
-                                        <ul className="group-user-list">
+                                            <Content className="message-list" onScroll={this.handleMessageListScroll}>
+                                                {this.renderMessage()}
+                                            </Content>
                                             {
-                                                $$group.get('onlines').map(($$online, i) => (
-                                                    <GroupUser key={i} avatar={$$online.getIn(['user', 'avatar'])} username={$$online.getIn(['user', 'username'])} os={$$online.get('os')} browser={$$online.get('browser')} />
-                                                ))
+                                                guest ?
+                                                    <div className="guest">
+                                                        <h3>
+                                                            游客用户不能发言, 请
+                                                            <a onClick={this.jumpTo.bind(this, '/login')} >登录</a>
+                                                            或
+                                                            <a onClick={this.jumpTo.bind(this, '/signin')} >注册</a>
+                                                        </h3>
+                                                    </div>
+                                                :
+                                                    <div className="footer">
+                                                        <div>
+                                                            <Input
+                                                                className="input"
+                                                                type="textarea"
+                                                                placeholder="请输入消息  Enter发送  Shift + Enter换行"
+                                                                autosize={{ minRows: 1, maxRows: 5 }}
+                                                                onKeyDown={this.handleInputKeyDown}
+                                                                onPressEnter={this.handleInputEnter}
+                                                                ref={(i) => this.input = i}
+                                                            />
+                                                            <div className="button-container">
+                                                                <Tooltip title="发送表情" mouseEnterDelay={1}>
+                                                                    <IconButton icon="icon-expression" size={20} onClick={this.openSelectExpression} />
+                                                                </Tooltip>
+                                                                <Tooltip title="发送图片" mouseEnterDelay={1}>
+                                                                    <IconButton icon="icon-image" size={20} onClick={this.sendImage} />
+                                                                    <input
+                                                                        style={{ display: 'none' }}
+                                                                        type="file"
+                                                                        accept="image/png,image/jpeg,image/gif"
+                                                                        ref={(i) => this.imageInput = i}
+                                                                        onChange={this.selectImage}
+                                                                    />
+                                                                </Tooltip>
+                                                                <Tooltip title="发送代码" mouseEnterDelay={1}>
+                                                                    <IconButton icon="icon-code" size={20} onClick={this.openCodeEditor} />
+                                                                </Tooltip>
+                                                            </div>
+                                                            <SelectExpression />
+                                                            <CodeEditor onSend={this.handleCodeEditorSend} />
+                                                        </div>
+                                                    </div>
                                             }
-                                        </ul>
+                                        </Layout>
+                                        <Sider className="user-list" collapsed={userListSollapsed} collapsible collapsedWidth={0} trigger={null} width={240}>
+                                            <div>
+                                                <div className="title">
+                                                    <p>在线成员: {$$group.get('onlines').size}/{$$group.get('members')}</p>
+                                                </div>
+                                                <ul className="group-user-list">
+                                                    {
+                                                        $$group.get('onlines').map(($$online, i) => (
+                                                            <GroupUser key={i} avatar={$$online.getIn(['user', 'avatar'])} username={$$online.getIn(['user', 'username'])} os={$$online.get('os')} browser={$$online.get('browser')} />
+                                                        ))
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </Sider>
+                                    </Layout>
+                                :
+                                    <div className="no-select">
+                                        <img src={require('../assets/images/fiora_cute.png')} />
+                                        <h4>请选择左侧联系人</h4>
                                     </div>
-                                </Sider>
-                            </Layout>
-                        :
-                            <div className="no-select">
-                                <img src={require('../assets/images/fiora_cute.png')} />
-                                <h4>请选择左侧联系人</h4>
-                            </div>
-                    }
-                </Layout>
+                            }
+                        </Layout>
+                    :
+                        <Layout className="wrap" />
+                }
             </Layout>
         );
     }
