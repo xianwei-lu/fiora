@@ -60,9 +60,14 @@ function handleSendMessage(message) {
         break;
     }
 }
+function handleSendEndMessage(message) {
+    setPreview(message);
+    message.content = convertExpression(handleXss(message.content));
+}
 
 export default {
     handleReceiveMessage,
     handleInitMessages,
     handleSendMessage,
+    handleSendEndMessage,
 };

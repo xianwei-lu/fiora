@@ -180,9 +180,16 @@ const actions = {
         });
 
         if (res.status === 201) {
-            this.updateMessage(linkman, linkmanType, `temp-${now}`, res.data.content, 'success');
+            messageTool.handleSendEndMessage(res.data);
+            this.updateMessage(linkman, linkmanType, `temp-${now}`, {
+                content: res.data.content,
+                status: 'success',
+            });
         } else {
-            this.updateMessage(linkman, linkmanType, `temp-${now}`, null, 'faild');
+            this.updateMessage(linkman, linkmanType, `temp-${now}`, {
+                content: res.data.content,
+                status: 'faild',
+            });
         }
         return res;
     },
@@ -193,7 +200,7 @@ const actions = {
             value: message,
         });
     },
-    async updateMessage(linkman, linkmanType, messageId, content, status) {
+    async updateMessage(linkman, linkmanType, messageId, message) {
         const $$state = store.getState();
         const index = $$state.getIn(['user', 'groups', getGroupIndex(linkman), 'messages']).findIndex(
             ($$message) => $$message.get('_id') === messageId,
@@ -201,7 +208,7 @@ const actions = {
         dispatch({
             type: 'UpdateValue',
             key: ['user', 'groups', getGroupIndex(linkman), 'messages', index],
-            value: { content, status },
+            value: message,
         });
     },
 
