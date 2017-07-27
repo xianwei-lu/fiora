@@ -36,8 +36,9 @@ module.exports = {
                 include: [
                     resolve('src'),
                     /node_modules\/chat-room-plugin/,
+                    /node_modules\/file-type/,
                 ],
-                exclude: /node_modules(?!\/chat-room-plugin)/,
+                exclude: /node_modules(?!\/(chat-room-plugin|file-type))/,
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

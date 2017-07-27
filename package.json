@@ -4,7 +4,7 @@
   "description": "An interesting chat application power by koa, react and react-native. ",
   "main": "index.js",
   "scripts": {
-    "start": "export NODE_ENV=product && node src/server/index.js",
+    "start": "export NODE_ENV=production && node src/server/index.js",
     "server": "export NODE_ENV=development && nodemon src/server/index.js --config nodemonrc.json",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",

@@ -26,7 +26,11 @@ const defaultOpt = {
 
 class SocketClient {
     constructor(host, port, opt = defaultOpt) {
-        this.socket = new socket(`//${host}:${port}`, opt.connectParams);
+        if (process.env.NODE_ENV === 'production') {
+            this.socket = new socket(`//${window.location.host}`, opt.connectParams);
+        } else {
+            this.socket = new socket(`//${host}:${port}`, opt.connectParams);
+        }
         this.header = {};
 
         this.get = createMethod.call(this, 'GET');
