@@ -1,11 +1,19 @@
 const mongoose = require('mongoose');
-const bluebird = require('bluebird');
 const path = require('path');
-const fs = bluebird.promisifyAll(require('fs'));
+const fs = require('fs');
 const config = require('../config/server');
 const Group = require('../src/server/models/group');
 
 mongoose.Promise = Promise;
+
+function createDirectory(directoryPath) {
+    if (!fs.existsSync(directoryPath)) {
+        fs.mkdirSync(path);
+        console.log(`create ${directoryPath} directory success`);
+    } else {
+        console.log(`${directoryPath} directory already exist`);
+    }
+}
 
 async function init() {
     await mongoose.connect(config.database);
@@ -17,20 +25,16 @@ async function init() {
             isDefault: true,
         });
         if (!defaultGroup) {
-            throw Error('create default group fail.');
+            throw Error('create default group fail');
         }
-        console.log('create default group success.');
+        console.log('create default group success');
     } else {
-        console.log('default group already exists.');
+        console.log('default group already exists');
     }
 
-    const tempDirectory = path.join(__dirname, '../temp/');
-    if (!await fs.exists(tempDirectory)) {
-        await fs.mkdir(tempDirectory);
-        console.log('create temp directory success.');
-    } else {
-        console.log('temp directory already exist.');
-    }
+    createDirectory(path.join(__dirname, '../temp'));
+    createDirectory(path.join(__dirname, '../public'));
+    createDirectory(path.join(__dirname, '../public/data'));
 }
 
 init()

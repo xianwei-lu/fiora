@@ -2,10 +2,10 @@ const avatar = require('avatar-generator')();
 const path = require('path');
 const uploadFile = require('./qiniu').uploadFile;
 
-const tempDir = path.join(__dirname, '../../temp');
+const avatarDir = path.join(__dirname, '../../public/data');
 
 function generate(key, gender, size) {
-    const file = path.join(tempDir, key);
+    const file = path.join(avatarDir, key);
     return new Promise((resolve, reject) => {
         avatar(key, gender, size)
         .write(file, (err) => {
@@ -18,8 +18,9 @@ function generate(key, gender, size) {
 }
 
 module.exports = async (key, gender, size = 64) => {
-    const avatarFile = await generate(`${key}.jpg`, gender, size);
-    const avatarUrl = await uploadFile(`user_default_avatar_${Date.now().toString()}.jpg`, avatarFile);
+    const fileName = `${key}_${Date.now().toString()}.jpg`;
+    const avatarFile = await generate(fileName, gender, size);
+    const avatarUrl = await uploadFile(fileName, avatarFile);
     return avatarUrl;
 };
 

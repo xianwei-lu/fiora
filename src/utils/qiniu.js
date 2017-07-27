@@ -42,6 +42,10 @@ function uploadFile(key, localFile) {
                 }
             });
         } else {
+            if (/public\/data/.test(localFile)) {
+                resolve(`/data/${key}`);
+                return;
+            }
             fs.rename(localFile, path.resolve(__dirname, `../../public/data/${key}`), (err) => {
                 if (err) {
                     reject(err);

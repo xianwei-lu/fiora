@@ -18,10 +18,17 @@ class Signin extends Component {
         history: PropTypes.object.isRequired,
         signinGroup: PropTypes.string,
     }
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            loading: false,
+        };
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                this.setState({ loading: true });
                 action.register(values.username, values.password, this.props.signinGroup).then((response) => {
                     if (response.status !== 201) {
                         message.error(response.data, 3);
@@ -101,7 +108,7 @@ class Signin extends Component {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">注册</Button>
+                        <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}>注册</Button>
                         <p className="login-form-text" onClick={this.toLogin}>已有账号? <a>去登陆</a></p>
                     </Form.Item>
                 </Form>
