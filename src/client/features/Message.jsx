@@ -34,11 +34,11 @@ class Message extends Component {
     componentDidMount() {
         if (this.props.shouldScroll) {
             scrollMessage = this.msg.scrollIntoView.bind(this.msg, false);
-            scrollMessage();
+            // 避免连续scroll
             if (scrollEvent) {
                 clearTimeout(scrollEvent);
             }
-            scrollEvent = setTimeout(scrollMessage, 300);
+            scrollEvent = setTimeout(scrollMessage, 100);
         }
     }
     shouldComponentUpdate(nextProps) {
@@ -75,7 +75,7 @@ class Message extends Component {
             <img
                 src={content}
                 ref={(i) => this.img = i}
-                onLoad={scrollMessage}
+                onLoad={() => scrollMessage()}
                 onError={() => this.img.src = require('../assets/images/image_not_found.png')}
             />
         );

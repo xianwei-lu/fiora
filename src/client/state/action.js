@@ -1,8 +1,7 @@
 import platform from 'platform';
 import Socket from '../../core/socketClient';
 import messageTool from '../../utils/message';
-
-const config = require('../../../config/client');
+import config from '../../../config/client';
 
 const socket = new Socket(config.host, config.port);
 let store = null;

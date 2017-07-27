@@ -81,6 +81,7 @@ AuthRouter
 
     const user = await User.findOne({ _id: payload.userId }, '-salt');
     assert(!user, 404, '该用户不存在');
+    user.password = undefined;
 
     const newToken = jwt.encode({ userId: user._id, expires: Date.now() + (1000 * 60 * 60 * 24 * 3) }, config.jwtSecret);
     ctx.socket.token = newToken;
