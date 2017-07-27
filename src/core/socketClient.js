@@ -21,11 +21,7 @@ function createMethod(method) {
 }
 
 const defaultOpt = {
-    connectParams: {
-        reconnection: true,
-        reconnectionAttempts: 6,
-        reconnectionDelay: 10000,
-    },
+
 };
 
 class SocketClient {

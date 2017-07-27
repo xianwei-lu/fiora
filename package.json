@@ -8,7 +8,6 @@
     "server": "export NODE_ENV=development && nodemon src/server/index.js --config nodemonrc.json",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "init": "node bin/init.js",
     "test": "export NODE_ENV=test && mocha test/*",
     "lint": "./node_modules/.bin/eslint ./ --ext js,jsx --ignore-pattern .eslintignore --cache --fix"
   },
