@@ -256,7 +256,7 @@ class Chat extends Component {
                     </Sider>
                     {
                         $$group ?
-                            <Layout>
+                            <Layout className="linkman">
                                 <Layout className="window">
                                     <div className="header">
                                         <div className="avatar-name">
