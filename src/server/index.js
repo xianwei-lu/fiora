@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const commandExists = require('command-exists');
 
 const app = require('./app');
 const config = require('../../config/server');
@@ -38,6 +39,16 @@ mongoose.connect(config.database, async (err) => {
 
     createDirectory(path.join(__dirname, '../../public'));
     createDirectory(path.join(__dirname, '../../public/data'));
+
+    if (config.useRandomAvatar) {
+        try {
+            await commandExists('convert');
+        } catch (e) {
+            console.error('Enable random avatar but not install ImageMagick');
+            console.error('Please refer to "https://www.imagemagick.org/script/index.php" to install it');
+            return process.exit(1);
+        }
+    }
 
     app.listen(config.port, async () => {
         await Socket.remove({});

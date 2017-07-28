@@ -1,6 +1,8 @@
 const bluebird = require('bluebird');
 const bcrypt = bluebird.promisifyAll(require('bcrypt'), { suffix: '$' });
 
+const config = require('../../../config/server');
+
 const Router = require('../../core/socketRouter');
 const assert = require('../../utils/assert');
 const avatar = require('../../utils/avatarGenerator');
@@ -32,7 +34,12 @@ UserRouter
     const salt = await bcrypt.genSalt$(saltRounds);
     const hash = await bcrypt.hash$(password, salt);
     const gender = genders[Math.floor(Math.random() * 2)];
-    const userAvatar = await avatar(username, gender);
+    let userAvatar = null;
+    if (config.useRandomAvatar) {
+        userAvatar = await avatar(username, gender);
+    } else {
+        userAvatar = config.defaultUserAvatar;
+    }
 
     try {
         const newUser = await User.create({
