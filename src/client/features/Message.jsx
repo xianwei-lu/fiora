@@ -124,7 +124,7 @@ class Message extends Component {
 }
 
 export default connect(
-    ($$state, { id }) => ({
-        shouldScroll: $$state.getIn(['view', 'autoScroll']) || id === $$state.getIn(['user', '_id']),
+    ($$state, { senderId }) => ({
+        shouldScroll: $$state.getIn(['view', 'autoScroll']) || senderId === $$state.getIn(['user', '_id']),
     }),
 )(Message);

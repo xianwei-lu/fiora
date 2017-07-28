@@ -234,9 +234,9 @@ class Chat extends Component {
         return $$messages.map(($$message, index) => (
             <Message
                 key={`message${$$message.get('_id')}`}
-                id={$$message.get('_id')}
                 avatar={$$message.getIn(['from', 'avatar'])}
                 username={$$message.getIn(['from', 'username'])}
+                senderId={$$message.getIn(['from', '_id'])}
                 time={$$message.get('createTime')}
                 type={$$message.get('type')}
                 content={$$message.get('content')}
