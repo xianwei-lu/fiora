@@ -20,15 +20,22 @@ module.exports = {
     bucket: 'bucket_name',
     bucketUrl: 'bucket_url',
 
-    // maximum message length
+    // Maximum message length
     // 消息最大长度
     maxMessageLength: 1024,
 
-    // maximum number of groups that can be created by each user
+    // Maximum number of groups that can be created by each user
     // 每个用户最多可以创建的群组个数
     maxGroupNumber: 2,
 
-    // default group avatar url
-    // 默认群组头像链接
-    defaultGroupAvatar: '//assets.suisuijiang.com/group_avatar_default.jpeg',
+    // New users and groups use random avatars. You need to install ImageMagick first
+    // 新建用户和群组使用随机头像, 需要先安装ImageMagick
+    useRandomAvatar: false,
+
+    // Default group avatar url. If use random avatar, you do not need this configuration
+    // 默认群组头像链接, 如果使用随机头像则不需要该项配置
+    defaultGroupAvatar: '/static/default_group_avatar.png',
+    // Default user avatar url. If use random avatar, you do not need this configuration
+    // 默认用户头像链接, 如果使用随机头像则不需要该项配置
+    defaultUserAvatar: '/static/default_user_avatar.png',
 };
