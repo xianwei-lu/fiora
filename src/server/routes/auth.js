@@ -116,6 +116,7 @@ AuthRouter
     } else {
         group = await Group.findOne({ isDefault: true });
     }
+    assert(!group, 400, '该群组不存在');
 
     ctx.socket.socket.join(group._id);
     await modelTool.populateGroupMessage(group);
