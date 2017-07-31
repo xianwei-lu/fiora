@@ -1,5 +1,5 @@
 import xss from 'xss';
-import toBase64 from 'arraybuffer-base64';
+import base64 from 'base64-arraybuffer';
 import fileType from 'file-type';
 import expressions from './expressions';
 
@@ -65,7 +65,7 @@ function handleSendMessage(message) {
     }
     case 'image': {
         const type = fileType(message.content);
-        message.content = `data:image/${type.ext};base64,${toBase64(message.content)}`;
+        message.content = `data:image/${type.ext};base64,${base64.encode(message.content)}`;
         break;
     }
     case 'file': {

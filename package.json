@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "antd": "^2.9.3",
-    "arraybuffer-base64": "^1.0.0",
     "avatar-generator": "^1.0.8",
+    "base64-arraybuffer": "^0.1.5",
     "bcrypt": "^1.0.2",
     "bluebird": "^3.4.7",
     "brace": "^0.10.0",

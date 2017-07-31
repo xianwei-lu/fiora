@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import copy from 'copy-to-clipboard';
-import toBase64 from 'arraybuffer-base64';
+import base64 from 'base64-arraybuffer';
+import fileType from 'file-type';
 
 import Linkman from 'features/Linkman';
 import Message from 'features/Message';
@@ -138,6 +139,51 @@ class Chat extends Component {
             });
             e.target.style.height = '40px';
             e.target.value = '';
+            e.preventDefault();
+        }
+    }
+    handlePaste = (e) => {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        const types = (e.clipboardData || e.originalEvent.clipboardData).types;
+
+        // 如果包含文件内容
+        if (types.indexOf('Files') > -1) {
+            for (let index = 0; index < items.length; index++) {
+                const item = items[index];
+                if (item.kind === 'file') {
+                    const reader = new FileReader();
+                    const $$group = this.getCurrentGroup();
+                    reader.onloadend = function () {
+                        const img = new Image();
+                        img.src = this.result;
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            canvas.getContext('2d').drawImage(img, 0, 0);
+                            let imgData = canvas.toDataURL('image/jpeg', 0.8);
+                            imgData = imgData.replace(/data:image\/jpeg;base64,/, '');
+                            const data = base64.decode(imgData);
+                            if (data.byteLength > config.maxFileSize) {
+                                message.warn('要发送的文件过大', 3);
+                                return;
+                            }
+                            action.sendMessage($$group.get('_id'), 'group', {
+                                type: 'image',
+                                content: data,
+                            }).then((res) => {
+                                if (res.status !== 201) {
+                                    message.error(`消息发送失败, ${res.data}`);
+                                }
+                            });
+                        };
+                    };
+                    const file = item.getAsFile();
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
             e.preventDefault();
         }
     }
@@ -336,6 +382,7 @@ class Chat extends Component {
                                                                 autosize={{ minRows: 1, maxRows: 5 }}
                                                                 onKeyDown={this.handleInputKeyDown}
                                                                 onPressEnter={this.handleInputEnter}
+                                                                onPaste={this.handlePaste}
                                                                 ref={(i) => this.input = i}
                                                             />
                                                             <div className="button-container">
