@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-format';
 import { connect } from 'react-redux';
-import { Spin, Button } from 'antd';
+import { Spin } from 'antd';
 
 import Avatar from 'components/Avatar';
 import Highlight from 'components/Highlight';

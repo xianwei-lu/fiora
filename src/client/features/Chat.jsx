@@ -7,7 +7,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 import copy from 'copy-to-clipboard';
 import base64 from 'base64-arraybuffer';
-import fileType from 'file-type';
 
 import Linkman from 'features/Linkman';
 import Message from 'features/Message';
