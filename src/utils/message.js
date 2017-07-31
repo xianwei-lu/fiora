@@ -31,29 +31,46 @@ function setPreview(message) {
         message.preview = `${message.from.username}: [${message.type}]`;
     }
 }
+function handleText(message) {
+    if (message.type === 'text') {
+        message.content = convertExpression(handleXss(message.content));
+    }
+}
+function handleFile(message) {
+    if (message.type === 'file') {
+        message.content = JSON.parse(message.content);
+    }
+}
 
 // export
 function handleReceiveMessage(message) {
     setPreview(message);
-    message.content = convertExpression(handleXss(message.content));
+    handleText(message);
+    handleFile(message);
 }
 
 function handleInitMessages(messages) {
     for (const message of messages) {
         setPreview(message);
-        message.content = convertExpression(handleXss(message.content));
+        handleText(message);
+        handleFile(message);
     }
 }
 function handleSendMessage(message) {
     setPreview(message);
     switch (message.type) {
     case 'text': {
-        message.content = convertExpression(handleXss(message.content));
+        handleText(message);
         break;
     }
     case 'image': {
         const type = fileType(message.content);
         message.content = `data:image/${type.ext};base64,${toBase64(message.content)}`;
+        break;
+    }
+    case 'file': {
+        message.content.url = '';
+        message.content.size = 0;
         break;
     }
     default:
@@ -62,7 +79,8 @@ function handleSendMessage(message) {
 }
 function handleSendEndMessage(message) {
     setPreview(message);
-    message.content = convertExpression(handleXss(message.content));
+    handleText(message);
+    handleFile(message);
 }
 
 export default {

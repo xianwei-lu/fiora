@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { notification, Button } from 'antd';
+import { notification, message, Button } from 'antd';
 
 import App from 'pages/App';
 import Login from 'pages/Login';
@@ -14,6 +14,13 @@ import store from './state/store';
 import action, { init } from './state/action';
 import messageTool from '../utils/message';
 
+notification.config({
+    top: 70,
+});
+message.config({
+    top: 7,
+});
+
 init(store);
 action.socket.on('message', (data) => {
     if (data.type === 'text') {
@@ -22,9 +29,6 @@ action.socket.on('message', (data) => {
     action.addMessage(data.toGroup, 'group', data);
 });
 let isDisconnect = false;
-notification.config({
-    top: 70,
-});
 action.socket.on('disconnect', () => {
     isDisconnect = true;
     notification.warn({

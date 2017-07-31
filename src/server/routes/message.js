@@ -52,6 +52,13 @@ MessageRouter
     } else if (message.type === 'image') {
         const type = fileType(message.content);
         message.content = await qiniuTool.uploadBytes(`message_${Date.now()}.${type.ext}`, message.content);
+    } else if (message.type === 'file') {
+        const fileUrl = await qiniuTool.uploadBytes(message.content.name, message.content.data);
+        message.content = JSON.stringify({
+            name: message.content.name,
+            url: fileUrl,
+            size: message.content.data.byteLength,
+        });
     }
 
     const user = await User.findById(ctx.socket.user);
@@ -77,6 +84,9 @@ MessageRouter
     try {
         savedMessage = await newMessage.save();
     } catch (err) {
+        if (/`.+` is not a valid enum value for path `type`/.test(err.message)) {
+            return ctx.res(400, 'message type is invalid');
+        }
         return ctx.res(500, 'server error when save new message');
     }
 

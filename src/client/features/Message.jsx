@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-format';
 import { connect } from 'react-redux';
-import { Spin } from 'antd';
+import { Spin, Button } from 'antd';
 
 import Avatar from 'components/Avatar';
 import Highlight from 'components/Highlight';
+import Icon from 'components/Icon';
 
 import 'styles/feature/message.less';
 // styles list: https://highlightjs.org/static/demo/
@@ -23,7 +24,10 @@ class Message extends Component {
             PropTypes.number,
         ]).isRequired,
         type: PropTypes.string.isRequired,
-        content: PropTypes.string.isRequired,
+        content: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.object,
+        ]).isRequired,
         isSimple: PropTypes.bool,
         status: PropTypes.string,
         shouldScroll: PropTypes.bool.isRequired,
@@ -80,6 +84,33 @@ class Message extends Component {
             />
         );
     }
+    renderFile = () => {
+        const { content } = this.props;
+        const name = content.get('name');
+        const url = content.get('url');
+        let size = content.get('size');
+        let unit = 'B';
+        if (size > 1024) {
+            size /= 1024;
+            unit = 'KB';
+        }
+        if (size > 1024) {
+            size /= 1024;
+            unit = 'MB';
+        }
+        return (
+            <div className="file">
+                <Icon icon="icon-file" size={36} />
+                <div>
+                    <p>{name}</p>
+                    <p>{size.toFixed(2) + unit}</p>
+                </div>
+                <a href={url} download>
+                    <Icon icon="icon-upload-demo" size={28} />
+                </a>
+            </div>
+        );
+    }
     renderContent = () => {
         switch (this.props.type) {
         case 'text':
@@ -90,6 +121,8 @@ class Message extends Component {
             return this.renderCode();
         case 'image':
             return this.renderImage();
+        case 'file':
+            return this.renderFile();
         default:
             return <span>未知消息</span>;
         }

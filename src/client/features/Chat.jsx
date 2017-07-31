@@ -21,6 +21,8 @@ import 'styles/feature/chat.less';
 import action from '../state/action';
 import expressions from '../../utils/expressions';
 
+import config from '../../../config/client';
+
 const { Content, Sider } = Layout;
 
 function insertAtCursor(input, value) {
@@ -193,6 +195,36 @@ class Chat extends Component {
         };
         reader.readAsArrayBuffer(image);
     }
+    sendFile = () => {
+        this.fileInput.click();
+    }
+    selectFile = () => {
+        const file = this.fileInput.files[0];
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        const $$group = this.getCurrentGroup();
+        reader.onloadend = function () {
+            if (this.result.byteLength > config.maxFileSize) {
+                message.warn('要发送的文件过大', 3);
+                return;
+            }
+            action.sendMessage($$group.get('_id'), 'group', {
+                type: 'file',
+                content: {
+                    name: file.name,
+                    data: this.result,
+                },
+            }).then((res) => {
+                if (res.status !== 201) {
+                    message.error(`消息发送失败, ${res.data}`);
+                }
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    }
     renderGroups = () => {
         const { $$groups, currentGroup } = this.props;
         if (!$$groups) {
@@ -314,6 +346,15 @@ class Chat extends Component {
                                                                         accept="image/png,image/jpeg,image/gif"
                                                                         ref={(i) => this.imageInput = i}
                                                                         onChange={this.selectImage}
+                                                                    />
+                                                                </Tooltip>
+                                                                <Tooltip title="发送文件" mouseEnterDelay={1}>
+                                                                    <IconButton icon="icon-file" size={20} onClick={this.sendFile} />
+                                                                    <input
+                                                                        style={{ display: 'none' }}
+                                                                        type="file"
+                                                                        ref={(i) => this.fileInput = i}
+                                                                        onChange={this.selectFile}
                                                                     />
                                                                 </Tooltip>
                                                                 <Tooltip title="发送代码" mouseEnterDelay={1}>
