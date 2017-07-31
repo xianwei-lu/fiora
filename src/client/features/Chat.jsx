@@ -184,6 +184,10 @@ class Chat extends Component {
         const reader = new FileReader();
         const $$group = this.getCurrentGroup();
         reader.onloadend = function () {
+            if (this.result.byteLength > config.maxFileSize) {
+                message.warn('要发送的文件过大', 3);
+                return;
+            }
             action.sendMessage($$group.get('_id'), 'group', {
                 type: 'image',
                 content: this.result,
