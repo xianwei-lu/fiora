@@ -82,10 +82,21 @@ function handleSendEndMessage(message) {
     handleText(message);
     handleFile(message);
 }
+function handleHistoryMessages(messages) {
+    for (const message of messages) {
+        handleText(message);
+        handleFile(message);
+        message.isHistory = true;
+    }
+    if (messages.length > 0) {
+        messages[messages.length - 1].isHistoryScrollTarget = true;
+    }
+}
 
 export default {
     handleReceiveMessage,
     handleInitMessages,
     handleSendMessage,
     handleSendEndMessage,
+    handleHistoryMessages,
 };

@@ -168,6 +168,7 @@ const actions = {
                 username: $$state.getIn(['user', 'username']),
             },
             status: 'sending',
+            isSelfSend: true,
         };
         messageTool.handleSendMessage(tempMessage);
         this.addMessage(linkman, linkmanType, tempMessage);
@@ -223,7 +224,7 @@ const actions = {
         });
         this.lockGetHistoryMessage = false;
         if (res.status === 200) {
-            messageTool.handleInitMessages(res.data);
+            messageTool.handleHistoryMessages(res.data);
             dispatch({
                 type: 'InsertValues',
                 index: 0,

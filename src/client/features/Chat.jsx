@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
-import { Layout, Menu, Button, Tooltip, Input, message } from 'antd';
+import { Layout, Menu, Button, Tooltip, Input, message, Spin } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -62,6 +62,9 @@ class Chat extends Component {
     }
     constructor(...args) {
         super(...args);
+        this.state = {
+            showHistoryLoading: false,
+        };
         this.onScrollHandle = null;
         this.updateOnlineTask = null;
         this.openUserList = action.setUserListSollapsed.bind(null, false);
@@ -199,14 +202,21 @@ class Chat extends Component {
     }
     handleMessageListScroll = (e) => {
         const $messageList = e.target;
-        const $$group = this.getCurrentGroup();
-        if ($messageList.scrollTop < 10) {
-            action.getHistoryMessage($$group.get('_id'), 'group', $$group.get('messages').size);
-        }
         if (this.onScrollHandle) {
             clearTimeout(this.onScrollHandle);
         }
         this.onScrollHandle = setTimeout(() => {
+            if ($messageList.scrollTop < 10) {
+                this.setState({ showHistoryLoading: true });
+                const $$group = this.getCurrentGroup();
+                action.getHistoryMessage(
+                    $$group.get('_id'),
+                    'group',
+                    $$group.get('messages').size,
+                ).then(() => {
+                    this.setState({ showHistoryLoading: false });
+                });
+            }
             action.setAutoScroll($messageList.scrollHeight - $messageList.scrollTop - $messageList.clientHeight < $messageList.clientHeight / 2);
         }, 100);
     }
@@ -321,17 +331,20 @@ class Chat extends Component {
                 key={`message${$$message.get('_id')}`}
                 avatar={$$message.getIn(['from', 'avatar'])}
                 username={$$message.getIn(['from', 'username'])}
-                senderId={$$message.getIn(['from', '_id'])}
                 time={$$message.get('createTime')}
                 type={$$message.get('type')}
                 content={$$message.get('content')}
                 status={$$message.get('status')}
                 isSimple={index > 0 ? $$messages.getIn([index - 1, 'from', '_id']) === $$message.getIn(['from', '_id']) : false}
+                isSelfSend={!!$$message.get('isSelfSend')}
+                isHistory={!!$$message.get('isHistory')}
+                isHistoryScrollTarget={!!$$message.get('isHistoryScrollTarget')}
             />
         ));
     }
     render() {
         const { userListSollapsed, guest, $$groups } = this.props;
+        const { showHistoryLoading } = this.state;
         const $$group = this.getCurrentGroup();
         return (
             <Layout className="feature-chat">
@@ -419,6 +432,14 @@ class Chat extends Component {
                                                             <CodeEditor onSend={this.handleCodeEditorSend} />
                                                         </div>
                                                     </div>
+                                            }
+                                            {
+                                                showHistoryLoading ?
+                                                    <div className="history-loading">
+                                                        <Spin />
+                                                    </div>
+                                                :
+                                                    null
                                             }
                                         </Layout>
                                         <Sider className="user-list" collapsed={userListSollapsed} collapsible collapsedWidth={0} trigger={null} width={240}>

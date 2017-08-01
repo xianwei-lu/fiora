@@ -13,7 +13,9 @@ import 'styles/feature/message.less';
 import 'highlight.js/styles/vs.css';
 
 let scrollMessage = null;
-let scrollEvent = null;
+let scrollMessageTask = null;
+let scrollHistoryMessage = null;
+let scrollHistoryMessageTask = null;
 
 class Message extends Component {
     static propTypes = {
@@ -31,24 +33,42 @@ class Message extends Component {
         isSimple: PropTypes.bool,
         status: PropTypes.string,
         shouldScroll: PropTypes.bool.isRequired,
+        isHistory: PropTypes.bool.isRequired,
+        isHistoryScrollTarget: PropTypes.bool.isRequired,
     }
     static defaultProps = {
         isSimple: false,
     }
     componentDidMount() {
-        if (this.props.shouldScroll) {
+        if (this.props.isHistory) {
+            if (this.props.isHistoryScrollTarget) {
+                const nextMsg = this.msg.nextSibling;
+                scrollHistoryMessage = nextMsg.scrollIntoView.bind(nextMsg, false);
+            }
+            if (scrollHistoryMessageTask) {
+                clearTimeout(scrollHistoryMessageTask);
+            }
+            scrollHistoryMessageTask = setTimeout(scrollHistoryMessage, 100);
+        } else if (this.props.shouldScroll) {
             scrollMessage = this.msg.scrollIntoView.bind(this.msg, false);
             // 避免连续scroll
-            if (scrollEvent) {
-                clearTimeout(scrollEvent);
+            if (scrollMessageTask) {
+                clearTimeout(scrollMessageTask);
             }
-            scrollEvent = setTimeout(scrollMessage, 100);
+            scrollMessageTask = setTimeout(scrollMessage, 100);
         }
     }
     shouldComponentUpdate(nextProps) {
         return !(
             this.props.status === nextProps.status
         );
+    }
+    imageLoad = () => {
+        if (this.props.isHistory) {
+            scrollHistoryMessage();
+        } else {
+            scrollMessage();
+        }
     }
     renderText = () => (
         this.props.content.split(/\n/).map((m, i) => (
@@ -79,7 +99,7 @@ class Message extends Component {
             <img
                 src={content}
                 ref={(i) => this.img = i}
-                onLoad={() => scrollMessage()}
+                onLoad={this.imageLoad}
                 onError={() => this.img.src = require('../assets/images/image_not_found.png')}
             />
         );
@@ -157,7 +177,7 @@ class Message extends Component {
 }
 
 export default connect(
-    ($$state, { senderId }) => ({
-        shouldScroll: $$state.getIn(['view', 'autoScroll']) || senderId === $$state.getIn(['user', '_id']),
+    ($$state, { isSelfSend }) => ({
+        shouldScroll: $$state.getIn(['view', 'autoScroll']) || isSelfSend,
     }),
 )(Message);
