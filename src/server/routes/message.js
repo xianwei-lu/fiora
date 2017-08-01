@@ -99,6 +99,24 @@ MessageRouter
         ctx.socket.socket.to(toGroup._id.toString()).emit('message', savedMessage);
     }
     ctx.res(201, savedMessage);
+})
+.get('/history', async (ctx) => {
+    const { linkman, linkmanType, messageCount } = ctx.params;
+    assert(!linkman, 400, 'need groupId param but not exists');
+    assert(!linkmanType, 400, 'need linkmanType param but not exists');
+    assert(!messageCount, 400, 'need messageCount param but not exists');
+    assert(!mongoose.Types.ObjectId.isValid(linkman), 400, 'groupId is invalid');
+
+    if (linkmanType !== 'group') {
+        return ctx.res(400, 'unsupport linkman type');
+    }
+    let messages = await Message.find({ toGroup: linkman }, null, { sort: '-createTime', skip: messageCount, limit: 30 });
+    await Message.populate(messages, [
+        { path: 'from', select: '_id username avatar' },
+    ]);
+    messages = messages.reverse();
+
+    ctx.res(200, messages);
 });
 
 module.exports = MessageRouter;

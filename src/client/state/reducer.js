@@ -40,10 +40,30 @@ export default function ($$state = initState, action) {
     }
     case 'InsertValue': {
         const itemsLength = $$state.getIn(action.key).size;
-        const index = action.index > itemsLength ? itemsLength : action.index;
+        let index = action.index;
+        if (index > itemsLength) {
+            index = itemsLength;
+        }
+        if (index < 0) {
+            index = 0;
+        }
         return $$state.updateIn(
             action.key,
             ($$items) => $$items.insert(index, immutable.fromJS(action.value)),
+        );
+    }
+    case 'InsertValues': {
+        const itemsLength = $$state.getIn(action.key).size;
+        let index = action.index;
+        if (index > itemsLength) {
+            index = itemsLength;
+        }
+        if (index < 0) {
+            index = 0;
+        }
+        return $$state.updateIn(
+            action.key,
+            ($$items) => $$items.splice(index, itemsLength).concat(immutable.fromJS(action.value)).concat($$items.splice(0, index)),
         );
     }
     case 'UpdateValue': {

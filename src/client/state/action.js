@@ -210,6 +210,29 @@ const actions = {
             value: message,
         });
     },
+    lockGetHistoryMessage: false,
+    async getHistoryMessage(linkman, linkmanType, messageCount) {
+        if (this.lockGetHistoryMessage) {
+            return;
+        }
+        this.lockGetHistoryMessage = true;
+        const res = await socket.get('/message/history', {
+            linkman,
+            linkmanType,
+            messageCount,
+        });
+        this.lockGetHistoryMessage = false;
+        if (res.status === 200) {
+            messageTool.handleInitMessages(res.data);
+            dispatch({
+                type: 'InsertValues',
+                index: 0,
+                key: ['user', 'groups', getGroupIndex(linkman), 'messages'],
+                value: res.data,
+            });
+        }
+        return res;
+    },
 
     // view
     setValue(key, value) {

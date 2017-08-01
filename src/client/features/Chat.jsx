@@ -199,6 +199,10 @@ class Chat extends Component {
     }
     handleMessageListScroll = (e) => {
         const $messageList = e.target;
+        const $$group = this.getCurrentGroup();
+        if ($messageList.scrollTop < 10) {
+            action.getHistoryMessage($$group.get('_id'), 'group', $$group.get('messages').size);
+        }
         if (this.onScrollHandle) {
             clearTimeout(this.onScrollHandle);
         }
