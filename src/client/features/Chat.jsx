@@ -326,21 +326,35 @@ class Chat extends Component {
                 <h3>还没有消息, 请大家畅所欲言!</h3>
             );
         }
-        return $$messages.map(($$message, index) => (
-            <Message
-                key={`message${$$message.get('_id')}`}
-                avatar={$$message.getIn(['from', 'avatar'])}
-                username={$$message.getIn(['from', 'username'])}
-                time={$$message.get('createTime')}
-                type={$$message.get('type')}
-                content={$$message.get('content')}
-                status={$$message.get('status')}
-                isSimple={index > 0 ? $$messages.getIn([index - 1, 'from', '_id']) === $$message.getIn(['from', '_id']) : false}
-                isSelfSend={!!$$message.get('isSelfSend')}
-                isHistory={!!$$message.get('isHistory')}
-                isHistoryScrollTarget={!!$$message.get('isHistoryScrollTarget')}
-            />
-        ));
+        return $$messages.map(($$message, index) => {
+            let isSimple = true;
+            if (index > 0) {
+                const $$prevMessage = $$messages.get(index - 1);
+                if ($$prevMessage.getIn(['from', '_id']) !== $$message.getIn(['from', '_id'])) {
+                    isSimple = false;
+                }
+                if (new Date($$message.get('createTime')).getTime() - new Date($$prevMessage.get('createTime')).getTime() > 1000 * 60 * 5) {
+                    isSimple = false;
+                }
+            } else {
+                isSimple = false;
+            }
+            return (
+                <Message
+                    key={`message${$$message.get('_id')}`}
+                    avatar={$$message.getIn(['from', 'avatar'])}
+                    username={$$message.getIn(['from', 'username'])}
+                    time={$$message.get('createTime')}
+                    type={$$message.get('type')}
+                    content={$$message.get('content')}
+                    status={$$message.get('status')}
+                    isSimple={isSimple}
+                    isSelfSend={!!$$message.get('isSelfSend')}
+                    isHistory={!!$$message.get('isHistory')}
+                    isHistoryScrollTarget={!!$$message.get('isHistoryScrollTarget')}
+                />
+            );
+        });
     }
     render() {
         const { userListSollapsed, guest, $$groups } = this.props;
