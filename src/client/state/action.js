@@ -18,9 +18,14 @@ function getGroupByName(name) {
         ($$group) => $$group.get('name') === name,
     );
 }
-function getGroupIndex(id) {
+function getGroupIndexById(id) {
     return store.getState().getIn(['user', 'groups']).findIndex(
         ($$group) => $$group.get('_id') === id,
+    );
+}
+function getGroupIndexByName(name) {
+    return store.getState().getIn(['user', 'groups']).findIndex(
+        ($$group) => $$group.get('name') === name,
     );
 }
 
@@ -146,7 +151,7 @@ const actions = {
         if (res.status === 200) {
             dispatch({
                 type: 'SetValue',
-                key: ['user', 'groups', getGroupIndex(groupId), 'onlines'],
+                key: ['user', 'groups', getGroupIndexById(groupId), 'onlines'],
                 value: res.data,
             });
         }
@@ -196,18 +201,18 @@ const actions = {
     async addMessage(linkman, linkmanType, message) {
         dispatch({
             type: 'PushValue',
-            key: ['user', 'groups', getGroupIndex(linkman), 'messages'],
+            key: ['user', 'groups', getGroupIndexById(linkman), 'messages'],
             value: message,
         });
     },
     async updateMessage(linkman, linkmanType, messageId, message) {
         const $$state = store.getState();
-        const index = $$state.getIn(['user', 'groups', getGroupIndex(linkman), 'messages']).findIndex(
+        const index = $$state.getIn(['user', 'groups', getGroupIndexById(linkman), 'messages']).findIndex(
             ($$message) => $$message.get('_id') === messageId,
         );
         dispatch({
             type: 'UpdateValue',
-            key: ['user', 'groups', getGroupIndex(linkman), 'messages', index],
+            key: ['user', 'groups', getGroupIndexById(linkman), 'messages', index],
             value: message,
         });
     },
@@ -228,7 +233,7 @@ const actions = {
             dispatch({
                 type: 'InsertValues',
                 index: 0,
-                key: ['user', 'groups', getGroupIndex(linkman), 'messages'],
+                key: ['user', 'groups', getGroupIndexById(linkman), 'messages'],
                 value: res.data,
             });
         }
@@ -245,16 +250,25 @@ const actions = {
     },
     selectGroup(name) {
         if (name && typeof name === 'string') {
-            dispatch({
-                type: 'SetValue',
-                key: ['currentGroup'],
-                value: name,
-            });
-            this.setAutoScroll(true);
-        }
-        const $$group = getGroupByName(name);
-        if ($$group) {
-            this.updateGroupOnline($$group.get('_id'));
+            const $$group = getGroupByName(name);
+            const currentGroupIndex = getGroupIndexByName(store.getState().get('currentGroup'));
+            if ($$group) {
+                dispatch({
+                    type: 'UpdateValues',
+                    key: ['user', 'groups', currentGroupIndex, 'messages'],
+                    value: {
+                        isHistory: false,
+                        isHistoryScrollTarget: false,
+                    },
+                });
+                dispatch({
+                    type: 'SetValue',
+                    key: ['currentGroup'],
+                    value: name,
+                });
+                this.setAutoScroll(true);
+                this.updateGroupOnline($$group.get('_id'));
+            }
         }
     },
     setAutoScroll(value) {

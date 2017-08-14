@@ -206,15 +206,18 @@ class Chat extends Component {
             clearTimeout(this.onScrollHandle);
         }
         this.onScrollHandle = setTimeout(() => {
-            if ($messageList.scrollTop < 10) {
+            if ($messageList.scrollHeight !== $messageList.clientHeight && $messageList.scrollTop < 10) {
                 this.setState({ showHistoryLoading: true });
                 const $$group = this.getCurrentGroup();
                 action.getHistoryMessage(
                     $$group.get('_id'),
                     'group',
                     $$group.get('messages').size,
-                ).then(() => {
+                ).then((res) => {
                     this.setState({ showHistoryLoading: false });
+                    if (res.status === 200 && res.data.length === 0) {
+                        message.info('没有更多消息了');
+                    }
                 });
             }
             action.setAutoScroll($messageList.scrollHeight - $messageList.scrollTop - $messageList.clientHeight < $messageList.clientHeight / 2);

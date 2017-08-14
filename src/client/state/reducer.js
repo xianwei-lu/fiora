@@ -72,6 +72,14 @@ export default function ($$state = initState, action) {
             ($$item) => $$item.mergeDeep(action.value),
         );
     }
+    case 'UpdateValues': {
+        return $$state.updateIn(
+            action.key,
+            ($$items) => $$items.map(($$item) => (
+                $$item.mergeDeep(action.value)
+            )),
+        );
+    }
     default: {
         return $$state;
     }
