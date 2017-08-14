@@ -65,7 +65,7 @@ MessageRouter
     assert(!user, 400, 'socket对象没有user id');
     let newMessage = null;
     let toGroup = null;
-    // let toUser = null;
+    let toUser = null;
     if (linkmanType === 'group') {
         toGroup = await Group.findById(linkman);
         assert(!toGroup, 400, 'group not exits');
@@ -73,6 +73,16 @@ MessageRouter
         newMessage = new Message({
             from: user,
             toGroup,
+            type: message.type,
+            content: message.content,
+        });
+    } else if (linkmanType === 'user') {
+        toUser = await User.findById(linkman);
+        assert(!toUser, 400, 'user not exits');
+
+        newMessage = new Message({
+            from: user,
+            toUser,
             type: message.type,
             content: message.content,
         });
