@@ -1,3 +1,14 @@
+/* eslint-disable import/first */
+if (
+    (window.location.protocol === 'https:' || window.location.hostname === 'localhost')
+    && navigator.serviceWorker
+) {
+    window.addEventListener('load', () => {
+        const sw = process.env.NODE_ENV === 'development' ? '/static/fiora-sw.js' : '/fiora-sw.js';
+        navigator.serviceWorker.register(sw);
+    });
+}
+
 import 'regenerator-runtime/runtime';
 
 import React from 'react';
@@ -109,7 +120,7 @@ socket.on('message', (message) => {
         notification(
             title,
             message.from.avatar,
-            message.type === 'text' ? message.content : `[${message.type}]`,
+            message.type === 'text' ? message.content.replace(/&lt;/g, '<').replace(/&gt;/g, '>') : `[${message.type}]`,
             Math.random(),
         );
     }
@@ -124,7 +135,7 @@ socket.on('message', (message) => {
             .replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g, '')
             .replace(/#/g, '');
         // The maximum number of words is 200
-        if (text.length > 200) {
+        if (text.length > 100) {
             return;
         }
 

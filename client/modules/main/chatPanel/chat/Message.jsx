@@ -8,8 +8,11 @@ import 'react-viewer/dist/index.css';
 import Avatar from '@/components/Avatar';
 import { Circle } from '@/components/Progress';
 import Dialog from '@/components/Dialog';
+import MessageBox from '@/components/Message';
 import Time from 'utils/time';
 import expressions from 'utils/expressions';
+import fetch from 'utils/fetch';
+import action from '../../../../state/action';
 
 
 const transparentImage = 'data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==';
@@ -57,7 +60,7 @@ class Message extends Component {
         avatar: PropTypes.string.isRequired,
         nickname: PropTypes.string.isRequired,
         time: PropTypes.object.isRequired,
-        type: PropTypes.oneOf(['text', 'image', 'url', 'code']),
+        type: PropTypes.oneOf(['text', 'image', 'url', 'code', 'invite']),
         content: PropTypes.string.isRequired,
         isSelf: PropTypes.bool,
         loading: PropTypes.bool,
@@ -100,6 +103,7 @@ class Message extends Component {
                 }
                 $image.width = width * scale;
                 $image.height = height * scale;
+                $image.src = /^(blob|data):/.test(content) ? content.split('?')[0] : `${content}&imageView2/3/w/${Math.floor($image.width * 1.2)}/h/${Math.floor($image.height * 1.2)}`;
             }
         }
         if (shouldScroll || isSelf) {
@@ -146,6 +150,21 @@ class Message extends Component {
             openUserInfoDialog();
         }
     }
+    @autobind
+    async joinGroup() {
+        const inviteInfo = JSON.parse(this.props.content);
+
+        const [err, res] = await fetch('joinGroup', { groupId: inviteInfo.groupId });
+        if (!err) {
+            res.type = 'group';
+            action.addLinkman(res, true);
+            MessageBox.success('加入群组成功');
+            const [err2, messages] = await fetch('getLinkmanHistoryMessages', { linkmanId: res._id, existCount: 0 });
+            if (!err2) {
+                action.addLinkmanMessages(res._id, messages);
+            }
+        }
+    }
     renderText() {
         let { content } = this.props;
         content = content.replace(
@@ -167,7 +186,7 @@ class Message extends Component {
         // 设置高度宽度为1防止被原图撑起来
         return (
             <div className={`image ${loading ? 'loading' : ''} ${/huaji=true/.test(content) ? 'huaji' : ''}`}>
-                <img className="img" src={src} width="1" height="1" onDoubleClick={this.showImageViewer} />
+                <img className="img" src={transparentImage} width="1" height="1" onDoubleClick={this.showImageViewer} />
                 <Circle className="progress" percent={percent} strokeWidth="5" strokeColor="#a0c672" trailWidth="5" />
                 <div className="progress-number">{Math.ceil(percent)}%</div>
                 <Viewer
@@ -226,6 +245,17 @@ class Message extends Component {
             <a href={content} target="_black" rel="noopener noreferrer" >{content}</a>
         );
     }
+    renderInvite() {
+        const inviteInfo = JSON.parse(this.props.content);
+        return (
+            <div className="invite" onClick={this.joinGroup}>
+                <div>
+                    <span>&quot;{inviteInfo.inviter}&quot; 邀请你加入群组「{inviteInfo.groupName}」</span>
+                </div>
+                <p>加入</p>
+            </div>
+        );
+    }
     renderContent() {
         const { type } = this.props;
         switch (type) {
@@ -240,6 +270,9 @@ class Message extends Component {
         }
         case 'url': {
             return this.renderUrl();
+        }
+        case 'invite': {
+            return this.renderInvite();
         }
         default:
             return (

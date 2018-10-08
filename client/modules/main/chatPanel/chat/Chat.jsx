@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import immutable from 'immutable';
-import * as qiniu from 'qiniu-js';
 
 import fetch from 'utils/fetch';
 import readDiskFile from 'utils/readDiskFile';
+import uploadFile from 'utils/uploadFile';
 import config from 'root/config/client';
 import action from '@/state/action';
 import Avatar from '@/components/Avatar';
@@ -100,27 +100,23 @@ class Chat extends Component {
     async changeGroupAvatar() {
         const { userId, focus } = this.props;
         const image = await readDiskFile('blob', 'image/png,image/jpeg,image/gif');
+        if (!image) {
+            return;
+        }
         if (image.length > config.maxImageSize) {
             return Message.error('设置群头像失败, 请选择小于1MB的图片');
         }
 
-        const [err, tokenRes] = await fetch('uploadToken', {});
-        if (!err) {
-            const result = qiniu.upload(image.result, `GroupAvatar/${userId}_${Date.now()}`, tokenRes.token, { useCdnDomain: true }, {});
-            result.subscribe({
-                error(e) {
-                    console.error(e);
-                    Message.error('上传群头像失败');
-                },
-                async complete(info) {
-                    const imageUrl = `${tokenRes.urlPrefix + info.key}`;
-                    const [changeGroupAvatarError] = await fetch('changeGroupAvatar', { groupId: focus, avatar: imageUrl });
-                    if (!changeGroupAvatarError) {
-                        action.setGroupAvatar(focus, URL.createObjectURL(image.result));
-                        Message.success('修改群头像成功');
-                    }
-                },
-            });
+        try {
+            const imageUrl = await uploadFile(image.result, `GroupAvatar/${userId}_${Date.now()}`, `GroupAvatar_${userId}_${Date.now()}.${image.ext}`);
+            const [changeGroupAvatarError] = await fetch('changeGroupAvatar', { groupId: focus, avatar: imageUrl });
+            if (!changeGroupAvatarError) {
+                action.setGroupAvatar(focus, URL.createObjectURL(image.result));
+                Message.success('修改群头像成功');
+            }
+        } catch (err) {
+            console.error(err);
+            Message.error('上传群头像失败');
         }
     }
     @autobind
@@ -133,10 +129,24 @@ class Chat extends Component {
             Message.success('退出群组成功');
         }
     }
+    /**
+     * 点击群组信息在线用户列表的用户事件
+     * @param {ImmutableMap} member 群组成员
+     */
+    handleClickGroupInfoUser(member) {
+        // 如果是自己, 则不展示
+        if (member.getIn(['user', '_id']) === this.props.userId) {
+            return;
+        }
+        this.showUserInfoDialog(member.get('user').toJS());
+    }
+    /**
+     * 渲染群组内在线用户列表
+     */
     renderMembers() {
         return this.props.members.map(member => (
             <div key={member.get('_id')}>
-                <div>
+                <div onClick={this.handleClickGroupInfoUser.bind(this, member)}>
                     <Avatar size={24} src={member.getIn(['user', 'avatar'])} />
                     <p>{member.getIn(['user', 'username'])}</p>
                 </div>
@@ -152,13 +162,13 @@ class Chat extends Component {
     }
     render() {
         const { groupInfoDialog, userInfoDialog, userInfo } = this.state;
-        const { userId, creator, avatar, type, to, name } = this.props;
+        const { userId, creator, avatar, type, to, name, members } = this.props;
         return (
             <div className="module-main-chat">
                 <HeaderBar onShowInfo={type === 'group' ? this.groupInfoDialog : this.showUserInfoDialog.bind(this, { _id: to, username: name, avatar })} />
                 <MessageList showUserInfoDialog={this.showUserInfoDialog} />
-                <ChatInput />
-                <div className={`float-panel info ${groupInfoDialog ? 'show' : 'hide'}`}>
+                <ChatInput members={members} />
+                <div className={`float-panel group-info ${groupInfoDialog ? 'show' : 'hide'}`}>
                     <p>群组信息</p>
                     <div>
                         <div className="avatar" style={{ display: !!userId && userId === creator ? 'block' : 'none' }}>
@@ -170,7 +180,7 @@ class Chat extends Component {
                             <Button type="danger" onClick={this.leaveGroup}>退出群组</Button>
                         </div>
                         <div className="online-members">
-                            <p>在线成员</p>
+                            <p>在线成员 &nbsp;<span>{this.props.members.size}</span></p>
                             <div>{this.renderMembers()}</div>
                         </div>
                     </div>
